@@ -1,4 +1,4 @@
-package kr.anabada.anabadaserver.entity;
+package kr.anabada.anabadaserver.domain.change.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
-@Table(name = "trade_request")
-public class TradeRequest {
+@Table(name = "change_request")
+public class ChangeRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
