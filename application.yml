@@ -1,0 +1,19 @@
+spring:
+  mvc:
+    favicon:
+      enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: none
+      format_sql: false
+      use_sql_comment: false
+    show-sql: false
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: "jdbc:mysql://172.105.237.249:3306/anabada"
+    port: 3306
+    username: ${ANABADA_MYSQL_USER}
+    password: ${ANABADA_MYSQL_PASSWORD}
+
+server:
+  port: 8080
