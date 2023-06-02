@@ -7,7 +7,7 @@ spring:
       ddl-auto: none
       format_sql: false
       use_sql_comment: false
-    show-sql: false
+    show-sql: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: "jdbc:mysql://172.105.237.249:3306/anabada"
