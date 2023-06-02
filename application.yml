@@ -14,6 +14,29 @@ spring:
     port: 3306
     username: ${ANABADA_MYSQL_USER}
     password: ${ANABADA_MYSQL_PASSWORD}
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: ${ANABADA_KAKAO_CLIENT_ID}
+            client-secret: ${ANABADA_KAKAO_SECRET}
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+            scope:
+              - account_email
+            client-name: kakao
+            client-authentication-method: POST
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+
+jwt:
+  secret: ${ANABADA_JWT_SECRET}
+  header: Authorization
 
 server:
   port: 8080
