@@ -32,6 +32,7 @@ public class SecurityConfig {
                         it -> it
                                 .requestMatchers("/test/user/**").hasRole("USER")
                                 .requestMatchers("/test/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/api/v1/auth/nickname").permitAll()
                                 .anyRequest().permitAll()
                 )
                 .formLogin(
