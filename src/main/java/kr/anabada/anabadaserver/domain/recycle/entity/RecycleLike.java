@@ -1,4 +1,4 @@
-package kr.anabada.anabadaserver.domain.recycle;
+package kr.anabada.anabadaserver.domain.recycle.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
