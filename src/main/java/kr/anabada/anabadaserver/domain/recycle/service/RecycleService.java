@@ -5,15 +5,11 @@ import kr.anabada.anabadaserver.domain.recycle.entity.Recycle;
 import kr.anabada.anabadaserver.domain.recycle.entity.RecycleLike;
 import kr.anabada.anabadaserver.domain.recycle.repository.RecycleLikeRepository;
 import kr.anabada.anabadaserver.domain.recycle.repository.RecycleRepository;
-import kr.anabada.anabadaserver.domain.user.entity.User;
 import kr.anabada.anabadaserver.global.exception.CustomException;
 import kr.anabada.anabadaserver.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,14 +19,14 @@ public class RecycleService {
     private final RecycleLikeRepository recycleLikeRepository;
 
     @Transactional
-    public void addNewPost(long userId, RecycleDto recycle) {
+    public Recycle addNewPost(long userId, RecycleDto recycle) {
         Recycle newPost = Recycle.builder()
                 .title(recycle.getTitle())
                 .content(recycle.getContent())
                 .writer(userId)
                 .build();
 
-        recycleRepository.save(newPost);
+        return recycleRepository.save(newPost);
     }
 
     @Transactional
