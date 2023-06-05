@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 
 @Slf4j
 @RestController
@@ -20,10 +19,10 @@ public class NicknameController {
 
     @GetMapping("")
     public NicknameDto generateNickname() {
-        String nickname = "";
+        String nickname;
         try {
             nickname = nicknameService.generateNickname();
-        } catch (NoSuchAlgorithmException | IOException e) {
+        } catch (IOException e) {
             nickname = "닉네임 생성 오류";
         }
         return new NicknameDto(nickname);
