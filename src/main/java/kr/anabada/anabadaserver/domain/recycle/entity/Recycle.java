@@ -21,10 +21,10 @@ import java.time.LocalDateTime;
 @Table(name = "recycle")
 @Where(clause = "isRemoved = false")
 @EntityListeners(AuditingEntityListener.class)
-@SQLDelete(sql = "UPDATE recycle SET isRemoved = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE recycle SET is_removed = true WHERE id = ?")
 public class Recycle {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -45,6 +45,7 @@ public class Recycle {
     @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
 
+    @Builder.Default
     @Column(name = "is_removed", nullable = false)
     private Boolean isRemoved = false;
 }
