@@ -1,4 +1,4 @@
-package kr.anabada.anabadaserver.domain.recycle;
+package kr.anabada.anabadaserver.domain.recycle.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -17,5 +17,11 @@ public class RecycleLike {
 
     @Column(name = "user_id", nullable = false)
     private Long userId;
+
+
+    public RecycleLike(Long postId, Long userId){
+        this.recycleId = postId;
+        this.userId = userId;
+    }
 
 }
