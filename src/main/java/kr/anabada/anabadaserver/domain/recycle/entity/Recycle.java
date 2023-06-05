@@ -15,6 +15,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "recycle")
 @Where(clause = "isRemoved = false")
 @EntityListeners(AuditingEntityListener.class)
@@ -34,13 +37,14 @@ public class Recycle {
     @Column(name = "content", length = 300)
     private String content;
 
+    @CreatedDate
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
+    @LastModifiedDate
     @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
 
     @Column(name = "is_removed", nullable = false)
     private Boolean isRemoved = false;
-
 }

@@ -18,4 +18,10 @@ public class RecycleLike {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
+
+    public RecycleLike(Long postId, Long userId){
+        this.recycleId = postId;
+        this.userId = userId;
+    }
+
 }
