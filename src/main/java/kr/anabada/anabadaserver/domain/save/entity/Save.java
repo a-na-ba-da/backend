@@ -2,13 +2,19 @@ package kr.anabada.anabadaserver.domain.save.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
 @Entity
 @Table(name = "save")
+@Where(clause = "is_removed = 0")
+@DiscriminatorColumn(name = "save_type")
+@SQLDelete(sql = "UPDATE save SET is_removed = 1 WHERE id = ?")
 public class Save {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -16,7 +22,7 @@ public class Save {
     private Long id;
 
     @Column(name = "writer", nullable = false)
-    private Long writer;
+    private Long writerId;
 
     @Column(name = "title", nullable = false, length = 50)
     private String title;
@@ -24,20 +30,8 @@ public class Save {
     @Column(name = "content", nullable = false, length = 300)
     private String content;
 
-    @Column(name = "is_online_delivery")
-    private Boolean isOnlineDelivery;
-
-    @Column(name = "buy_date")
-    private LocalDate buyDate;
-
     @Column(name = "product_url", length = 500)
     private String productUrl;
-
-    @Column(name = "pay")
-    private Integer pay;
-
-    @Column(name = "is_online")
-    private Boolean isOnline;
 
     @Column(name = "buy_place_lat")
     private Double buyPlaceLat;
@@ -45,16 +39,14 @@ public class Save {
     @Column(name = "buy_place_lng")
     private Double buyPlaceLng;
 
-    @Column(name = "save_type", nullable = false)
-    private Boolean saveType = false;
-
+    @CreatedDate
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
+    @LastModifiedDate
     @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
 
     @Column(name = "is_removed", nullable = false)
     private Boolean isRemoved = false;
-
 }
