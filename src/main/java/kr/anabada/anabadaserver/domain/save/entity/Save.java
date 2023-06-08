@@ -3,11 +3,13 @@ package kr.anabada.anabadaserver.domain.save.entity;
 import jakarta.persistence.*;
 import kr.anabada.anabadaserver.common.entity.BaseTimeEntity;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+@Getter
 @Entity
 @SuperBuilder
 @NoArgsConstructor
@@ -43,4 +45,12 @@ public abstract class Save extends BaseTimeEntity {
     @Builder.Default
     @Column(name = "is_removed", nullable = false)
     private Boolean isRemoved = false;
+
+    public void setWriterId(Long writerId) {
+        this.writerId = writerId;
+    }
+
+    public void setRemoved(Boolean removed) {
+        isRemoved = removed;
+    }
 }
