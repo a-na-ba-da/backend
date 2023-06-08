@@ -1,23 +1,24 @@
 package kr.anabada.anabadaserver.domain.save.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import kr.anabada.anabadaserver.common.entity.BaseTimeEntity;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
-import java.time.LocalDateTime;
-
-@Getter
 @Entity
+@SuperBuilder
+@NoArgsConstructor
 @Table(name = "save")
 @Where(clause = "is_removed = 0")
 @DiscriminatorColumn(name = "save_type")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @SQLDelete(sql = "UPDATE save SET is_removed = 1 WHERE id = ?")
-public class Save {
+public abstract class Save extends BaseTimeEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -39,14 +40,7 @@ public class Save {
     @Column(name = "buy_place_lng")
     private Double buyPlaceLng;
 
-    @CreatedDate
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    @Column(name = "modified_at")
-    private LocalDateTime modifiedAt;
-
+    @Builder.Default
     @Column(name = "is_removed", nullable = false)
     private Boolean isRemoved = false;
 }

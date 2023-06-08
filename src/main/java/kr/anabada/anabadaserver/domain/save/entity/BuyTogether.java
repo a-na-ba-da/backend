@@ -3,11 +3,17 @@ package kr.anabada.anabadaserver.domain.save.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 
 @Entity
-@DiscriminatorValue("B")
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
+@DiscriminatorValue("buy_together")
 public class BuyTogether extends Save {
 
     // 물건 전달 방법
