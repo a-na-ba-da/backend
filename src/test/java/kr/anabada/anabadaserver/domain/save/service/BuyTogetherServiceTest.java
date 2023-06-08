@@ -31,7 +31,7 @@ class BuyTogetherServiceTest {
     @Test
     @Transactional
     @DisplayName("아껴쓰기 - 같이사요 | 게시물 등록 성공 테스트")
-    void testCreateNewBuyTogetherPostSuccess() {
+    void 게시물_등록_성공() {
         // Given
         long fakePostId = 1L;
         BuyTogetherDto buyTogetherDto = BuyTogetherDto.builder()
@@ -51,11 +51,10 @@ class BuyTogetherServiceTest {
         given(saveRepository.findById(fakePostId))
                 .willReturn(Optional.of(buyTogether));
         // When
-        Save result = buyTogetherService.createNewBuyTogetherPost(fakePostId, buyTogetherDto);
+        Save result = buyTogetherService.createNewBuyTogetherPost(1L, buyTogetherDto);
         // Then
         Save findPost = saveRepository.findById(result.getId()).get();
         assertEquals(buyTogetherDto.getTitle(), findPost.getTitle());
     }
-
 
 }
