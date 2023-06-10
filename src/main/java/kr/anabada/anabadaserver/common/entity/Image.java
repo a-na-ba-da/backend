@@ -6,7 +6,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -15,6 +18,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "image")
+@EntityListeners(AuditingEntityListener.class)
 public class Image {
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -22,7 +26,11 @@ public class Image {
     @Column(name = "id", columnDefinition = "BINARY(16)")
     private UUID id;
 
-    @Column(name = "image_type", nullable = false, length = 15)
+    @Column(name = "post_id")
+    @org.hibernate.annotations.Comment("사용되는 타입 테이블의 id")
+    private Long postId;
+
+    @Column(name = "image_type", updatable = false)
     private String imageType;
 
     @Column(name = "ext", nullable = false, length = 5)
@@ -31,9 +39,22 @@ public class Image {
     @Column(name = "original_file_name", length = 100)
     private String originalFileName;
 
-//    @Column(name = "path", nullable = false, length = 150)
-//    private String path;
+    @CreatedDate
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
     @Column(name = "uploader", nullable = false)
     private Long uploader;
+
+    public void attach(Long postId, long userId) {
+        if (this.postId != null) {
+            throw new IllegalStateException("이미 사용중인 이미지입니다.");
+        }
+
+        if (this.uploader != userId) {
+            throw new IllegalStateException("해당 이미지는 다른 사용자가 업로드한 이미지입니다.");
+        }
+
+        this.postId = postId;
+    }
 }

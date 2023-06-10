@@ -1,6 +1,6 @@
 package kr.anabada.anabadaserver.common.controller;
 
-import kr.anabada.anabadaserver.common.dto.ImageType;
+import kr.anabada.anabadaserver.common.dto.DomainType;
 import kr.anabada.anabadaserver.common.service.ImageUploadService;
 import kr.anabada.anabadaserver.domain.user.entity.User;
 import kr.anabada.anabadaserver.global.auth.CurrentUser;
@@ -31,7 +31,7 @@ public class ImageUploadController {
             throw new IllegalArgumentException("파일이 존재하지 않습니다.");
         }
 
-        ImageType imageType = ImageType.of(type);
+        DomainType imageType = DomainType.of(type);
         return imageUploadService.uploadImages(uploadFile, imageType, user.getId());
     }
 }

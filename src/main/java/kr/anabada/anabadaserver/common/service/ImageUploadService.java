@@ -1,6 +1,6 @@
 package kr.anabada.anabadaserver.common.service;
 
-import kr.anabada.anabadaserver.common.dto.ImageType;
+import kr.anabada.anabadaserver.common.dto.DomainType;
 import kr.anabada.anabadaserver.common.entity.Image;
 import kr.anabada.anabadaserver.common.repository.ImageRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class ImageUploadService {
     private final ImageRepository imageRepository;
 
     @Transactional
-    public List<String> uploadImages(MultipartFile[] uploadFile, ImageType imageType, long uploaderId) {
+    public List<String> uploadImages(MultipartFile[] uploadFile, DomainType imageType, long uploaderId) {
         List<String> imageNameList = new ArrayList<>();
         for (MultipartFile file : uploadFile) {
             // validate file
@@ -44,10 +44,10 @@ public class ImageUploadService {
             imageRepository.save(
                     Image.builder()
                             .id(uuid)
-                            .originalFileName(originalFileInfo.fileName())
-                            .extension(originalFileInfo.extension())
                             .uploader(uploaderId)
-                            .imageType(imageType.getTypeStr())
+                            .imageType(imageType.toString())
+                            .originalFileName(originalFileInfo.fileName)
+                            .extension(originalFileInfo.extension)
                             .build()
             );
 
@@ -139,7 +139,7 @@ public class ImageUploadService {
 
     }
 
-    private record OriginalFileInfo(String fileName, String extension) {
+    public record OriginalFileInfo(String fileName, String extension) {
         public static OriginalFileInfo of(String fileName, String extension) {
             return new OriginalFileInfo(fileName, extension);
         }
