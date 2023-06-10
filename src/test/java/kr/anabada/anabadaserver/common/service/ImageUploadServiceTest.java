@@ -1,6 +1,6 @@
 package kr.anabada.anabadaserver.common.service;
 
-import kr.anabada.anabadaserver.common.dto.ImageType;
+import kr.anabada.anabadaserver.common.dto.DomainType;
 import kr.anabada.anabadaserver.common.repository.ImageRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -61,7 +61,7 @@ class ImageUploadServiceTest {
     void 이미지_업로드_실패_지원하지_않는_확장자() {
         // Given - gif file
         MultipartFile multipartFile = new MockMultipartFile("test.gif", "test.gif", "image/gif", "test".getBytes());
-        ImageType imageType = ImageType.BUY_TOGETHER;
+        DomainType imageType = DomainType.BUY_TOGETHER;
         long uploaderId = 1L;
 
         // When & Then - throw exception
@@ -73,7 +73,7 @@ class ImageUploadServiceTest {
     void 이미지_업로드_실패_파일_이름이_없음() {
         // Given (No original file name)
         MultipartFile multipartFile = new MockMultipartFile("test.png", "", "image/png", "test".getBytes());
-        ImageType imageType = ImageType.BUY_TOGETHER;
+        DomainType imageType = DomainType.BUY_TOGETHER;
         long uploaderId = 1L;
 
         // When & Then - throw exception
@@ -85,7 +85,7 @@ class ImageUploadServiceTest {
     void 이미지_업로드_실패_저장폴더_접근_실패() throws FileNotFoundException {
         // Given
         MultipartFile multipartFile = new MockMultipartFile("test.png", "test.png", "image/png", "test".getBytes());
-        ImageType imageType = ImageType.BUY_TOGETHER;
+        DomainType imageType = DomainType.BUY_TOGETHER;
         long uploaderId = 1L;
 
         // When - Mock static method
@@ -100,7 +100,7 @@ class ImageUploadServiceTest {
     @DisplayName("이미지 업로드 실패 - 이미지 타입 누락")
     void 이미지_업로드_실패_이미지_타입_누락() {
         // Given
-        ImageType imageType = null;
+        DomainType imageType = null;
         MultipartFile multipartFile = new MockMultipartFile("test.gif", "test.gif", "image/gif", "test".getBytes());
         long uploaderId = 1L;
 
