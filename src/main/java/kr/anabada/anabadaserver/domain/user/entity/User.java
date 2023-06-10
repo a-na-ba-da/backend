@@ -1,6 +1,7 @@
 package kr.anabada.anabadaserver.domain.user.entity;
 
 import jakarta.persistence.*;
+import kr.anabada.anabadaserver.domain.user.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,5 +32,13 @@ public class User {
             return false;
 
         return !activated;
+    }
+    
+    public UserDto toDto() {
+        return UserDto.builder()
+                .id(id)
+                .nickname(nickname)
+                .activated(activated)
+                .build();
     }
 }

@@ -2,6 +2,7 @@ package kr.anabada.anabadaserver.domain.save.entity;
 
 import jakarta.persistence.*;
 import kr.anabada.anabadaserver.common.entity.BaseTimeEntity;
+import kr.anabada.anabadaserver.domain.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,8 +25,9 @@ public abstract class Save extends BaseTimeEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "writer", nullable = false)
-    private Long writerId;
+    @OneToOne
+    @JoinColumn(name = "writer", nullable = false)
+    private User writer;
 
     @Column(name = "title", nullable = false, length = 50)
     private String title;
@@ -46,8 +48,8 @@ public abstract class Save extends BaseTimeEntity {
     @Column(name = "is_removed", nullable = false)
     private Boolean isRemoved = false;
 
-    public void setWriterId(Long writerId) {
-        this.writerId = writerId;
+    public void setWriter(User writer) {
+        this.writer = writer;
     }
 
     public void setRemoved(Boolean removed) {

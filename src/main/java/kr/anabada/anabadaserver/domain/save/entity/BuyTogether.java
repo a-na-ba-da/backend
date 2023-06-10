@@ -1,22 +1,25 @@
 package kr.anabada.anabadaserver.domain.save.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
+import kr.anabada.anabadaserver.common.entity.Image;
 import kr.anabada.anabadaserver.domain.save.dto.BuyTogetherDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Where;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Entity
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@DiscriminatorValue("buy_together")
+@DiscriminatorValue("BUY_TOGETHER")
 public class BuyTogether extends Save {
 
     // 물건 전달 방법
@@ -31,6 +34,12 @@ public class BuyTogether extends Save {
     @Column(name = "pay")
     private Integer pay;
 
+    @BatchSize(size = 100)
+    @JoinColumn(name = "post_id")
+    @OneToMany(fetch = FetchType.LAZY)
+    @Where(clause = "image_type = 'BUY_TOGETHER'")
+    private List<Image> images;
+
     public BuyTogetherDto toDto() {
         return BuyTogetherDto.builder()
                 .id(getId())
@@ -40,6 +49,8 @@ public class BuyTogether extends Save {
                 .modifiedAt(getModifiedAt())
                 .isOnlineDelivery(isOnlineDelivery)
                 .buyDate(buyDate)
+                .images(images.stream().map(Image::getId).map(UUID::toString).toList())
+                .userDto(getWriter().toDto())
                 .pay(pay)
                 .build();
     }

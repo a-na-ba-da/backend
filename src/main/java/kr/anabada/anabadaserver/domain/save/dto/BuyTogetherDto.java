@@ -12,6 +12,7 @@ import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Builder
@@ -35,6 +36,7 @@ public class BuyTogetherDto {
     private LocalDateTime modifiedAt;
     @JsonProperty("writer")
     private UserDto userDto;
+    private List<String> images;
 
     public Save toEntity() {
         return BuyTogether.builder()

@@ -1,13 +1,18 @@
 package kr.anabada.anabadaserver.domain.user.dto;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
 public class UserDto {
-    private long id;
-    private String nickname;
-    private String email;
-    private Boolean activated;
+    private final Long id;
+    private final String nickname;
+    private final Boolean activated;
+
+    @Builder
+    public UserDto(long id, String nickname, Boolean activated) {
+        this.id = id;
+        this.nickname = nickname;
+        this.activated = activated;
+    }
 }
