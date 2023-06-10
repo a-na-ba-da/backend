@@ -1,8 +1,10 @@
 package kr.anabada.anabadaserver.domain.save.service;
 
+import kr.anabada.anabadaserver.common.service.ImageService;
 import kr.anabada.anabadaserver.domain.save.dto.BuyTogetherDto;
 import kr.anabada.anabadaserver.domain.save.entity.Save;
 import kr.anabada.anabadaserver.domain.save.repository.SaveRepository;
+import kr.anabada.anabadaserver.domain.user.entity.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,11 +21,14 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 
 @ExtendWith(MockitoExtension.class)
 class BuyTogetherServiceTest {
     @Mock
     private SaveRepository saveRepository;
+    @Mock
+    private ImageService imageService;
 
     @InjectMocks
     private BuyTogetherService buyTogetherService;
@@ -34,6 +39,13 @@ class BuyTogetherServiceTest {
     void 게시물_등록_성공() {
         // Given
         long fakePostId = 1L;
+        User user = User.builder()
+                .id(1L)
+                .email("test@test.com")
+                .role("ROLE_USER")
+                .activated(true)
+                .nickname("testtest")
+                .build();
         BuyTogetherDto buyTogetherDto = BuyTogetherDto.builder()
                 .title("title")
                 .content("content")
@@ -45,13 +57,14 @@ class BuyTogetherServiceTest {
                 .build();
         Save buyTogether = buyTogetherDto.toEntity();
         ReflectionTestUtils.setField(buyTogether, "id", fakePostId);
-        // Mocking
+        // When - Mocking
         given(saveRepository.save(any(Save.class)))
                 .willReturn(buyTogether);
         given(saveRepository.findById(fakePostId))
                 .willReturn(Optional.of(buyTogether));
+        doNothing().when(imageService).attach(any(Long.class), any(), any(Long.class));
         // When
-        Save result = buyTogetherService.createNewBuyTogetherPost(1L, buyTogetherDto);
+        Save result = buyTogetherService.createNewBuyTogetherPost(user, buyTogetherDto);
         // Then
         Save findPost = saveRepository.findById(result.getId()).get();
         assertEquals(buyTogetherDto.getTitle(), findPost.getTitle());
