@@ -45,7 +45,10 @@ public class BuyTogetherService {
 
 
     public BuyTogetherDto getBuyTogether(Long id) {
-        return null;
+        BuyTogether buyTogether = saveRepository.findBuyTogetherById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
+
+        return buyTogether.toDto();
     }
 
     @Transactional

@@ -9,4 +9,6 @@ import java.util.Optional;
 
 public interface SaveRepository extends JpaRepository<Save, Long>, SaveRepositoryCustom {
     Optional<BuyTogether> findBuyTogetherByIdAndWriter(Long id, User writer);
+
+    Optional<BuyTogether> findBuyTogetherById(Long id);
 }
