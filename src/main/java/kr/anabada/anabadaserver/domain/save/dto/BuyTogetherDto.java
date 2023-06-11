@@ -1,9 +1,7 @@
 package kr.anabada.anabadaserver.domain.save.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import kr.anabada.anabadaserver.domain.save.entity.BuyTogether;
 import kr.anabada.anabadaserver.domain.save.entity.Save;
 import kr.anabada.anabadaserver.domain.user.dto.UserDto;
@@ -26,9 +24,13 @@ public class BuyTogetherDto {
     private String title;
     @NotBlank(message = "내용을 입력해주세요.")
     private String content;
-    @Pattern(regexp = "^(http|https)://.*", message = "URL 형식이 올바르지 않습니다.")
+    @Pattern(regexp = "^(http|https)://.*", message = "URL은 http:// 또는 https:// 로 시작해야합니다.")
     private String productUrl;
+    @Max(value = 90, message = "위도의 범위는 -90 ~ 90 입니다.")
+    @Min(value = -90, message = "위도의 범위는 -90 ~ 90 입니다.")
     private Double buyPlaceLat;
+    @Max(value = 180, message = "경도의 범위는 -180 ~ 180 입니다.")
+    @Min(value = -180, message = "경도의 범위는 -180 ~ 180 입니다.")
     private Double buyPlaceLng;
     private boolean isOnlineDelivery;
     @NotNull(message = "구매일을 입력해주세요.")
