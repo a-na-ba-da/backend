@@ -45,6 +45,7 @@ public class BuyTogether extends Save {
                 .id(getId())
                 .title(getTitle())
                 .content(getContent())
+                .productUrl(getProductUrl())
                 .createdAt(getCreatedAt())
                 .modifiedAt(getModifiedAt())
                 .isOnlineDelivery(isOnlineDelivery)

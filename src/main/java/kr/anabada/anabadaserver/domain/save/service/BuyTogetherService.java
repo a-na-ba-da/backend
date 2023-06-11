@@ -2,6 +2,7 @@ package kr.anabada.anabadaserver.domain.save.service;
 
 import kr.anabada.anabadaserver.common.service.ImageService;
 import kr.anabada.anabadaserver.domain.save.dto.BuyTogetherDto;
+import kr.anabada.anabadaserver.domain.save.dto.SaveSearchRequestDto;
 import kr.anabada.anabadaserver.domain.save.entity.BuyTogether;
 import kr.anabada.anabadaserver.domain.save.entity.Save;
 import kr.anabada.anabadaserver.domain.save.repository.SaveRepository;
@@ -37,8 +38,8 @@ public class BuyTogetherService {
         return save;
     }
 
-    public List<BuyTogetherDto> getBuyTogetherList(Pageable pageable) {
-        return saveRepository.findAllByOrderByCreatedAtDesc(pageable)
+    public List<BuyTogetherDto> getBuyTogetherList(SaveSearchRequestDto searchRequest, Pageable pageable) {
+        return saveRepository.findSaveList(searchRequest, pageable)
                 .stream().map(BuyTogether::toDto).toList();
     }
 

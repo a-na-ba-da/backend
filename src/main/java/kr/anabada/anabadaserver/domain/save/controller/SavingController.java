@@ -2,6 +2,7 @@ package kr.anabada.anabadaserver.domain.save.controller;
 
 import jakarta.validation.constraints.NotNull;
 import kr.anabada.anabadaserver.domain.save.dto.BuyTogetherDto;
+import kr.anabada.anabadaserver.domain.save.dto.SaveSearchRequestDto;
 import kr.anabada.anabadaserver.domain.save.service.BuyTogetherService;
 import kr.anabada.anabadaserver.domain.user.entity.User;
 import kr.anabada.anabadaserver.global.auth.CurrentUser;
@@ -34,8 +35,8 @@ public class SavingController {
     }
 
     @GetMapping("/buy-together")
-    public Page<BuyTogetherDto> getBuyTogetherList(Pageable pageable) {
-        List<BuyTogetherDto> result = buyTogetherService.getBuyTogetherList(pageable);
+    public Page<BuyTogetherDto> getBuyTogetherList(Pageable pageable, SaveSearchRequestDto searchRequest) {
+        List<BuyTogetherDto> result = buyTogetherService.getBuyTogetherList(searchRequest, pageable);
         return new PageImpl<>(result, pageable, result.size());
     }
 
