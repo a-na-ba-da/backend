@@ -24,6 +24,8 @@ public class BuyTogetherService {
 
     @Transactional
     public Save createNewBuyTogetherPost(User writer, BuyTogetherDto buyTogetherDto) {
+        buyTogetherDto.validate();
+        
         Save buyTogether = buyTogetherDto.toEntity();
         buyTogether.setWriter(writer);
 

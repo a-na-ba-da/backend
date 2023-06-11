@@ -29,6 +29,7 @@ public class SavingController {
         if (user == null)
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
 
+        buyTogetherDto.validate();
         buyTogetherService.createNewBuyTogetherPost(user, buyTogetherDto);
     }
 
