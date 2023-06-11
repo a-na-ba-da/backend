@@ -63,7 +63,7 @@ public class BuyTogetherDto {
             throw new CustomException(ErrorCode.NOT_EXIST_BUY_PLACE);
         }
 
-        if (images.isEmpty()) {
+        if (images == null) {
             // 이미지를 업로드 하지 않았을때
             throw new CustomException(ErrorCode.NOT_EXIST_IMAGE);
         }
