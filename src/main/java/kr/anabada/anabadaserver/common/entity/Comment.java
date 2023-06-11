@@ -1,4 +1,4 @@
-package kr.anabada.anabadaserver.common.controller;
+package kr.anabada.anabadaserver.common.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

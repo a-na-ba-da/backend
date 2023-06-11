@@ -14,7 +14,7 @@ class GlobalExceptionHandlerTest {
         ErrorCode err = ErrorCode.ONLY_ACCESS_USER;
         CustomException e = new CustomException(err);
         ResponseEntity<ErrorResponse> response = new GlobalExceptionHandler().handleCustomException(e);
-        assertEquals(err.getStatus(), response.getStatusCode().value());
+        assertEquals(err.getStatus(), response.getStatusCode());
     }
 
 }
