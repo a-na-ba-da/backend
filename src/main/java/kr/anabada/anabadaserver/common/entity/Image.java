@@ -48,11 +48,11 @@ public class Image {
 
     public void attach(Long postId, long userId) {
         if (this.postId != null) {
-            throw new IllegalStateException("이미 사용중인 이미지입니다.");
+            throw new IllegalArgumentException("이미 사용중인 이미지입니다.");
         }
 
         if (this.uploader != userId) {
-            throw new IllegalStateException("해당 이미지는 다른 사용자가 업로드한 이미지입니다.");
+            throw new IllegalArgumentException("해당 이미지는 다른 사용자가 업로드한 이미지입니다.");
         }
 
         this.postId = postId;
