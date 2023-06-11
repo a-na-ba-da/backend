@@ -40,7 +40,9 @@ public class BuyTogetherService {
 
     public List<BuyTogetherDto> getBuyTogetherList(SaveSearchRequestDto searchRequest, Pageable pageable) {
         return saveRepository.findSaveList(searchRequest, pageable)
-                .stream().map(BuyTogether::toDto).toList();
+                .stream()
+                .map(BuyTogether::toDto)
+                .toList();
     }
 
 
