@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import java.time.LocalDate;
@@ -20,6 +21,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @DiscriminatorValue("BUY_TOGETHER")
+@SQLDelete(sql = "UPDATE save SET is_removed = 1 WHERE id = ?")
 public class BuyTogether extends Save {
 
     // 물건 전달 방법

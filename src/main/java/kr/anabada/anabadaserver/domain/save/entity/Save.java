@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 @Getter
@@ -18,7 +17,6 @@ import org.hibernate.annotations.Where;
 @Where(clause = "is_removed = 0")
 @DiscriminatorColumn(name = "save_type")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@SQLDelete(sql = "UPDATE save SET is_removed = 1 WHERE id = ?")
 public abstract class Save extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
