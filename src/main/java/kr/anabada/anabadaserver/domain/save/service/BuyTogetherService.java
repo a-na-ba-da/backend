@@ -47,4 +47,12 @@ public class BuyTogetherService {
     public BuyTogetherDto getBuyTogether(Long id) {
         return null;
     }
+
+    @Transactional
+    public void removeMyPost(User user, Long buyTogetherId) {
+        BuyTogether buyTogether = saveRepository.findBuyTogetherByIdAndWriter(buyTogetherId, user)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
+
+        saveRepository.delete(buyTogether);
+    }
 }

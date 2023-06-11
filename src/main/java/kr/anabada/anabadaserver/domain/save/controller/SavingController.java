@@ -45,6 +45,15 @@ public class SavingController {
         return buyTogetherService.getBuyTogether(id);
     }
 
+    @DeleteMapping("/buy-together/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteBuyTogether(@CurrentUser User user, @PathVariable @NotNull(message = "삭제할 게시물 id가 없습니다.") Long id) {
+        if (user == null)
+            throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
+
+        buyTogetherService.removeMyPost(user, id);
+    }
+
     @PutMapping("/save/{id}")
     public String modifySaving(@PathVariable Long id) {
         return "save";
