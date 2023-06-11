@@ -1,29 +1,34 @@
 package kr.anabada.anabadaserver.global.exception;
 
+import org.springframework.http.HttpStatus;
+
 import static org.springframework.http.HttpStatus.*;
 
 public enum ErrorCode {
 
-    // Common
+    // INVALID INPUT VALUE - 에러코드 C000
+    INVALID_INPUT_VALUE(BAD_REQUEST, "C000", "입력 값이 올바르지 않습니다."),
+    NOT_EXIST_BUY_PLACE(NOT_FOUND, "C000", "구매 장소를 입력해주세요."),
+    INVALID_BUY_DATE(BAD_REQUEST, "C000", "구매 날짜가 올바르지 않습니다."),
+    NOT_EXIST_IMAGE(UNPROCESSABLE_ENTITY, "C000", "이미지를 입력해주세요."),
+    ILLEGAL_ARGUMENT_EXCEPTION(FORBIDDEN, "C000", "인수 값이 잘못되었습니다."),
 
-    // TODO HTTPSTATUS로 변경
-    ONLY_ACCESS_USER(501, "C001", "유저만 사용 할 수 있는 기능입니다."),
-    NOT_FOUND_BUY_TOGETHER(NOT_FOUND.value(), "C002", "해당 게시글을 찾을 수 없습니다."),
-    NOT_EXIST_BUY_PLACE(NOT_FOUND.value(), "BT-001", "구매 장소를 입력해주세요."),
-    INVALID_BUY_DATE(BAD_REQUEST.value(), "BT-002", "구매 날짜가 올바르지 않습니다."),
-    NOT_EXIST_IMAGE(UNPROCESSABLE_ENTITY.value(), "IMAGE-001", "이미지를 입력해주세요.");
+
+    // Common
+    ONLY_ACCESS_USER(NOT_IMPLEMENTED, "C001", "로그인 이후 사용 할 수 있는 기능입니다."),
+    NOT_FOUND_BUY_TOGETHER(NOT_FOUND, "C002", "해당 게시글을 찾을 수 없습니다.");
 
     private final String errorCodeStr;
     private final String message;
-    private final int status;
+    private final HttpStatus status;
 
-    ErrorCode(final int status, final String errorCodeStr, final String message) {
+    ErrorCode(final HttpStatus status, final String errorCodeStr, final String message) {
         this.status = status;
         this.message = message;
         this.errorCodeStr = errorCodeStr;
     }
 
-    public int getStatus() {
+    public HttpStatus getStatus() {
         return status;
     }
 
