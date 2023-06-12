@@ -1,8 +1,8 @@
-package kr.anabada.anabadaserver.common.controller;
+package kr.anabada.anabadaserver.domain.report.controller;
 
 import jakarta.validation.Valid;
-import kr.anabada.anabadaserver.common.dto.ReportDto;
-import kr.anabada.anabadaserver.common.service.ReportService;
+import kr.anabada.anabadaserver.domain.report.dto.ReportDto;
+import kr.anabada.anabadaserver.domain.report.service.ReportService;
 import kr.anabada.anabadaserver.domain.user.entity.User;
 import kr.anabada.anabadaserver.global.auth.CurrentUser;
 import lombok.RequiredArgsConstructor;

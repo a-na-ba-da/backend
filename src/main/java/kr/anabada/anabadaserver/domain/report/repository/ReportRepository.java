@@ -1,6 +1,6 @@
-package kr.anabada.anabadaserver.common.repository;
+package kr.anabada.anabadaserver.domain.report.repository;
 
-import kr.anabada.anabadaserver.domain.message.entity.Report;
+import kr.anabada.anabadaserver.domain.report.entity.Report;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

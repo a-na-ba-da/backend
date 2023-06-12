@@ -1,8 +1,8 @@
-package kr.anabada.anabadaserver.common.service;
+package kr.anabada.anabadaserver.domain.report.service;
 
-import kr.anabada.anabadaserver.common.dto.ReportDto;
-import kr.anabada.anabadaserver.common.repository.ReportRepository;
-import kr.anabada.anabadaserver.domain.message.entity.Report;
+import kr.anabada.anabadaserver.domain.report.dto.ReportDto;
+import kr.anabada.anabadaserver.domain.report.entity.Report;
+import kr.anabada.anabadaserver.domain.report.repository.ReportRepository;
 import kr.anabada.anabadaserver.domain.save.entity.BuyTogether;
 import kr.anabada.anabadaserver.domain.save.repository.SaveRepository;
 import kr.anabada.anabadaserver.global.exception.CustomException;

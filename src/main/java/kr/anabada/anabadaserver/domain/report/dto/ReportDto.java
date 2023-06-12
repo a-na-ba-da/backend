@@ -1,6 +1,7 @@
-package kr.anabada.anabadaserver.common.dto;
+package kr.anabada.anabadaserver.domain.report.dto;
 
 import jakarta.validation.constraints.NotNull;
+import kr.anabada.anabadaserver.common.dto.DomainType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
