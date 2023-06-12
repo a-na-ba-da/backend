@@ -53,9 +53,4 @@ public class SavingController {
 
         buyTogetherService.removeMyPost(user, id);
     }
-
-    @PutMapping("/save/{id}")
-    public String modifySaving(@PathVariable Long id) {
-        return "save";
-    }
 }
