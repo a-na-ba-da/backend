@@ -16,7 +16,12 @@ public enum ErrorCode {
 
     // Common
     ONLY_ACCESS_USER(NOT_IMPLEMENTED, "C001", "로그인 이후 사용 할 수 있는 기능입니다."),
-    NOT_FOUND_BUY_TOGETHER(NOT_FOUND, "C002", "해당 게시글을 찾을 수 없습니다.");
+    NOT_FOUND_BUY_TOGETHER(NOT_FOUND, "C002", "해당 게시글을 찾을 수 없습니다."),
+
+
+    // Report
+    CANT_REPORT(BAD_REQUEST, "R001", "신고 할 수 없습니다. 요청값을 확인해주세요."),
+    DUPLICATE_REPORT(BAD_REQUEST, "R002", "이미 신고한 이력이 있습니다. 중복 신고는 불가능합니다.");
 
     private final String errorCodeStr;
     private final String message;

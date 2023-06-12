@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface SaveRepositoryCustom {
     List<BuyTogether> findSaveList(SaveSearchRequestDto searchRequest, Pageable pageable);
+
+    BuyTogether getBuyTogetherForReport(Long writer, Long postId);
 }

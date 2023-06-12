@@ -52,4 +52,12 @@ public class SaveRepositoryImpl implements SaveRepositoryCustom {
                 .limit(pageable.getPageSize())
                 .fetch();
     }
+
+    @Override
+    public BuyTogether getBuyTogetherForReport(Long writer, Long postId) {
+        return queryFactory.selectFrom(buyTogether)
+                .where(buyTogether.id.eq(postId)
+                        .and(buyTogether.writer.id.ne(writer))).fetchFirst();
+    }
+
 }

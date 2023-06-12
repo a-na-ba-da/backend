@@ -20,25 +20,25 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class Report {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
     @Comment("신고 타입")
     @Column(name = "report_type", nullable = false, length = 15)
-    private String reportType;
+    private String type;
 
     @Comment("신고 대상 PK (타입 테이블 내 index)")
     @Column(name = "report_target_id", nullable = false)
-    private Long reportTargetId;
+    private Long targetPK;
 
     @Comment("신고자 ID")
     @Column(name = "reporter_user_id", nullable = false)
-    private Long reporterUserId;
+    private Long reporter;
 
-    @Comment("신고 대상 ID")
+    @Comment("피신고자 ID")
     @Column(name = "reported_user_id", nullable = false)
-    private Long reportedUserId;
+    private Long reported;
 
     @Comment("신고 내용")
     @Column(name = "content", length = 500)
