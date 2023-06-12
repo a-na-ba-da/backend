@@ -10,12 +10,11 @@ public enum DomainType {
         this.ko = ko;
     }
 
-    public static DomainType of(String ko) {
-        for (DomainType imageType : values()) {
-            if (imageType.ko.equals(ko)) {
-                return imageType;
-            }
+    public static DomainType of(String str) {
+        for (DomainType domainType : DomainType.values()) {
+            if (domainType.toString().equals(str))
+                return domainType;
         }
-        throw new IllegalArgumentException("존재하지 않는 이미지 타입입니다.");
+        throw new IllegalArgumentException("존재하지 않는 도메인 타입입니다.");
     }
 }
