@@ -28,12 +28,12 @@ public class BuyTogether extends Save {
     @Column(name = "is_online_delivery")
     private Boolean isOnlineDelivery;
 
-    // 구매 예정일
+    // 구매 예정일 (NULL = 협의 or 상관없음)
     @Column(name = "buy_date")
     private LocalDate buyDate;
 
     // 너가 내야될 돈
-    @Column(name = "pay")
+    @Column(name = "pay", columnDefinition = "int unsigned not null")
     private Integer pay;
 
     @BatchSize(size = 100)
