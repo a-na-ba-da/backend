@@ -13,6 +13,7 @@ import kr.anabada.anabadaserver.global.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 
@@ -20,6 +21,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Setter
 @Getter
 @Builder
 @AllArgsConstructor
@@ -72,7 +74,7 @@ public class BuyTogetherDto {
             throw new CustomException(ErrorCode.NOT_EXIST_BUY_PLACE);
         }
 
-        if (images == null) {
+        if (images == null || images.isEmpty()) {
             // 이미지를 업로드 하지 않았을때
             throw new CustomException(ErrorCode.NOT_EXIST_IMAGE);
         }
