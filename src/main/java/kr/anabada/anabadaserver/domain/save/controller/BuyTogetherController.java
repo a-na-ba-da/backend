@@ -20,11 +20,11 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/saving")
-public class SavingController {
+@RequestMapping("/api/v1/saving/buy-together")
+public class BuyTogetherController {
     private final BuyTogetherService buyTogetherService;
 
-    @PostMapping("/buy-together")
+    @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public void createNewBuyTogetherPost(@CurrentUser User user, @Validated BuyTogetherDto buyTogetherDto) {
         if (user == null)
@@ -34,28 +34,23 @@ public class SavingController {
         buyTogetherService.createNewBuyTogetherPost(user, buyTogetherDto);
     }
 
-    @GetMapping("/buy-together")
+    @GetMapping("")
     public Page<BuyTogetherDto> getBuyTogetherList(Pageable pageable, SaveSearchRequestDto searchRequest) {
         List<BuyTogetherDto> result = buyTogetherService.getBuyTogetherList(searchRequest, pageable);
         return new PageImpl<>(result, pageable, result.size());
     }
 
-    @GetMapping("/buy-together/{id}")
+    @GetMapping("/{id}")
     public BuyTogetherDto getBuyTogether(@PathVariable @NotNull(message = "게시물 id를 입력해주세요.") Long id) {
         return buyTogetherService.getBuyTogether(id);
     }
 
-    @DeleteMapping("/buy-together/{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBuyTogether(@CurrentUser User user, @PathVariable @NotNull(message = "삭제할 게시물 id가 없습니다.") Long id) {
         if (user == null)
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
 
         buyTogetherService.removeMyPost(user, id);
-    }
-
-    @PutMapping("/save/{id}")
-    public String modifySaving(@PathVariable Long id) {
-        return "save";
     }
 }
