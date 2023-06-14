@@ -3,6 +3,8 @@ package kr.anabada.anabadaserver.common.controller;
 import jakarta.validation.constraints.NotNull;
 import kr.anabada.anabadaserver.common.dto.NaverProductResponse;
 import kr.anabada.anabadaserver.common.service.NaverProductService;
+import kr.anabada.anabadaserver.global.exception.CustomException;
+import kr.anabada.anabadaserver.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,11 @@ public class NaverProductController {
 
     @GetMapping("")
     public NaverProductResponse getItemList(@RequestParam @NotNull(message = "검색어를 입력해주세요.") String keyword) {
-        return naverProductService.searchProductByKeyword(keyword);
+        NaverProductResponse result = naverProductService.searchProductByKeyword(keyword);
+        if (result == null) {
+            throw new CustomException(ErrorCode.NAVER_PRODUCT_API_FAILED);
+        } else {
+            return result;
+        }
     }
 }

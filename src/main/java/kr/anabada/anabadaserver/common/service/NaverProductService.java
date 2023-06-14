@@ -3,6 +3,7 @@ package kr.anabada.anabadaserver.common.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.anabada.anabadaserver.common.dto.NaverProductResponse;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+@Log
 @Service
 public class NaverProductService {
     private final String clientId;
@@ -55,7 +57,8 @@ public class NaverProductService {
             return objectMapper.treeToValue(jsonNode, NaverProductResponse.class);
 
         } catch (Exception e) {
-            System.out.println(e);
+            log.info("네이버 상품 검색 API 호출 실패");
+            log.info(e.getMessage());
         }
         return null;
     }
