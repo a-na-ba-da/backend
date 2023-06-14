@@ -42,4 +42,11 @@ public class KnowTogetherService {
                 .map(KnowTogether::toDto)
                 .toList();
     }
+
+    public KnowTogetherDto getKnowTogether(Long id) {
+        KnowTogether knowTogether = saveRepository.findKnowTogetherById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
+
+        return knowTogether.toDto();
+    }
 }

@@ -2,6 +2,7 @@ package kr.anabada.anabadaserver.domain.save.entity;
 
 import jakarta.persistence.*;
 import kr.anabada.anabadaserver.common.entity.Image;
+import kr.anabada.anabadaserver.domain.save.dto.KnowTogetherDto;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;

@@ -1,18 +1,22 @@
 package kr.anabada.anabadaserver.domain.save.controller;
 
+import jakarta.validation.constraints.NotNull;
 import kr.anabada.anabadaserver.domain.save.dto.KnowTogetherDto;
+import kr.anabada.anabadaserver.domain.save.dto.SaveSearchRequestDto;
 import kr.anabada.anabadaserver.domain.save.service.KnowTogetherService;
 import kr.anabada.anabadaserver.domain.user.entity.User;
 import kr.anabada.anabadaserver.global.auth.CurrentUser;
 import kr.anabada.anabadaserver.global.exception.CustomException;
 import kr.anabada.anabadaserver.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,6 +38,11 @@ public class KnowTogetherController {
     public Page<KnowTogetherDto> getKnowTogetherList(Pageable pageable, SaveSearchRequestDto searchRequest) {
         List<KnowTogetherDto> result = knowTogetherService.getKnowTogetherList(searchRequest, pageable);
         return new PageImpl<>(result, pageable, result.size());
+    }
+
+    @GetMapping("/{id}")
+    public KnowTogetherDto getKnowTogether(@PathVariable @NotNull(message = "게시물 id를 입력해주세요.") Long id) {
+        return knowTogetherService.getKnowTogether(id);
     }
 
 }
