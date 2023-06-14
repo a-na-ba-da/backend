@@ -21,7 +21,7 @@ public class SaveRepositoryImpl implements SaveRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<BuyTogether> findSaveList(SaveSearchRequestDto searchRequest, Pageable pageable) {
+    public List<BuyTogether> findBuyTogetherList(SaveSearchRequestDto searchRequest, Pageable pageable) {
         BooleanBuilder builder = new BooleanBuilder();
         OrderSpecifier<?> orderSpecifier = new OrderSpecifier<>(DESC, buyTogether.id);
 

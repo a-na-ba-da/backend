@@ -26,7 +26,7 @@ public class BuyTogetherService {
     @Transactional
     public Save createNewBuyTogetherPost(User writer, BuyTogetherDto buyTogetherDto) {
         buyTogetherDto.validate();
-        
+
         Save buyTogether = buyTogetherDto.toEntity();
         buyTogether.setWriter(writer);
 
@@ -39,7 +39,7 @@ public class BuyTogetherService {
     }
 
     public List<BuyTogetherDto> getBuyTogetherList(SaveSearchRequestDto searchRequest, Pageable pageable) {
-        return saveRepository.findSaveList(searchRequest, pageable)
+        return saveRepository.findBuyTogetherList(searchRequest, pageable)
                 .stream()
                 .map(BuyTogether::toDto)
                 .toList();
