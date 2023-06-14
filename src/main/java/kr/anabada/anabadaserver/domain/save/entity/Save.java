@@ -1,22 +1,31 @@
 package kr.anabada.anabadaserver.domain.save.entity;
 
 import jakarta.persistence.*;
+import kr.anabada.anabadaserver.common.entity.BaseTimeEntity;
+import kr.anabada.anabadaserver.domain.user.entity.User;
+import lombok.Builder;
 import lombok.Getter;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Where;
 
 @Getter
 @Entity
+@SuperBuilder
+@NoArgsConstructor
 @Table(name = "save")
-public class Save {
+@Where(clause = "is_removed = 0")
+@DiscriminatorColumn(name = "save_type")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public abstract class Save extends BaseTimeEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "writer", nullable = false)
-    private Long writer;
+    @OneToOne
+    @JoinColumn(name = "writer", nullable = false)
+    private User writer;
 
     @Column(name = "title", nullable = false, length = 50)
     private String title;
@@ -24,20 +33,8 @@ public class Save {
     @Column(name = "content", nullable = false, length = 300)
     private String content;
 
-    @Column(name = "is_online_delivery")
-    private Boolean isOnlineDelivery;
-
-    @Column(name = "buy_date")
-    private LocalDate buyDate;
-
     @Column(name = "product_url", length = 500)
     private String productUrl;
-
-    @Column(name = "pay")
-    private Integer pay;
-
-    @Column(name = "is_online")
-    private Boolean isOnline;
 
     @Column(name = "buy_place_lat")
     private Double buyPlaceLat;
@@ -45,16 +42,15 @@ public class Save {
     @Column(name = "buy_place_lng")
     private Double buyPlaceLng;
 
-    @Column(name = "save_type", nullable = false)
-    private Boolean saveType = false;
-
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "modified_at")
-    private LocalDateTime modifiedAt;
-
+    @Builder.Default
     @Column(name = "is_removed", nullable = false)
     private Boolean isRemoved = false;
 
+    public void setWriter(User writer) {
+        this.writer = writer;
+    }
+
+    public void setRemoved(Boolean removed) {
+        isRemoved = removed;
+    }
 }
