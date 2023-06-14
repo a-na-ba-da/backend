@@ -1,6 +1,8 @@
 package kr.anabada.anabadaserver.common.entity;
 
 import jakarta.persistence.*;
+import kr.anabada.anabadaserver.global.exception.CustomException;
+import kr.anabada.anabadaserver.global.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,11 +50,11 @@ public class Image {
 
     public void attach(Long postId, long userId) {
         if (this.postId != null) {
-            throw new IllegalArgumentException("이미 사용중인 이미지입니다.");
+            throw new CustomException(ErrorCode.NOT_EXIST_IMAGE);
         }
 
         if (this.uploader != userId) {
-            throw new IllegalArgumentException("해당 이미지는 다른 사용자가 업로드한 이미지입니다.");
+            throw new CustomException(ErrorCode.NOT_EXIST_IMAGE);
         }
 
         this.postId = postId;
