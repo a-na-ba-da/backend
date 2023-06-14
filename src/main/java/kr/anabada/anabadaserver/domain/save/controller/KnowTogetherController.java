@@ -30,4 +30,10 @@ public class KnowTogetherController {
         knowTogetherService.createNewKnowTogetherPost(user, knowTogetherDto);
     }
 
+    @GetMapping("")
+    public Page<KnowTogetherDto> getKnowTogetherList(Pageable pageable, SaveSearchRequestDto searchRequest) {
+        List<KnowTogetherDto> result = knowTogetherService.getKnowTogetherList(searchRequest, pageable);
+        return new PageImpl<>(result, pageable, result.size());
+    }
+
 }

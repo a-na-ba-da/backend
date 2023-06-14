@@ -26,4 +26,18 @@ public class KnowTogether extends Save {
     @JoinColumn(name = "post_id")
     @Where(clause = "image_type = 'KNOW_TOGETHER'")
     private List<Image> images;
+
+    public KnowTogetherDto toDto() {
+        return KnowTogetherDto.builder()
+                .id(getId())
+                .title(getTitle())
+                .content(getContent())
+                .productUrl(getProductUrl())
+                .createdAt(getCreatedAt())
+                .modifiedAt(getModifiedAt())
+                .isOnlineBought(isOnline)
+                .images(images.stream().map(Image::getId).map(java.util.UUID::toString).toList())
+                .userDto(getWriter().toDto())
+                .build();
+    }
 }
