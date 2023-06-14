@@ -28,7 +28,8 @@ public class NaverProductService {
 
         try {
             String text = URLEncoder.encode(keyword, StandardCharsets.UTF_8);
-            String apiURL = "https://openapi.naver.com/v1/search/shop?query=" + text; // json 결과
+            String option = "&display=10&exclude=used:rental:cbshop";
+            String apiURL = "https://openapi.naver.com/v1/search/shop?query=" + text + option;
             URL url = new URL(apiURL);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
