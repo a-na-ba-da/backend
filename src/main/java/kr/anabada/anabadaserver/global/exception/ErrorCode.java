@@ -10,7 +10,7 @@ public enum ErrorCode {
     INVALID_INPUT_VALUE(BAD_REQUEST, "C000", "입력 값이 올바르지 않습니다."),
     NOT_EXIST_BUY_PLACE(NOT_FOUND, "C000", "구매 장소를 입력해주세요."),
     INVALID_BUY_DATE(BAD_REQUEST, "C000", "구매 날짜가 올바르지 않습니다."),
-    NOT_EXIST_IMAGE(UNPROCESSABLE_ENTITY, "C000", "이미지를 입력해주세요."),
+    NOT_EXIST_IMAGE(UNPROCESSABLE_ENTITY, "C000", "이미지를 제대로 입력해주세요."),
     ILLEGAL_ARGUMENT_EXCEPTION(FORBIDDEN, "C000", "인수 값이 잘못되었습니다."),
 
 
