@@ -16,12 +16,6 @@ public enum ErrorCode {
 
     // Common
 <<<<<<< HEAD
-    ONLY_ACCESS_USER(501, "C001", "유저만 사용 할 수 있는 기능입니다."),
-
-    // R
-    NOT_FOUND_RECYCLE_POST(404, "R001", "찾을수 없는 게시물입니다."),
-    CANT_DUPLICATE_LIKE(500, "R002", "좋아요를 이미 누른 게시물입니다.");
-    // TODO 상태코드 적절한지 확인 후 변경
 =======
     ONLY_ACCESS_USER(NOT_IMPLEMENTED, "C001", "로그인 이후 사용 할 수 있는 기능입니다."),
     NOT_FOUND_BUY_TOGETHER(NOT_FOUND, "C002", "해당 게시글을 찾을 수 없습니다."),
