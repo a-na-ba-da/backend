@@ -1,27 +1,21 @@
 package kr.anabada.anabadaserver.common.dto;
 
 public enum DomainType {
-    BUY_TOGETHER("buy-together", "같이 사요"),
-    KNOW_TOGETHER("know-together", "같이알아요");
+    BUY_TOGETHER("같이 사요"),
+    KNOW_TOGETHER("같이 알아요");
 
-    private final String typeStr;
-    private final String name;
+    private final String ko;
 
-    DomainType(String domain, String name) {
-        this.typeStr = domain;
-        this.name = name;
+    DomainType(String ko) {
+        this.ko = ko;
     }
 
-    public static DomainType of(String domain) {
+    public static DomainType of(String ko) {
         for (DomainType imageType : values()) {
-            if (imageType.typeStr.equals(domain)) {
+            if (imageType.ko.equals(ko)) {
                 return imageType;
             }
         }
         throw new IllegalArgumentException("존재하지 않는 이미지 타입입니다.");
-    }
-
-    public String getTypeStr() {
-        return typeStr;
     }
 }
