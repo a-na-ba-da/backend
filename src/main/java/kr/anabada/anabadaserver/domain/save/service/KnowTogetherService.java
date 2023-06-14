@@ -49,4 +49,15 @@ public class KnowTogetherService {
 
         return knowTogether.toDto();
     }
+
+    @Transactional
+    public void removeMyPost(User user, Long id) {
+        Save save = saveRepository.findKnowTogetherById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
+
+        if (!save.getWriter().getId().equals(user.getId()))
+            throw new IllegalArgumentException("해당 게시물의 작성자가 아닙니다.");
+
+        saveRepository.delete(save);
+    }
 }

@@ -45,4 +45,12 @@ public class KnowTogetherController {
         return knowTogetherService.getKnowTogether(id);
     }
 
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteBuyTogether(@CurrentUser User user, @PathVariable @NotNull(message = "삭제할 게시물 id가 없습니다.") Long id) {
+        if (user == null)
+            throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
+
+        knowTogetherService.removeMyPost(user, id);
+    }
 }
