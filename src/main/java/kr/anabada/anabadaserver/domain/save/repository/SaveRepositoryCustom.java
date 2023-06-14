@@ -12,5 +12,5 @@ public interface SaveRepositoryCustom {
 
     List<KnowTogether> findKnowTogetherList(SaveSearchRequestDto searchRequest, Pageable pageable);
 
-    BuyTogether getBuyTogetherForReport(Long writer, Long postId);
+    Long getPostWriterNotMine(Long myId, Long postId);
 }

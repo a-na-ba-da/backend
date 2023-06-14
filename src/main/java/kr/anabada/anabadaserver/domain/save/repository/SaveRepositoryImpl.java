@@ -7,6 +7,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.anabada.anabadaserver.domain.save.dto.SaveSearchRequestDto;
 import kr.anabada.anabadaserver.domain.save.entity.BuyTogether;
 import kr.anabada.anabadaserver.domain.save.entity.KnowTogether;
+import kr.anabada.anabadaserver.domain.save.entity.Save;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,7 @@ import java.util.List;
 import static com.querydsl.core.types.Order.DESC;
 import static kr.anabada.anabadaserver.domain.save.entity.QBuyTogether.buyTogether;
 import static kr.anabada.anabadaserver.domain.save.entity.QKnowTogether.knowTogether;
+import static kr.anabada.anabadaserver.domain.save.entity.QSave.save;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -88,10 +90,14 @@ public class SaveRepositoryImpl implements SaveRepositoryCustom {
     }
 
     @Override
-    public BuyTogether getBuyTogetherForReport(Long writer, Long postId) {
-        return queryFactory.selectFrom(buyTogether)
-                .where(buyTogether.id.eq(postId)
-                        .and(buyTogether.writer.id.ne(writer))).fetchFirst();
+    public Long getPostWriterNotMine(Long myId, Long postId) {
+        // 내가 쓰지 않은 게시물이면서, 유효하면 작성자 id를 반환
+        Save result = queryFactory.selectFrom(save)
+                .where(save.id.eq(postId)
+                        .and(save.writer.id.ne(myId))).fetchFirst();
+        if (result == null)
+            return null;
+        return result.getWriter().getId();
     }
 
 }

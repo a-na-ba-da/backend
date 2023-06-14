@@ -3,7 +3,6 @@ package kr.anabada.anabadaserver.domain.report.service;
 import kr.anabada.anabadaserver.domain.report.dto.ReportDto;
 import kr.anabada.anabadaserver.domain.report.entity.Report;
 import kr.anabada.anabadaserver.domain.report.repository.ReportRepository;
-import kr.anabada.anabadaserver.domain.save.entity.BuyTogether;
 import kr.anabada.anabadaserver.domain.save.repository.SaveRepository;
 import kr.anabada.anabadaserver.global.exception.CustomException;
 import kr.anabada.anabadaserver.global.exception.ErrorCode;
@@ -22,8 +21,7 @@ public class ReportService {
     public void report(long reporterId, ReportDto reportDto) {
         ReportableRecord reportableRecord =
                 switch (reportDto.getType()) {
-                    case BUY_TOGETHER -> chkBuyTogetherReportable(reporterId, reportDto);
-                    case KNOW_TOGETHER -> throw new IllegalArgumentException("아직 지원하지 않습니다.");
+                    case BUY_TOGETHER, KNOW_TOGETHER -> chkSaveReportable(reporterId, reportDto);
                     default -> throw new IllegalArgumentException("잘못된 신고 타입입니다.");
                 };
 
@@ -34,13 +32,13 @@ public class ReportService {
         saveReport(reporterId, reportDto, reportableRecord);
     }
 
-    private ReportableRecord chkBuyTogetherReportable(long reporterId, ReportDto reportDto) {
-        BuyTogether targetPost = saveRepository.getBuyTogetherForReport(reporterId, reportDto.getPostId());
-        if (targetPost == null) {
+    private ReportableRecord chkSaveReportable(long reporterId, ReportDto reportDto) {
+        Long targetPostWriterId = saveRepository.getPostWriterNotMine(reporterId, reportDto.getPostId());
+        if (targetPostWriterId == null) {
             throw new CustomException(ErrorCode.CANT_REPORT);
         }
 
-        return new ReportableRecord(targetPost.getWriter().getId(), targetPost.getId());
+        return new ReportableRecord(targetPostWriterId, reportDto.getPostId());
     }
 
     private void saveReport(long reporterId, ReportDto reportDto, ReportableRecord reportableRecord) {
