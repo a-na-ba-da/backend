@@ -6,7 +6,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.util.ResourceUtils;
@@ -18,14 +21,15 @@ import static org.springframework.util.ResourceUtils.getFile;
 
 @ExtendWith(MockitoExtension.class)
 class ImageUploadServiceTest {
-    @Spy
     @InjectMocks
     ImageUploadService imageUploadService;
 
     @Mock
     ImageRepository imageRepository;
 
- /*   @Test
+ /*
+ TODO
+ @Test
     @DisplayName("이미지 업로드 성공 - jpg, png, jpeg")
     void 이미지_업로드_성공() throws IOException {
         // Given - 여러개 이미지 업로드
