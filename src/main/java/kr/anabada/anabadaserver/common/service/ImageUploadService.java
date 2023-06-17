@@ -135,8 +135,26 @@ public class ImageUploadService {
         if (!imageFile.delete() || !thumbnailFile.delete()) {
             throw new RuntimeException("이미지 삭제 실패");
         }
+    }
 
+    public byte[] downloadImage(String fileName) {
+        File imageFile = getImageFile(fileName);
 
+        try {
+            return imageFile.toURI().toURL().openStream().readAllBytes();
+        } catch (IOException e) {
+            throw new RuntimeException("이미지 다운로드 실패");
+        }
+    }
+
+    private File getImageFile(String fileName) {
+        File directory = getImageDirectory();
+        File imageFile = new File(directory, fileName);
+
+        if (!imageFile.exists()) {
+            throw new IllegalArgumentException("이미지 파일이 존재하지 않습니다.");
+        }
+        return imageFile;
     }
 
     public record OriginalFileInfo(String fileName, String extension) {
