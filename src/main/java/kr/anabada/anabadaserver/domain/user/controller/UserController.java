@@ -11,19 +11,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController {
 
-    @Secured("ROLE_USER")
-    @GetMapping("/loginInfo")
-    public String loginInfo(Authentication authentication) {
-        log.info("auth : {}", authentication);
-
-        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-        return oAuth2User.toString();
-    }
-
-    //    @Secured("ROLE_USER")
-    @GetMapping("/test/user")
-    public String testUser() {
-        return "test user";
-    }
 
 }
