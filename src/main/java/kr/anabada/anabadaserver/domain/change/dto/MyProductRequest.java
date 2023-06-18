@@ -26,6 +26,6 @@ public class MyProductRequest {
 
     @NotNull(message = "이미지를 업로드 해주세요.")
     @Size(min = 1, max = 5, message = "이미지는 1개 이상 5개 이하로 업로드 해주세요.")
-    @Schema(description = "사용자가 직접 업로드한 상품 이미지 파일 이름 Array", ref = "Array", example = "[\"6d4ca57f-71c6-4886-b464-6d2847b3ebb8\", \"e490da47-5e19-44ac-8565-448600d870fd\"]")
+    @Schema(description = "사용자가 직접 업로드한 상품 이미지 파일 이름 Array", example = "[\"6d4ca57f-71c6-4886-b464-6d2847b3ebb8\", \"e490da47-5e19-44ac-8565-448600d870fd\"]")
     private List<String> images;
 }
