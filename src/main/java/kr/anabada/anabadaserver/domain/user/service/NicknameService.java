@@ -1,11 +1,13 @@
 package kr.anabada.anabadaserver.domain.user.service;
 
+import kr.anabada.anabadaserver.domain.user.entity.User;
 import kr.anabada.anabadaserver.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -51,5 +53,11 @@ public class NicknameService {
             maxTries--;
         } while (userRepository.existsByNickname(generatedNickname) && maxTries > 0);
         return generatedNickname;
+    }
+
+    @Transactional
+    public void changeNickname(long userId, String nickname) {
+        userRepository.findById(userId)
+                .ifPresent(user -> user.changeNickname(nickname));
     }
 }

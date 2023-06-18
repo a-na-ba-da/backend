@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 @Getter
 @Entity
 @Builder
@@ -40,5 +42,17 @@ public class User {
                 .nickname(nickname)
                 .activated(activated)
                 .build();
+    }
+
+    public void changeNickname(String nickname) {
+        if (nickname == null || nickname.length() > 30) {
+            throw new IllegalArgumentException("닉네임은 30자 이내로 입력해주세요.");
+        }
+
+        if (Objects.equals(this.nickname, nickname)){
+            throw new IllegalArgumentException("이전 닉네임과 동일합니다.");
+        }
+
+        this.nickname = nickname;
     }
 }
