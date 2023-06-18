@@ -1,14 +1,24 @@
 package kr.anabada.anabadaserver.domain.change.entity;
 
 import jakarta.persistence.*;
+import kr.anabada.anabadaserver.domain.change.dto.ProductStatus;
+import kr.anabada.anabadaserver.domain.change.dto.ProductStatusConverter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import static kr.anabada.anabadaserver.domain.change.dto.ProductStatus.AVAILABLE;
 
 @Getter
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "my_product")
 public class MyProduct {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -18,25 +28,21 @@ public class MyProduct {
     @Column(name = "name", length = 100)
     private String name;
 
-    @Column(name = "price", columnDefinition = "int UNSIGNED not null")
-    private Long price;
+    @Column(name = "original_price", columnDefinition = "int UNSIGNED not null")
+    private int originalPrice;
 
     @Column(name = "content", nullable = false, length = 300)
     private String content;
 
-    @Column(name = "lat", nullable = false)
-    private Double lat;
-
-    @Column(name = "lng", nullable = false)
-    private Double lng;
-
+    @Builder.Default
+    @Convert(converter = ProductStatusConverter.class)
     @Column(name = "status", nullable = false)
-    private Boolean status = false;
+    private ProductStatus status = AVAILABLE;
 
-    @Column(name = "category", length = 40)
-    private String category;
+//    @Column(name = "category", length = 40)
+//    private String category;
 
+    @Builder.Default
     @Column(name = "is_removed", nullable = false)
     private Boolean isRemoved = false;
-
 }
