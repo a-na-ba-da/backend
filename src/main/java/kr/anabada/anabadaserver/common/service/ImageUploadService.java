@@ -31,25 +31,22 @@ public class ImageUploadService {
         for (MultipartFile file : uploadFile) {
             // validate file
             OriginalFileInfo originalFileInfo = validateFile(file);
-
-            // check image directory
             File directory = getImageDirectory();
 
-            // save image and generate thumbnail
-            UUID uuid = UUID.randomUUID();
-            File savedFile = saveImageOnLocal(directory, uuid, file);
-            makeThumbnail(directory, uuid.toString(), savedFile);
-
             // save image info on database
-            imageRepository.save(
+            UUID uuid = imageRepository.save(
                     Image.builder()
-                            .id(uuid)
+                            .id(UUID.randomUUID())
                             .uploader(uploaderId)
                             .imageType(imageType.toString())
                             .originalFileName(originalFileInfo.fileName)
                             .extension(originalFileInfo.extension)
                             .build()
-            );
+            ).getId();
+
+            // save image to local and generate thumbnail
+            File savedFile = saveImageOnLocal(directory, uuid, file);
+            makeThumbnail(directory, uuid, savedFile);
 
             imageNameList.add(uuid.toString());
         }
@@ -102,7 +99,7 @@ public class ImageUploadService {
     }
 
 
-    private void makeThumbnail(File directory, String uuidStr, File saveFile) {
+    private void makeThumbnail(File directory, UUID uuid, File saveFile) {
         // generate thumbnail image
         BufferedImage bo_img = null;
         try {
@@ -114,7 +111,7 @@ public class ImageUploadService {
         int maxWidth = 750;
         int calcHeight = (int) (bo_img.getHeight() * ((double) maxWidth / bo_img.getWidth()));
 
-        File thumbnailFile = new File(directory, "thumbnail_" + uuidStr);
+        File thumbnailFile = new File(directory, "thumbnail_" + uuid.toString());
         try {
             Thumbnails.of(saveFile)
                     .size(maxWidth, calcHeight)
