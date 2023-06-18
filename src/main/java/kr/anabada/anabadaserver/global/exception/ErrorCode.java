@@ -21,7 +21,11 @@ public enum ErrorCode {
 
     // Report
     CANT_REPORT(BAD_REQUEST, "R001", "신고 할 수 없습니다. 요청값을 확인해주세요."),
-    DUPLICATE_REPORT(BAD_REQUEST, "R002", "이미 신고한 이력이 있습니다. 중복 신고는 불가능합니다.");
+    DUPLICATE_REPORT(BAD_REQUEST, "R002", "이미 신고한 이력이 있습니다. 중복 신고는 불가능합니다."),
+
+
+    // Third-Party
+    NAVER_PRODUCT_API_FAILED(SERVICE_UNAVAILABLE, "T001", "네이버 상품 API 호출에 실패했습니다. 잠시 후 다시 시도해주세요.");
 
     private final String errorCodeStr;
     private final String message;
