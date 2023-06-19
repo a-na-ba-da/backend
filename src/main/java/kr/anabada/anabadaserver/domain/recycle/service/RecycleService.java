@@ -8,8 +8,11 @@ import kr.anabada.anabadaserver.domain.recycle.repository.RecycleRepository;
 import kr.anabada.anabadaserver.global.exception.CustomException;
 import kr.anabada.anabadaserver.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -32,12 +35,19 @@ public class RecycleService {
     @Transactional
     public void likePost(Long userId, Long postId) {
         Recycle post = recycleRepository.findById(postId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_RECYCLE_POST));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_RECYCLE));
 
         recycleLikeRepository.findByUserIdAndRecycleId(userId, postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.CANT_DUPLICATE_LIKE));
 
         RecycleLike recycleLike = new RecycleLike(post.getId(), userId);
         recycleLikeRepository.save(recycleLike);
+    }
+
+    public List<RecycleDto> getRecycleList(Pageable pageable){
+        return recycleRepository.findRecycleList(pageable)
+                .stream()
+                .map(Recycle::toDto)
+                .toList();
     }
 }

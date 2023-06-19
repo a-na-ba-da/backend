@@ -1,6 +1,7 @@
 package kr.anabada.anabadaserver.domain.recycle.entity;
 
 import jakarta.persistence.*;
+import kr.anabada.anabadaserver.domain.recycle.dto.RecycleDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,4 +49,17 @@ public class Recycle {
     @Builder.Default
     @Column(name = "is_removed", nullable = false)
     private Boolean isRemoved = false;
+
+
+    public RecycleDto toDto() {
+        return RecycleDto.builder()
+                .id(getId())
+                .title(getTitle())
+                .writer(getWriter())
+                .content(getContent())
+                .createdAt(getCreatedAt())
+                .modifiedAt(getModifiedAt())
+                .isRemoved(getIsRemoved())
+                .build();
+    }
 }

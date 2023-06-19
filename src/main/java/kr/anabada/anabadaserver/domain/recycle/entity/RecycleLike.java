@@ -24,4 +24,5 @@ public class RecycleLike {
         this.userId = userId;
     }
 
+    public RecycleLike() {}
 }
