@@ -1,7 +1,6 @@
 spring:
-  mvc:
-    favicon:
-      enabled: false
+  profiles:
+    active: prod
   jpa:
     hibernate:
       ddl-auto: none
