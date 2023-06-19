@@ -23,6 +23,9 @@ public class ChangeRequest {
     @Column(name = "requester_id", nullable = false)
     private Long requesterId;
 
+    @Column(name = "place", nullable = false)
+    private String place;
+
     @Column(name = "requester_product", nullable = false)
     private Long requesterProduct;
 
