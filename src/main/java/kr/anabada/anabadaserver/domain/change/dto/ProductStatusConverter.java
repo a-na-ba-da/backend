@@ -4,18 +4,24 @@ import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import org.springframework.util.StringUtils;
 
+import static kr.anabada.anabadaserver.domain.change.dto.ProductStatus.of;
+
 @Converter
 public class ProductStatusConverter implements AttributeConverter<ProductStatus, String> {
     @Override
     public String convertToDatabaseColumn(ProductStatus attribute) {
-        return attribute.name();
+        if (attribute == null) {
+            return null;
+        }
+
+        return attribute.getStatus();
     }
 
     @Override
     public ProductStatus convertToEntityAttribute(String dbData) {
-        if (StringUtils.hasText(dbData)) {
+        if (!StringUtils.hasText(dbData)) {
             return null;
         }
-        return ProductStatus.valueOf(dbData);
+        return of(dbData);
     }
 }
