@@ -35,7 +35,7 @@ public class BuyTogetherDto {
     private String title;
     @Schema(description = "내용")
     @NotNull(message = "내용을 입력해주세요.")
-    @Length(min = 1, max = 300, message = "내용은 1자 이상 50자 이하로 작성해주세요.")
+    @Length(min = 1, max = 700, message = "내용은 1자 이상 700자 이하로 작성해주세요.")
     private String content;
     @Schema(description = "상품 URL")
     @Pattern(regexp = "^(http|https)://.*", message = "URL은 http:// 또는 https:// 로 시작해야합니다.")

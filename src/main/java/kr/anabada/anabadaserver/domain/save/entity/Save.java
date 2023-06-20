@@ -30,7 +30,7 @@ public abstract class Save extends BaseTimeEntity {
     @Column(name = "title", nullable = false, length = 50)
     private String title;
 
-    @Column(name = "content", nullable = false, length = 300)
+    @Column(name = "content", nullable = false, length = 700)
     private String content;
 
     @Column(name = "product_url", length = 500)
