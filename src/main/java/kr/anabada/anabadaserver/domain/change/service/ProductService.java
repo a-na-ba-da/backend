@@ -19,7 +19,7 @@ import static kr.anabada.anabadaserver.domain.change.dto.ProductStatus.AVAILABLE
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class MyProductService {
+public class ProductService {
     private final NaverProductService naverProductService;
     private final ImageService imageService;
     private final ProductRepository myProductRepository;
@@ -41,7 +41,11 @@ public class MyProductService {
         imageService.attach(owner.getId(), request.getImages(), myProduct.getId());
     }
 
-    public Page<MyProductResponse> getMyProduct(User owner, String searchWord, Pageable pageable) {
+    public Page<MyProductResponse> getMyProducts(User owner, String searchWord, Pageable pageable) {
         return myProductRepository.findUserProductList(new SearchProductRecord(owner, searchWord, pageable, true));
+    }
+
+    public Page<MyProductResponse> getProducts(String searchWord, Pageable pageable) {
+        return myProductRepository.findUserProductList(new SearchProductRecord(null, searchWord, pageable, true));
     }
 }

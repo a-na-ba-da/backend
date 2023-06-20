@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import kr.anabada.anabadaserver.domain.change.dto.MyProductRequest;
 import kr.anabada.anabadaserver.domain.change.dto.MyProductResponse;
-import kr.anabada.anabadaserver.domain.change.service.MyProductService;
+import kr.anabada.anabadaserver.domain.change.service.ProductService;
 import kr.anabada.anabadaserver.domain.user.entity.User;
 import kr.anabada.anabadaserver.global.auth.CurrentUser;
 import kr.anabada.anabadaserver.global.exception.CustomException;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/changing")
 @Tag(name = "바꿔쓰기", description = "바꿔쓰기 관련 API")
 public class ProductController {
-    private final MyProductService myProductService;
+    private final ProductService myProductService;
 
     @PostMapping("/my-product")
     @Operation(summary = "바꿔쓰기에 사용할 내 상품 등록")
@@ -44,6 +44,17 @@ public class ProductController {
         if (isInvalidSearchWord(searchWord))
             throw new CustomException(ErrorCode.SEARCH_WORD_LENGTH);
 
+        return myProductService.getMyProducts(user, searchWord, pageable);
+    }
+
+    @GetMapping("/product")
+    @Operation(summary = "모든(내 상품 포함) 상품 목록 조회")
+    public Page<MyProductResponse> getAllProduct(String searchWord, Pageable pageable) {
+        if (isInvalidSearchWord(searchWord))
+            throw new CustomException(ErrorCode.SEARCH_WORD_LENGTH);
+
+        return myProductService.getProducts(searchWord, pageable);
+    }
 
     private boolean isInvalidSearchWord(String searchWord) {
         return StringUtils.hasText(searchWord) && searchWord.trim().length() < 2;
