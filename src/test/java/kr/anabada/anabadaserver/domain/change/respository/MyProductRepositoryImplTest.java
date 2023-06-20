@@ -4,8 +4,8 @@ import jakarta.persistence.EntityManager;
 import kr.anabada.anabadaserver.TestConfig;
 import kr.anabada.anabadaserver.domain.change.dto.ProductStatus;
 import kr.anabada.anabadaserver.domain.change.entity.MyProduct;
-import kr.anabada.anabadaserver.domain.change.respository.MyProductRepository;
-import kr.anabada.anabadaserver.domain.change.respository.MyProductRepositoryImpl.SearchProductRecord;
+import kr.anabada.anabadaserver.domain.change.respository.ProductRepository;
+import kr.anabada.anabadaserver.domain.change.respository.ProductRepositoryImpl.SearchProductRecord;
 import kr.anabada.anabadaserver.domain.user.entity.User;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -24,7 +24,7 @@ import org.springframework.test.context.ActiveProfiles;
 class MyProductRepositoryTest {
 
     @Autowired
-    private MyProductRepository myProductRepository;
+    private ProductRepository myProductRepository;
 
     @Autowired
     private EntityManager em;

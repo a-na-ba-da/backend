@@ -27,7 +27,7 @@ import static kr.anabada.anabadaserver.domain.change.entity.QMyProduct.myProduct
 
 @Slf4j
 @RequiredArgsConstructor
-public class MyProductRepositoryImpl implements MyProductRepositoryCustom {
+public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override

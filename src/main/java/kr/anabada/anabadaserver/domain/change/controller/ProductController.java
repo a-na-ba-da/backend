@@ -23,9 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/changing")
 @Tag(name = "바꿔쓰기", description = "바꿔쓰기 관련 API")
-public class MyProductController {
+public class ProductController {
     private final MyProductService myProductService;
 
+    @PostMapping("/my-product")
     @Operation(summary = "바꿔쓰기에 사용할 내 상품 등록")
     public void createMyProduct(@CurrentUser User user, @Valid MyProductRequest request) {
         if (user == null)
@@ -34,6 +35,7 @@ public class MyProductController {
         myProductService.createMyProduct(user, request);
     }
 
+    @GetMapping("/my-product")
     @Operation(summary = "내 상품 목록 조회")
     public Page<MyProductResponse> getMyProduct(@CurrentUser User user, String searchWord, Pageable pageable) {
         if (user == null)
@@ -46,5 +48,4 @@ public class MyProductController {
     private boolean isInvalidSearchWord(String searchWord) {
         return StringUtils.hasText(searchWord) && searchWord.trim().length() < 2;
     }
-
 }

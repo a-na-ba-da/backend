@@ -5,8 +5,8 @@ import kr.anabada.anabadaserver.common.service.NaverProductService;
 import kr.anabada.anabadaserver.domain.change.dto.MyProductRequest;
 import kr.anabada.anabadaserver.domain.change.dto.MyProductResponse;
 import kr.anabada.anabadaserver.domain.change.entity.MyProduct;
-import kr.anabada.anabadaserver.domain.change.respository.MyProductRepository;
-import kr.anabada.anabadaserver.domain.change.respository.MyProductRepositoryImpl.SearchProductRecord;
+import kr.anabada.anabadaserver.domain.change.respository.ProductRepository;
+import kr.anabada.anabadaserver.domain.change.respository.ProductRepositoryImpl.SearchProductRecord;
 import kr.anabada.anabadaserver.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,7 +22,7 @@ import static kr.anabada.anabadaserver.domain.change.dto.ProductStatus.AVAILABLE
 public class MyProductService {
     private final NaverProductService naverProductService;
     private final ImageService imageService;
-    private final MyProductRepository myProductRepository;
+    private final ProductRepository myProductRepository;
 
     @Transactional
     public void createMyProduct(User owner, MyProductRequest request) {
