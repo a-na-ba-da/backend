@@ -30,9 +30,9 @@ class MyProductRepositoryTest {
     private EntityManager em;
 
     @Test
-    @DisplayName("유저의 물건 목록 조회 성공 1 | 기본 조회 상황")
+    @DisplayName("본인 물건 목록 조회 성공 1 | 기본 조회 상황")
     void findUserProductList() {
-        User user = createUser();
+        User user = createUserA();
         em.persist(user);
 
         MyProduct myProduct = createMyProduct(user, "test", "test", 10000, ProductStatus.AVAILABLE);
@@ -48,9 +48,9 @@ class MyProductRepositoryTest {
     }
 
     @Test
-    @DisplayName("유저의 물건 목록 조회 성공 2 | 교환완료 등의 상태가 다른 상품은 조회되지 않음")
+    @DisplayName("본인 물건 목록 조회 성공 2 | 교환완료 등의 상태가 다른 상품은 조회되지 않음")
     void findUserProductList2() {
-        User user = createUser();
+        User user = createUserA();
         em.persist(user);
 
         MyProduct myProduct = createMyProduct(user, "test", "다른 상태코드 물건", 10000, ProductStatus.REQUESTING);
@@ -68,9 +68,9 @@ class MyProductRepositoryTest {
     }
 
     @Test
-    @DisplayName("유저의 물건 목록 조회 성공 3 | 키워드 검색 정상 동작")
+    @DisplayName("본인 물건 목록 조회 성공 3 | 키워드 검색 정상 동작")
     void findUserProductList3() {
-        User user = createUser();
+        User user = createUserA();
         em.persist(user);
 
         MyProduct myProduct = createMyProduct(user, "123키워드123", "123키워드123", 10000, ProductStatus.AVAILABLE);
@@ -91,10 +91,65 @@ class MyProductRepositoryTest {
         Assertions.assertThat(searched.getName()).isEqualTo(myProduct.getName());
     }
 
-    private User createUser() {
+    @Test
+    @DisplayName("모든 물건 목록 조회 성공 1 | 교환완료 등의 상태가 다른 상품은 조회되지 않음")
+    void findAllProducts1() {
+        User userA = createUserA();
+        User userB = createUserB();
+        em.persist(userA);
+        em.persist(userB);
+
+        MyProduct myProduct = createMyProduct(userA, "123키워드123", "123키워드123", 10000, ProductStatus.AVAILABLE);
+        MyProduct myProduct2 = createMyProduct(userB, "제목", "내용", 10000, ProductStatus.CHANGED);
+        MyProduct myProduct3 = createMyProduct(userB, "123키워드123", "123키워드123", 10000, ProductStatus.AVAILABLE);
+        em.persist(myProduct);
+        em.persist(myProduct2);
+        em.persist(myProduct3);
+
+        var page = PageRequest.of(0, 10);
+        var keyword = "키워드";
+        var searchOption = new SearchProductRecord(null, keyword, page, false);
+        var myProductResponses = myProductRepository.findUserProductList(searchOption);
+
+        Assertions.assertThat(myProductResponses.getTotalElements()).isEqualTo(2);
+    }
+
+    @Test
+    @DisplayName("모든 물건 목록 조회 성공 2 | 키워드 검색 정상 동작")
+    void findAllProducts2() {
+        User userA = createUserA();
+        User userB = createUserB();
+        em.persist(userA);
+        em.persist(userB);
+
+        MyProduct myProduct = createMyProduct(userA, "123키워드123", "123키워드123", 10000, ProductStatus.AVAILABLE);
+        MyProduct myProduct2 = createMyProduct(userB, "제목", "내용", 10000, ProductStatus.AVAILABLE);
+        MyProduct myProduct3 = createMyProduct(userB, "123키워드123", "123키워드123", 10000, ProductStatus.AVAILABLE);
+        em.persist(myProduct);
+        em.persist(myProduct2);
+        em.persist(myProduct3);
+
+        var page = PageRequest.of(0, 10);
+        var keyword = "키워드";
+        var searchOption = new SearchProductRecord(null, keyword, page, false);
+        var myProductResponses = myProductRepository.findUserProductList(searchOption);
+
+        Assertions.assertThat(myProductResponses.getTotalElements()).isEqualTo(2);
+    }
+
+    private User createUserA() {
         return User.builder()
-                .nickname("test")
-                .email("test@test.com")
+                .nickname("userA")
+                .email("userA@test.com")
+                .activated(true)
+                .role("ROLE_USER")
+                .build();
+    }
+
+    private User createUserB() {
+        return User.builder()
+                .nickname("userB")
+                .email("userB@test.com")
                 .activated(true)
                 .role("ROLE_USER")
                 .build();
