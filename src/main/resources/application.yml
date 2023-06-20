@@ -37,6 +37,9 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
 
+image:
+  path: ${ANABADA_IMAGE_PATH}
+
 springdoc:
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8

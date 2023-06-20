@@ -3,8 +3,8 @@ package kr.anabada.anabadaserver.common.service;
 import kr.anabada.anabadaserver.common.dto.DomainType;
 import kr.anabada.anabadaserver.common.entity.Image;
 import kr.anabada.anabadaserver.common.repository.ImageRepository;
-import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnails;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
@@ -20,10 +20,15 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ImageUploadService {
     private final ImageRepository imageRepository;
+    private final String imagePath;
+
+    public ImageUploadService(ImageRepository imageRepository, @Value("${image.path}") String imagePath) {
+        this.imageRepository = imageRepository;
+        this.imagePath = imagePath;
+    }
 
     @Transactional
     public List<String> uploadImages(MultipartFile[] uploadFile, DomainType imageType, long uploaderId) {
@@ -57,7 +62,9 @@ public class ImageUploadService {
     private File getImageDirectory() {
         File directory = null;
         try {
-            directory = new File(ResourceUtils.getFile("classpath:").getPath(), "images");
+            // from image path
+            directory = ResourceUtils.getFile(imagePath);
+            //new File(ResourceUtils.getFile("classpath:").getPath(), "images");
         } catch (FileNotFoundException e) {
             throw new RuntimeException("이미지 디렉터리 접근 실패");
         }
