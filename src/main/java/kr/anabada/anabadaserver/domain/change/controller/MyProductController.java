@@ -39,11 +39,12 @@ public class MyProductController {
         if (user == null)
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
 
-        if (StringUtils.hasText(searchWord) && searchWord.trim().length() < 2)
+        if (isInvalidSearchWord(searchWord))
             throw new CustomException(ErrorCode.SEARCH_WORD_LENGTH);
 
 
-        return myProductService.getMyProduct(user, searchWord, pageable);
+    private boolean isInvalidSearchWord(String searchWord) {
+        return StringUtils.hasText(searchWord) && searchWord.trim().length() < 2;
     }
 
 }
