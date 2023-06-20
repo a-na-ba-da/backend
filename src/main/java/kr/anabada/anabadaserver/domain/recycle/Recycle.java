@@ -31,5 +31,4 @@ public class Recycle {
 
     @Column(name = "is_removed", nullable = false)
     private Boolean isRemoved = false;
-
 }

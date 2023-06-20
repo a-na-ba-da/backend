@@ -44,5 +44,4 @@ public class Message {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "message_origin_id", nullable = false)
     private MessageOrigin messageOrigin;
-
 }

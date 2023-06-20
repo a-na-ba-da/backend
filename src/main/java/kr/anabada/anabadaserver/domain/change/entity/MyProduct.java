@@ -61,17 +61,4 @@ public class MyProduct {
     @Builder.Default
     @Column(name = "is_removed", nullable = false)
     private Boolean isRemoved = false;
-
-//  쓸 일이 없어 일단 주석 처리 하였음.
-//    public MyProductResponse toResponse() {
-//        return MyProductResponse.builder()
-//                .id(id)
-//                .name(name)
-//                .user(owner == null ? null : owner.toDto())
-//                .originalPrice(originalPrice)
-//                .content(content)
-//                .status(status)
-//                .images(images == null ? null : images.stream().map(Image::getId).map(UUID::toString).toList())
-//                .build();
-//    }
 }
