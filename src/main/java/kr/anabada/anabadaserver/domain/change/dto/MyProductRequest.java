@@ -21,7 +21,7 @@ public class MyProductRequest {
     private Long naverProductId;
 
     @NotNull(message = "상품 설명을 입력해주세요.")
-    @Size(min = 1, max = 300, message = "상품 설명은 1자 이상 300자 이하로 작성해주세요.")
+    @Size(min = 1, max = 700, message = "상품 설명은 1자 이상 700자 이하로 작성해주세요.")
     private String content;
 
     @NotNull(message = "이미지를 업로드 해주세요.")

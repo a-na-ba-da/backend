@@ -41,7 +41,7 @@ public class MyProduct {
     @Column(name = "original_price", columnDefinition = "int UNSIGNED not null")
     private int originalPrice;
 
-    @Column(name = "content", nullable = false, length = 300)
+    @Column(name = "content", nullable = false, length = 700)
     private String content;
 
     @Builder.Default

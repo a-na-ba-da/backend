@@ -62,7 +62,7 @@ create table if not exists lend
     title         varchar(50)                null,
     start         datetime(6)                not null,
     end           datetime(6)                null,
-    content       varchar(300)               not null comment '상품 설명',
+    content       varchar(700)               not null comment '상품 설명',
     price_per_day int                        not null,
     lat           double                     null,
     lng           double                     not null,
