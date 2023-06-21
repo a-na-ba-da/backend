@@ -3,8 +3,6 @@ package kr.anabada.anabadaserver.domain.user.service;
 import kr.anabada.anabadaserver.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -20,9 +18,6 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class NicknameService {
     private final UserRepository userRepository;
-
-    @Autowired
-    ResourceLoader resourceLoader;
 
     public String generateNickname() throws IOException {
         return generateRandomNickname();

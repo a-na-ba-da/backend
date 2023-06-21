@@ -125,7 +125,7 @@ public class NaverProductService {
             String[] split = html.split("product_bridge_product");
             String[] split2 = split[1].split("<strong>");
             String[] split3 = split2[1].split("</strong>");
-            
+
             return split3[0];
         } catch (IndexOutOfBoundsException e) {
             throw new RuntimeException("네이버 상품 상세 페이지 파싱 실패");

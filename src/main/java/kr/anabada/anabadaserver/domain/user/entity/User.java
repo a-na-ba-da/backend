@@ -33,7 +33,7 @@ public class User {
 
         return !activated;
     }
-    
+
     public UserDto toDto() {
         return UserDto.builder()
                 .id(id)
