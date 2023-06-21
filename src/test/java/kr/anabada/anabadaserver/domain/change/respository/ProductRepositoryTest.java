@@ -1,10 +1,9 @@
-package kr.anabada.anabadaserver.domain.change.repository;
+package kr.anabada.anabadaserver.domain.change.respository;
 
 import jakarta.persistence.EntityManager;
 import kr.anabada.anabadaserver.TestConfig;
 import kr.anabada.anabadaserver.domain.change.dto.ProductStatus;
 import kr.anabada.anabadaserver.domain.change.entity.MyProduct;
-import kr.anabada.anabadaserver.domain.change.respository.ProductRepository;
 import kr.anabada.anabadaserver.domain.change.respository.ProductRepositoryImpl.SearchProductRecord;
 import kr.anabada.anabadaserver.domain.user.entity.User;
 import org.junit.jupiter.api.DisplayName;
@@ -136,7 +135,7 @@ class ProductRepositoryTest {
         em.persist(userB);
 
         MyProduct myProduct = createMyProduct(userA, "상품1", "설명1", ProductStatus.AVAILABLE);
-        MyProduct myProduct2 = createMyProduct(userB, "(교환된)상품3", "(교환된)설명2", ProductStatus.CHANGED);
+        MyProduct myProduct2 = createMyProduct(userB, "(교환된)상품2", "(교환된)설명2", ProductStatus.CHANGED);
         MyProduct myProduct3 = createMyProduct(userB, "상품3", "설명3", ProductStatus.AVAILABLE);
         myProductRepository.saveAll(List.of(myProduct, myProduct2, myProduct3));
 
