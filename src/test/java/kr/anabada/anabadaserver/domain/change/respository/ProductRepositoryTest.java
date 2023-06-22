@@ -1,6 +1,7 @@
 package kr.anabada.anabadaserver.domain.change.respository;
 
 import jakarta.persistence.EntityManager;
+import kr.anabada.anabadaserver.AnabadaServerApplication;
 import kr.anabada.anabadaserver.TestConfig;
 import kr.anabada.anabadaserver.domain.change.dto.ProductStatus;
 import kr.anabada.anabadaserver.domain.change.entity.MyProduct;
@@ -14,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
 
@@ -22,8 +24,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
 @DataJpaTest
 @ActiveProfiles("test")
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import(TestConfig.class)
+@ContextConfiguration(classes = AnabadaServerApplication.class)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class ProductRepositoryTest {
 
     @Autowired
