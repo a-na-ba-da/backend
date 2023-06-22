@@ -145,9 +145,9 @@ public class ImageUploadService {
         File imageFile = getImageFile(fileName);
 
         try {
-            return imageFile.toURI().toURL().openStream().readAllBytes();
+            return java.nio.file.Files.readAllBytes(imageFile.toPath());
         } catch (IOException e) {
-            throw new RuntimeException("이미지 다운로드 실패");
+            throw new IllegalArgumentException("이미지 다운로드 실패");
         }
     }
 
