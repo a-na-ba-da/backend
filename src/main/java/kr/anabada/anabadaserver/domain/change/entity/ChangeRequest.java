@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Table(name = "change_request")
 public class ChangeRequest {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -23,6 +23,9 @@ public class ChangeRequest {
     @Column(name = "requester_id", nullable = false)
     private Long requesterId;
 
+    @Column(name = "place", nullable = false)
+    private String place;
+
     @Column(name = "requester_product", nullable = false)
     private Long requesterProduct;
 
@@ -34,5 +37,4 @@ public class ChangeRequest {
 
     @Column(name = "is_removed", nullable = false)
     private Boolean isRemoved = false;
-
 }

@@ -3,9 +3,8 @@ package kr.anabada.anabadaserver.domain.user.service;
 import kr.anabada.anabadaserver.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,12 +16,10 @@ import java.util.Random;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class NicknameService {
     private final UserRepository userRepository;
-
-    @Autowired
-    ResourceLoader resourceLoader;
 
     public String generateNickname() throws IOException {
         return generateRandomNickname();
@@ -49,7 +46,11 @@ public class NicknameService {
             int nounIndex = rand.nextInt(nounList.length);
             generatedNickname = adjList[adjIndex] + " " + nounList[nounIndex];
             maxTries--;
-        } while (userRepository.existsByNickname(generatedNickname) && maxTries > 0);
+        } while (isNicknameExist(generatedNickname) && maxTries > 0);
         return generatedNickname;
+    }
+
+    public boolean isNicknameExist(String nickname) {
+        return userRepository.existsByNickname(nickname);
     }
 }

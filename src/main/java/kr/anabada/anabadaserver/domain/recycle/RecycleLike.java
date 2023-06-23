@@ -8,7 +8,7 @@ import lombok.Getter;
 @Table(name = "recycle_like")
 public class RecycleLike {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -17,5 +17,4 @@ public class RecycleLike {
 
     @Column(name = "user_id", nullable = false)
     private Long userId;
-
 }

@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Table(name = "message")
 public class Message {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -44,5 +44,4 @@ public class Message {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "message_origin_id", nullable = false)
     private MessageOrigin messageOrigin;
-
 }

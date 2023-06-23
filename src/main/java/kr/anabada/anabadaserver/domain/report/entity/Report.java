@@ -33,11 +33,11 @@ public class Report {
     private Long targetPK;
 
     @Comment("신고자 ID")
-    @Column(name = "reporter_user_id", nullable = false)
+    @Column(name = "reporter_member_id", nullable = false)
     private Long reporter;
 
     @Comment("피신고자 ID")
-    @Column(name = "reported_user_id", nullable = false)
+    @Column(name = "reported_member_id", nullable = false)
     private Long reported;
 
     @Comment("신고 내용")

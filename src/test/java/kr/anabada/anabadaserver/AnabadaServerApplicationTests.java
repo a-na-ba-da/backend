@@ -8,6 +8,6 @@ class AnabadaServerApplicationTests {
 
     @Test
     void contextLoads() {
-    }
 
+    }
 }

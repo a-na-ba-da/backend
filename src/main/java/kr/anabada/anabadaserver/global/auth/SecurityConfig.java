@@ -28,11 +28,16 @@ public class SecurityConfig {
                 .httpBasic(
                         AbstractHttpConfigurer::disable
                 )
+                .headers(
+                        AbstractHttpConfigurer::disable // h2
+                )
                 .authorizeHttpRequests(
                         it -> it
+                                // api-docs, swagger-ui, h2
                                 .requestMatchers("/api-docs/**").permitAll()
                                 .requestMatchers("/swagger-ui/**").permitAll()
-
+                                .requestMatchers("/h2-console/**").permitAll()
+                                
                                 .requestMatchers("/test/user/**").hasRole("USER")
                                 .requestMatchers("/test/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/api/v1/auth/nickname").permitAll()
