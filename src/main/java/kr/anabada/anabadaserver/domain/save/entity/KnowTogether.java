@@ -6,6 +6,7 @@ import kr.anabada.anabadaserver.domain.save.dto.KnowTogetherDto;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -23,6 +24,7 @@ public class KnowTogether extends Save {
     @Column(name = "is_online")
     private Boolean isOnline;
 
+    @BatchSize(size = 100)
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     @Where(clause = "image_type = 'KNOW_TOGETHER'")

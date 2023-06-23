@@ -1,7 +1,16 @@
 spring:
   jpa:
-    hibernate:
-      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        show_sql: true
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:test/anabada;MODE=MYSQL;
+    port: 3306
+    username: sa
+    password:
   security:
     oauth2:
       client:

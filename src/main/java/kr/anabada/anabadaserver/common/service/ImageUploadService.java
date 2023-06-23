@@ -3,8 +3,8 @@ package kr.anabada.anabadaserver.common.service;
 import kr.anabada.anabadaserver.common.dto.DomainType;
 import kr.anabada.anabadaserver.common.entity.Image;
 import kr.anabada.anabadaserver.common.repository.ImageRepository;
-import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnails;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
@@ -20,10 +20,15 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ImageUploadService {
     private final ImageRepository imageRepository;
+    private final String imagePath;
+
+    public ImageUploadService(ImageRepository imageRepository, @Value("${image.path}") String imagePath) {
+        this.imageRepository = imageRepository;
+        this.imagePath = imagePath;
+    }
 
     @Transactional
     public List<String> uploadImages(MultipartFile[] uploadFile, DomainType imageType, long uploaderId) {
@@ -31,25 +36,22 @@ public class ImageUploadService {
         for (MultipartFile file : uploadFile) {
             // validate file
             OriginalFileInfo originalFileInfo = validateFile(file);
-
-            // check image directory
             File directory = getImageDirectory();
 
-            // save image and generate thumbnail
-            UUID uuid = UUID.randomUUID();
-            File savedFile = saveImageOnLocal(directory, uuid, file);
-            makeThumbnail(directory, uuid.toString(), savedFile);
-
             // save image info on database
-            imageRepository.save(
+            UUID uuid = imageRepository.save(
                     Image.builder()
-                            .id(uuid)
+                            .id(UUID.randomUUID())
                             .uploader(uploaderId)
                             .imageType(imageType.toString())
                             .originalFileName(originalFileInfo.fileName)
                             .extension(originalFileInfo.extension)
                             .build()
-            );
+            ).getId();
+
+            // save image to local and generate thumbnail
+            File savedFile = saveImageOnLocal(directory, uuid, file);
+            makeThumbnail(directory, uuid, savedFile);
 
             imageNameList.add(uuid.toString());
         }
@@ -60,7 +62,9 @@ public class ImageUploadService {
     private File getImageDirectory() {
         File directory = null;
         try {
-            directory = new File(ResourceUtils.getFile("classpath:").getPath(), "images");
+            // from image path
+            directory = ResourceUtils.getFile(imagePath);
+            //new File(ResourceUtils.getFile("classpath:").getPath(), "images");
         } catch (FileNotFoundException e) {
             throw new RuntimeException("이미지 디렉터리 접근 실패");
         }
@@ -102,7 +106,7 @@ public class ImageUploadService {
     }
 
 
-    private void makeThumbnail(File directory, String uuidStr, File saveFile) {
+    private void makeThumbnail(File directory, UUID uuid, File saveFile) {
         // generate thumbnail image
         BufferedImage bo_img = null;
         try {
@@ -114,7 +118,7 @@ public class ImageUploadService {
         int maxWidth = 750;
         int calcHeight = (int) (bo_img.getHeight() * ((double) maxWidth / bo_img.getWidth()));
 
-        File thumbnailFile = new File(directory, "thumbnail_" + uuidStr);
+        File thumbnailFile = new File(directory, "thumbnail_" + uuid.toString());
         try {
             Thumbnails.of(saveFile)
                     .size(maxWidth, calcHeight)
@@ -141,9 +145,9 @@ public class ImageUploadService {
         File imageFile = getImageFile(fileName);
 
         try {
-            return imageFile.toURI().toURL().openStream().readAllBytes();
+            return java.nio.file.Files.readAllBytes(imageFile.toPath());
         } catch (IOException e) {
-            throw new RuntimeException("이미지 다운로드 실패");
+            throw new IllegalArgumentException("이미지 다운로드 실패");
         }
     }
 

@@ -12,6 +12,7 @@ public enum ErrorCode {
     INVALID_BUY_DATE(BAD_REQUEST, "C000", "구매 날짜가 올바르지 않습니다."),
     NOT_EXIST_IMAGE(UNPROCESSABLE_ENTITY, "C000", "이미지를 제대로 입력해주세요."),
     ILLEGAL_ARGUMENT_EXCEPTION(FORBIDDEN, "C000", "인수 값이 잘못되었습니다."),
+    SEARCH_WORD_LENGTH(BAD_REQUEST, "C00", "검색어는 2글자 이상 입력해주세요."),
 
 
     // Common

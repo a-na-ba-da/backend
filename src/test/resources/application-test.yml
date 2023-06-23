@@ -2,6 +2,12 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: ${TEST_DB_URL}
+    port: 3306
+    username: ${TEST_DB_ID}
+    password: ${TEST_DB_PW}
   security:
     oauth2:
       client:

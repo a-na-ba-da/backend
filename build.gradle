@@ -40,6 +40,8 @@ dependencies {
     // DB 관련
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'com.mysql:mysql-connector-j:8.0.32'
+    runtimeOnly 'com.h2database:h2'
+    testImplementation 'org.mariadb.jdbc:mariadb-java-client:3.1.4' // test 환경 DB = 마리아 DB
 
     // API 문서 관련
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
@@ -50,16 +52,21 @@ dependencies {
     // 썸네일 생성 관련
     implementation group: 'net.coobird', name: 'thumbnailator', version: '0.4.19'
 
+    // 스프링부트 웹
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // 롬북
     compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
+
+    // 그외 테스트 관련
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'org.springframework.security:spring-security-test'
 }
 
 tasks.named('test') {
+    systemProperties = System.getProperties() // [중요] 테스트 시, 시스템 프로퍼티를 사용할 수 있도록 설정
     outputs.dir snippetsDir
     useJUnitPlatform()
 }

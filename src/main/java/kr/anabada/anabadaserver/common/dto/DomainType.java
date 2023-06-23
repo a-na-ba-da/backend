@@ -2,7 +2,8 @@ package kr.anabada.anabadaserver.common.dto;
 
 public enum DomainType {
     BUY_TOGETHER("같이 사요"),
-    KNOW_TOGETHER("같이 알아요");
+    KNOW_TOGETHER("같이 알아요"),
+    MY_PRODUCT("내 상품");
 
     private final String ko;
 
