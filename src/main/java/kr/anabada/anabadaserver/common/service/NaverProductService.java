@@ -3,7 +3,7 @@ package kr.anabada.anabadaserver.common.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.anabada.anabadaserver.common.dto.NaverProductResponse;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-@Log
+@Slf4j
 @Service
 public class NaverProductService {
     private final String clientId;

@@ -7,10 +7,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
 
-@SpringBootTest
-@ContextConfiguration(classes = AnabadaServerApplication.class)
+@SpringBootTest(classes = AnabadaServerApplication.class)
 class NaverProductApiTest {
 
     @Autowired
@@ -28,6 +26,7 @@ class NaverProductApiTest {
         // then
         Assertions.assertThat(result).isNotNull();
         Assertions.assertThat(result.getItems()).hasSizeGreaterThan(0);
+
 
     }
 }

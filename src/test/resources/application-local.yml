@@ -1,18 +1,16 @@
 spring:
-  profiles:
-    active: prod
   jpa:
-    hibernate:
-      ddl-auto: none
-      format_sql: false
-      use_sql_comment: false
-    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        show_sql: true
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: "jdbc:mysql://172.105.237.249:3306/anabada"
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:test/anabada;MODE=MYSQL;
     port: 3306
-    username: ${ANABADA_MYSQL_USER}
-    password: ${ANABADA_MYSQL_PASSWORD}
+    username: sa
+    password:
   security:
     oauth2:
       client:

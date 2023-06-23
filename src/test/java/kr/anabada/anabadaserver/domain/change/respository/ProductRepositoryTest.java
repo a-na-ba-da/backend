@@ -2,7 +2,6 @@ package kr.anabada.anabadaserver.domain.change.respository;
 
 import jakarta.persistence.EntityManager;
 import kr.anabada.anabadaserver.AnabadaServerApplication;
-import kr.anabada.anabadaserver.TestConfig;
 import kr.anabada.anabadaserver.domain.change.dto.ProductStatus;
 import kr.anabada.anabadaserver.domain.change.entity.MyProduct;
 import kr.anabada.anabadaserver.domain.change.respository.ProductRepositoryImpl.SearchProductRecord;
@@ -10,23 +9,17 @@ import kr.anabada.anabadaserver.domain.user.entity.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
-@DataJpaTest
-@ActiveProfiles("test")
-@Import(TestConfig.class)
-@ContextConfiguration(classes = AnabadaServerApplication.class)
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Transactional
+@SpringBootTest(classes = AnabadaServerApplication.class)
 class ProductRepositoryTest {
 
     @Autowired

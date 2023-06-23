@@ -1,26 +1,22 @@
 package kr.anabada.anabadaserver.domain.user.service;
 
 import kr.anabada.anabadaserver.AnabadaServerApplication;
-import kr.anabada.anabadaserver.domain.user.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-@SpringBootTest
-@ContextConfiguration(classes = AnabadaServerApplication.class)
+@Transactional
+@SpringBootTest(classes = AnabadaServerApplication.class)
 class NicknameServiceTest {
     @Autowired
     private NicknameService nicknameService;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Test
     @DisplayName("닉네임 생성 정상 작동 확인")
@@ -35,7 +31,7 @@ class NicknameServiceTest {
         Assertions.assertTrue(nickname.contains(" "));
 
         // check if nickname is unique
-        Assertions.assertFalse(userRepository.existsByNickname(nickname));
+        Assertions.assertFalse(nicknameService.isNicknameExist(nickname));
     }
 
     @Test

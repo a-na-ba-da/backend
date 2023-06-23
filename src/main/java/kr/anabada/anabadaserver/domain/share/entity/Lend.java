@@ -20,16 +20,16 @@ public class Lend {
     @Column(name = "title", length = 50)
     private String title;
 
-    @Column(name = "start", nullable = false)
+    @Column(name = "start_at", nullable = false)
     private LocalDateTime start;
 
-    @Column(name = "end")
+    @Column(name = "end_at")
     private LocalDateTime end;
 
     @Column(name = "content", nullable = false, length = 300)
     private String content;
 
-    @Column(name = "price_per_day", columnDefinition = "int UNSIGNED not null")
+    @Column(name = "price_per_day", columnDefinition = "int not null")
     private Long pricePerDay;
 
     @Column(name = "lat")
