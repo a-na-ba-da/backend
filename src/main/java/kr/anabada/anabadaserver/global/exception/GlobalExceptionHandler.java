@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Objects;
 
-import static kr.anabada.anabadaserver.global.exception.ErrorCode.ILLEGAL_ARGUMENT_EXCEPTION;
-import static kr.anabada.anabadaserver.global.exception.ErrorCode.INVALID_INPUT_VALUE;
+import static kr.anabada.anabadaserver.global.exception.ErrorCode.*;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @RestControllerAdvice
@@ -32,7 +31,17 @@ public class GlobalExceptionHandler {
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(value = {IllegalArgumentException.class})
     protected ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException e) {
-        final ErrorResponse response = new ErrorResponse(ILLEGAL_ARGUMENT_EXCEPTION.getErrorCode(), ILLEGAL_ARGUMENT_EXCEPTION.getMessage(), e.getMessage());
+        final ErrorResponse response = new ErrorResponse(ILLEGAL_ARGUMENT_EXCEPTION.getErrorCode(), ILLEGAL_ARGUMENT_EXCEPTION.getMessage(), e.getLocalizedMessage());
+        return new ResponseEntity<>(response, BAD_REQUEST);
+    }
+
+    /**
+     * IllegalStateException 발생 시, Response 규격에 맞춰 에러 메시지를 반환한다.
+     */
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(value = {IllegalStateException.class})
+    protected ResponseEntity<ErrorResponse> handleIllegalStateException(IllegalStateException e) {
+        final ErrorResponse response = new ErrorResponse(ILLEGAL_STATE_EXCEPTION.getErrorCode(), ILLEGAL_STATE_EXCEPTION.getMessage(), e.getLocalizedMessage());
         return new ResponseEntity<>(response, BAD_REQUEST);
     }
 
