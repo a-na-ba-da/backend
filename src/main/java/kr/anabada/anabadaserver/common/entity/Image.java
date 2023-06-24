@@ -1,9 +1,6 @@
 package kr.anabada.anabadaserver.common.entity;
 
 import jakarta.persistence.*;
-import kr.anabada.anabadaserver.global.exception.CustomException;
-import kr.anabada.anabadaserver.global.exception.ErrorCode;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +15,6 @@ import java.util.UUID;
 @Entity
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "image")
 @EntityListeners(AuditingEntityListener.class)
 public class Image {
@@ -47,6 +43,16 @@ public class Image {
 
     @Column(name = "uploader", nullable = false)
     private Long uploader;
+
+    public Image(UUID id, Long postId, String imageType, String extension, String originalFileName, LocalDateTime createdAt, Long uploader) {
+        this.id = id;
+        this.postId = postId;
+        this.imageType = imageType;
+        this.extension = extension;
+        this.originalFileName = originalFileName;
+        this.createdAt = createdAt;
+        this.uploader = uploader;
+    }
 
     public void attach(Long postId, long userId) {
         if (this.postId != null) {
