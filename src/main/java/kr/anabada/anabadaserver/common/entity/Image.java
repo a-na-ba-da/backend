@@ -56,11 +56,11 @@ public class Image {
 
     public void attach(Long postId, long userId) {
         if (this.postId != null) {
-            throw new CustomException(ErrorCode.NOT_EXIST_IMAGE);
+            throw new IllegalStateException("이미 연결된 이미지입니다.");
         }
 
         if (this.uploader != userId) {
-            throw new CustomException(ErrorCode.NOT_EXIST_IMAGE);
+            throw new IllegalStateException("본인이 업로드한 이미지가 아닙니다.");
         }
 
         this.postId = postId;
