@@ -2,7 +2,7 @@ package kr.anabada.anabadaserver.domain.save.entity;
 
 import jakarta.persistence.*;
 import kr.anabada.anabadaserver.common.entity.Image;
-import kr.anabada.anabadaserver.domain.save.dto.BuyTogetherDto;
+import kr.anabada.anabadaserver.domain.save.dto.response.BuyTogetherResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +26,7 @@ public class BuyTogether extends Save {
 
     // 물건 전달 방법
     @Column(name = "is_online_delivery")
-    private Boolean isOnlineDelivery;
+    private Boolean isParcelDelivery;
 
     // 구매 예정일 (NULL = 협의 or 상관없음)
     @Column(name = "buy_date")
@@ -42,18 +42,18 @@ public class BuyTogether extends Save {
     @Where(clause = "image_type = 'BUY_TOGETHER'")
     private List<Image> images;
 
-    public BuyTogetherDto toDto() {
-        return BuyTogetherDto.builder()
+    public BuyTogetherResponse toResponse() {
+        return BuyTogetherResponse.builder()
                 .id(getId())
                 .title(getTitle())
                 .content(getContent())
                 .productUrl(getProductUrl())
                 .createdAt(getCreatedAt())
                 .modifiedAt(getModifiedAt())
-                .isOnlineDelivery(isOnlineDelivery)
+                .isParcelDelivery(isParcelDelivery)
                 .buyDate(buyDate)
                 .images(images.stream().map(Image::getId).map(UUID::toString).toList())
-                .userDto(getWriter().toDto())
+                .writer(getWriter().toDto())
                 .pay(pay)
                 .build();
     }

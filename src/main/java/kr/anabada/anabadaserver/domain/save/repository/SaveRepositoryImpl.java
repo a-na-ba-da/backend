@@ -43,8 +43,8 @@ public class SaveRepositoryImpl implements SaveRepositoryCustom {
                                     searchRequest.getLat()
                             ),
                             Expressions.stringTemplate("POINT({0}, {1})",
-                                    buyTogether.buyPlaceLng,
-                                    buyTogether.buyPlaceLat
+                                    buyTogether.deliveryPlaceLng,
+                                    buyTogether.deliveryPlaceLat
                             )
                     ));
         }
@@ -75,8 +75,8 @@ public class SaveRepositoryImpl implements SaveRepositoryCustom {
                                     searchRequest.getLat()
                             ),
                             Expressions.stringTemplate("POINT({0}, {1})",
-                                    knowTogether.buyPlaceLng,
-                                    knowTogether.buyPlaceLat
+                                    knowTogether.deliveryPlaceLng,
+                                    knowTogether.deliveryPlaceLat
                             )
                     ));
         }
