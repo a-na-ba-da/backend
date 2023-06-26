@@ -36,8 +36,8 @@ public class BuyTogetherMeetRequest extends BuyTogetherRequest {
                 .content(super.getContent())
                 .productUrl(super.getProductUrl())
                 .isParcelDelivery(super.isParcelDelivery())
-                .deliveryPlaceLat(deliveryPlaceLat)
-                .deliveryPlaceLng(deliveryPlaceLng)
+                .placeLat(deliveryPlaceLat)
+                .placeLng(deliveryPlaceLng)
                 .buyDate(super.getBuyDate())
                 .pay(super.getPay())
                 .build();
