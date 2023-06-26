@@ -1,7 +1,6 @@
 package kr.anabada.anabadaserver.domain.save.service;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import kr.anabada.anabadaserver.common.service.ImageService;
 import kr.anabada.anabadaserver.domain.save.dto.request.BuyTogetherMeetRequest;
 import kr.anabada.anabadaserver.domain.save.dto.request.BuyTogetherParcelRequest;
@@ -9,7 +8,6 @@ import kr.anabada.anabadaserver.domain.save.dto.request.BuyTogetherRequest;
 import kr.anabada.anabadaserver.domain.save.entity.Save;
 import kr.anabada.anabadaserver.domain.save.repository.SaveRepository;
 import kr.anabada.anabadaserver.domain.user.entity.User;
-import kr.anabada.anabadaserver.global.config.QuerydslConfig;
 import kr.anabada.anabadaserver.global.exception.CustomException;
 import kr.anabada.anabadaserver.global.exception.ErrorCode;
 import org.junit.jupiter.api.Assertions;
@@ -19,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,12 +26,10 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 
-@Nested
 @Transactional
 @SpringBootTest
 @DisplayName("아껴쓰기 서비스")
-@Import(QuerydslConfig.class)
-class SavingServiceTest {
+class BuyTogetherServiceTest {
 
     @MockBean
     private ImageService imageService;
@@ -45,7 +40,7 @@ class SavingServiceTest {
     @Autowired
     private SaveRepository saveRepository;
 
-    @PersistenceContext
+    @Autowired
     private EntityManager em;
 
     User createUser(String email, String nickname) {
@@ -66,7 +61,7 @@ class SavingServiceTest {
                     .content("content")
                     .pay(10000)
                     .buyDate(LocalDate.now().plusDays(7))
-                    .isParcelDelivery(false)
+                    .parcelDelivery(false)
                     .deliveryPlaceLat(37.123456)
                     .deliveryPlaceLng(127.123456)
                     .productUrl("http://naver.com")
@@ -140,7 +135,7 @@ class SavingServiceTest {
                     .content("content")
                     .pay(10000)
                     .buyDate(LocalDate.now().plusDays(7))
-                    .isParcelDelivery(true)
+                    .parcelDelivery(true)
                     .productUrl("http://naver.com")
                     .images(List.of("image1", "image2"))
                     .build();
@@ -217,7 +212,6 @@ class SavingServiceTest {
                 buyTogetherService.createNewBuyTogetherPost(user, request);
             }, ErrorCode.NOT_EXIST_IMAGE.getMessage());
         }
-
     }
 
 
