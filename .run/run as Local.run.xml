@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="run as Local" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-    <option name="ACTIVE_PROFILES" value="default,local" />
+    <option name="ACTIVE_PROFILES" value="default, local" />
     <module name="anabada-server.main" />
     <selectedOptions>
       <option name="environmentVariables" />
