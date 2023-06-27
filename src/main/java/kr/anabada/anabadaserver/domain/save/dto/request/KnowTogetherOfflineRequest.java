@@ -29,9 +29,8 @@ public class KnowTogetherOfflineRequest extends KnowTogetherRequest {
     @Length(max = 20, message = "구매 장소에 대한 상호명은 20자 이하로 작성해주세요.")
     private String buyPlaceDetail;
 
-
     public KnowTogetherOfflineRequest(String title, String content, List<String> images, Double buyPlaceLat, Double buyPlaceLng, String buyPlaceDetail) {
-        super(title, content, false, images);
+        super(title, content, false, images, null);
         this.buyPlaceLat = buyPlaceLat;
         this.buyPlaceLng = buyPlaceLng;
         this.buyPlaceDetail = buyPlaceDetail;

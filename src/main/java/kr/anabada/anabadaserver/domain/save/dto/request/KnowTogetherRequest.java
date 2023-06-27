@@ -36,12 +36,14 @@ public abstract class KnowTogetherRequest {
     @NotEmpty(message = "이미지를 업로드 해주세요.")
     @Size(min = 1, max = 5, message = "이미지는 1개 이상 5개 이하로 업로드 해주세요.")
     private List<String> images;
+    private String productUrl;
 
-    protected KnowTogetherRequest(String title, String content, boolean isOnlineBought, List<String> images) {
+    protected KnowTogetherRequest(String title, String content, boolean onlineBought, List<String> images, String productUrl) {
         this.title = title;
         this.content = content;
-        this.onlineBought = isOnlineBought;
+        this.onlineBought = onlineBought;
         this.images = images;
+        this.productUrl = productUrl;
     }
 
     public void checkValidation() {
@@ -53,7 +55,6 @@ public abstract class KnowTogetherRequest {
         if (!StringUtils.hasText(title) && (title.length() <= 5 || title.length() >= 30)) {
             throw new IllegalArgumentException("제목은 2자 이상 30자 이하로 작성해주세요.");
         }
-
     }
 
     public Save toEntity() {

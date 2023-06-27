@@ -38,8 +38,6 @@ public class KnowTogetherController {
         if (user == null)
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
 
-        System.out.println(request.getImages());
-
         request.checkValidation();
         knowTogetherService.createNewKnowTogetherPost(user, request);
     }
