@@ -1,4 +1,4 @@
-package kr.anabada.anabadaserver.global.exception;
+package kr.anabada.anabadaserver.global.response;
 
 import org.springframework.http.HttpStatus;
 

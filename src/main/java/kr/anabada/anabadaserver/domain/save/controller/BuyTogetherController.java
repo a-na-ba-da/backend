@@ -12,10 +12,10 @@ import kr.anabada.anabadaserver.domain.save.entity.BuyTogether;
 import kr.anabada.anabadaserver.domain.save.service.BuyTogetherService;
 import kr.anabada.anabadaserver.domain.user.entity.User;
 import kr.anabada.anabadaserver.global.auth.CurrentUser;
-import kr.anabada.anabadaserver.global.exception.CustomException;
-import kr.anabada.anabadaserver.global.exception.ErrorCode;
+import kr.anabada.anabadaserver.global.response.CustomException;
+import kr.anabada.anabadaserver.global.response.ErrorCode;
+import kr.anabada.anabadaserver.global.response.GlobalResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -57,16 +57,16 @@ public class BuyTogetherController {
 
     @GetMapping("")
     @ApiResponse(responseCode = "200", description = "같이사요 목록 조회 성공")
-    public Page<BuyTogetherResponse> getBuyTogetherList(Pageable pageable, SaveSearchRequestDto searchRequest) {
+    public GlobalResponse<PageImpl<BuyTogetherResponse>> getBuyTogetherList(Pageable pageable, SaveSearchRequestDto searchRequest) {
         List<BuyTogetherResponse> result = buyTogetherService.getBuyTogetherList(searchRequest, pageable)
                 .stream().map(BuyTogether::toResponse).toList();
-        return new PageImpl<>(result, pageable, result.size());
+        return new GlobalResponse<>(new PageImpl<>(result, pageable, result.size()));
     }
 
     @GetMapping("/{id}")
     @ApiResponse(responseCode = "200", description = "같이사요 단건 조회 성공")
-    public BuyTogetherResponse getBuyTogether(@PathVariable @NotNull(message = "게시물 id를 입력해주세요.") Long id) {
-        return buyTogetherService.getPost(id).toResponse();
+    public GlobalResponse<BuyTogetherResponse> getBuyTogether(@PathVariable @NotNull(message = "게시물 id를 입력해주세요.") Long id) {
+        return new GlobalResponse<>(buyTogetherService.getPost(id).toResponse());
     }
 
     @DeleteMapping("/{id}")

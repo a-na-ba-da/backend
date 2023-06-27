@@ -12,10 +12,10 @@ import kr.anabada.anabadaserver.domain.save.dto.response.KnowTogetherResponse;
 import kr.anabada.anabadaserver.domain.save.service.KnowTogetherService;
 import kr.anabada.anabadaserver.domain.user.entity.User;
 import kr.anabada.anabadaserver.global.auth.CurrentUser;
-import kr.anabada.anabadaserver.global.exception.CustomException;
-import kr.anabada.anabadaserver.global.exception.ErrorCode;
+import kr.anabada.anabadaserver.global.response.CustomException;
+import kr.anabada.anabadaserver.global.response.ErrorCode;
+import kr.anabada.anabadaserver.global.response.GlobalResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -56,15 +56,15 @@ public class KnowTogetherController {
 
     @GetMapping("")
     @ApiResponse(responseCode = "200", description = "같이 알아요 목록 조회")
-    public Page<KnowTogetherResponse> getKnowTogetherList(Pageable pageable, SaveSearchRequestDto searchRequest) {
+    public GlobalResponse<PageImpl<KnowTogetherResponse>> getKnowTogetherList(Pageable pageable, SaveSearchRequestDto searchRequest) {
         List<KnowTogetherResponse> result = knowTogetherService.getKnowTogetherList(searchRequest, pageable);
-        return new PageImpl<>(result, pageable, result.size());
+        return new GlobalResponse<>(new PageImpl<>(result, pageable, result.size()));
     }
 
     @GetMapping("/{id}")
     @ApiResponse(responseCode = "200", description = "같이 알아요 단건 조회")
-    public KnowTogetherResponse getKnowTogether(@PathVariable @NotNull(message = "게시물 id를 입력해주세요.") Long id) {
-        return knowTogetherService.getKnowTogether(id);
+    public GlobalResponse<KnowTogetherResponse> getKnowTogether(@PathVariable @NotNull(message = "게시물 id를 입력해주세요.") Long id) {
+        return new GlobalResponse<>(knowTogetherService.getKnowTogether(id));
     }
 
     @DeleteMapping("/{id}")

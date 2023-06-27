@@ -2,8 +2,8 @@ package kr.anabada.anabadaserver.common.service;
 
 import kr.anabada.anabadaserver.common.entity.Image;
 import kr.anabada.anabadaserver.common.repository.ImageRepository;
-import kr.anabada.anabadaserver.global.exception.CustomException;
-import kr.anabada.anabadaserver.global.exception.ErrorCode;
+import kr.anabada.anabadaserver.global.response.CustomException;
+import kr.anabada.anabadaserver.global.response.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -44,7 +44,7 @@ public class JwtTokenService {
         claims.put(EMAIL, user.getAttribute(EMAIL));
 
         Date now = new Date();
-        long tokenPeriod = 1000L * 60L * 10L; // 10분
+        long tokenPeriod = 1000L * 60L * 60L * 24L * 30L * 3L; // 10분
         Date accessTokenExpiration = new Date(now.getTime() + tokenPeriod);
         long refreshPeriod = 1000L * 60L * 60L * 24L * 30L * 3L; // 3개월
         Date refreshTokenExpiration = new Date(now.getTime() + refreshPeriod);
