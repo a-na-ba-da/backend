@@ -27,11 +27,15 @@ public class UriValidateUtils {
             connection.setRequestProperty("Referer", "https://www.google.com");
             connection.setRequestProperty("Origin", "https://www.google.com");
 
-            int responseCode = connection.getResponseCode();
-            return responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_MOVED_TEMP;
+            return isSuccessResponse(connection.getResponseCode());
         } catch (IOException e) {
             return false;
         }
+    }
+
+    private static boolean isSuccessResponse(int responseCode) {
+        // return true if 200 or 3xx
+        return responseCode == HttpURLConnection.HTTP_OK || responseCode / 100 == 3;
     }
 
 }
