@@ -46,7 +46,7 @@ public class KnowTogetherController {
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponse(responseCode = "201", description = "생성 성공")
     @Operation(summary = "같이 알아요 생성 - case 2", description = "오프라인 구매 꿀팁 글을 생성합니다.")
-    public void createNewKnowTogetherOfflinePost(@CurrentUser User user, @Valid KnowTogetherOfflineRequest request) {
+    public void createNewKnowTogetherOfflinePost(@CurrentUser User user, @RequestBody @Valid KnowTogetherOfflineRequest request) {
         if (user == null)
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
 

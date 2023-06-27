@@ -35,7 +35,7 @@ public class BuyTogetherController {
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponse(responseCode = "201", description = "같이사요 생성 성공")
     @Operation(summary = "같이사요 생성 - case 1", description = "물건 산 이후 택배로 전달하는 같이사요 게시물 생성")
-    public void createNewBuyTogetherParcel(@CurrentUser User user, @Validated BuyTogetherParcelRequest request) {
+    public void createNewBuyTogetherParcel(@CurrentUser User user, @RequestBody @Validated BuyTogetherParcelRequest request) {
         if (user == null)
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
 
@@ -47,7 +47,7 @@ public class BuyTogetherController {
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponse(responseCode = "201", description = "같이사요 생성 성공")
     @Operation(summary = "같이사요 생성 - case 2", description = "물건 산 이후 대면으로 전달하는 같이사요 게시물 생성")
-    public void createNewBuyTogetherMeet(@CurrentUser User user, @Validated BuyTogetherMeetRequest request) {
+    public void createNewBuyTogetherMeet(@CurrentUser User user, @RequestBody @Validated BuyTogetherMeetRequest request) {
         if (user == null)
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
 
