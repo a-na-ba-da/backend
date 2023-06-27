@@ -61,7 +61,6 @@ class BuyTogetherServiceTest {
                     .content("content")
                     .pay(10000)
                     .buyDate(LocalDate.now().plusDays(7))
-                    .parcelDelivery(false)
                     .deliveryPlaceLat(37.123456)
                     .deliveryPlaceLng(127.123456)
                     .productUrl("http://naver.com")
@@ -135,7 +134,6 @@ class BuyTogetherServiceTest {
                     .content("content")
                     .pay(10000)
                     .buyDate(LocalDate.now().plusDays(7))
-                    .parcelDelivery(true)
                     .productUrl("http://naver.com")
                     .images(List.of("image1", "image2"))
                     .build();

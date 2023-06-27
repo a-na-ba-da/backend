@@ -52,14 +52,14 @@ public abstract class BuyTogetherRequest {
     @Hidden
     private boolean parcelDelivery;
 
-    protected BuyTogetherRequest(String title, String content, String productUrl, LocalDate buyDate, Integer pay, List<String> images, boolean isParcelDelivery) {
+    protected BuyTogetherRequest(String title, String content, String productUrl, LocalDate buyDate, Integer pay, List<String> images, boolean parcelDelivery) {
         this.title = title;
         this.content = content;
         this.productUrl = productUrl;
         this.buyDate = buyDate;
         this.pay = pay;
         this.images = images;
-        this.parcelDelivery = isParcelDelivery;
+        this.parcelDelivery = parcelDelivery;
     }
 
     public void checkValidation() {
