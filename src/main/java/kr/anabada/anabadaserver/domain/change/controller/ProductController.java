@@ -10,6 +10,7 @@ import kr.anabada.anabadaserver.domain.user.entity.User;
 import kr.anabada.anabadaserver.global.auth.CurrentUser;
 import kr.anabada.anabadaserver.global.response.CustomException;
 import kr.anabada.anabadaserver.global.response.ErrorCode;
+import kr.anabada.anabadaserver.global.response.GlobalResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,23 +38,23 @@ public class ProductController {
 
     @GetMapping("/my-product")
     @Operation(summary = "내 상품 목록 조회")
-    public Page<MyProductResponse> getMyProduct(@CurrentUser User user, String searchWord, Pageable pageable) {
+    public GlobalResponse<Page<MyProductResponse>> getMyProduct(@CurrentUser User user, String searchWord, Pageable pageable) {
         if (user == null)
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
 
         if (isInvalidSearchWord(searchWord))
             throw new CustomException(ErrorCode.SEARCH_WORD_LENGTH);
 
-        return myProductService.getMyProducts(user, searchWord, pageable);
+        return new GlobalResponse<>(myProductService.getMyProducts(user, searchWord, pageable));
     }
 
     @GetMapping("/product")
     @Operation(summary = "모든(내 상품 포함) 상품 목록 조회")
-    public Page<MyProductResponse> getAllProduct(String searchWord, Pageable pageable) {
+    public GlobalResponse<Page<MyProductResponse>> getAllProduct(String searchWord, Pageable pageable) {
         if (isInvalidSearchWord(searchWord))
             throw new CustomException(ErrorCode.SEARCH_WORD_LENGTH);
 
-        return myProductService.getProducts(searchWord, pageable);
+        return new GlobalResponse<>(myProductService.getProducts(searchWord, pageable));
     }
 
     private boolean isInvalidSearchWord(String searchWord) {
