@@ -15,10 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,7 +26,7 @@ public class ProductController {
 
     @PostMapping("/my-product")
     @Operation(summary = "바꿔쓰기에 사용할 내 상품 등록")
-    public void createMyProduct(@CurrentUser User user, @Valid MyProductRequest request) {
+    public void createMyProduct(@CurrentUser User user, @RequestBody @Valid MyProductRequest request) {
         if (user == null)
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
 
