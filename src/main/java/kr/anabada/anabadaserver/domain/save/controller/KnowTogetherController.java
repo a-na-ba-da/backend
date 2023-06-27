@@ -1,21 +1,24 @@
 package kr.anabada.anabadaserver.domain.save.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import kr.anabada.anabadaserver.domain.save.dto.KnowTogetherDto;
 import kr.anabada.anabadaserver.domain.save.dto.SaveSearchRequestDto;
+import kr.anabada.anabadaserver.domain.save.dto.request.KnowTogetherOfflineRequest;
+import kr.anabada.anabadaserver.domain.save.dto.request.KnowTogetherOnlineRequest;
+import kr.anabada.anabadaserver.domain.save.dto.response.KnowTogetherResponse;
 import kr.anabada.anabadaserver.domain.save.service.KnowTogetherService;
 import kr.anabada.anabadaserver.domain.user.entity.User;
 import kr.anabada.anabadaserver.global.auth.CurrentUser;
-import kr.anabada.anabadaserver.global.exception.CustomException;
-import kr.anabada.anabadaserver.global.exception.ErrorCode;
+import kr.anabada.anabadaserver.global.response.CustomException;
+import kr.anabada.anabadaserver.global.response.ErrorCode;
+import kr.anabada.anabadaserver.global.response.GlobalResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,28 +30,41 @@ import java.util.List;
 public class KnowTogetherController {
     private final KnowTogetherService knowTogetherService;
 
-    @PostMapping("")
+    @PostMapping("/online")
     @ResponseStatus(HttpStatus.CREATED)
-    @ApiResponse(responseCode = "201", description = "같이 알아요 생성 성공")
-    public void createNewKnowTogetherPost(@CurrentUser User user, @Validated KnowTogetherDto knowTogetherDto) {
+    @ApiResponse(responseCode = "201", description = "생성 성공")
+    @Operation(summary = "같이 알아요 생성 - case 1", description = "온라인 구매 꿀팁 글을 생성합니다.")
+    public void createNewKnowTogetherOnlinePost(@CurrentUser User user, @RequestBody @Valid KnowTogetherOnlineRequest request) {
         if (user == null)
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
 
-        knowTogetherDto.validate();
-        knowTogetherService.createNewKnowTogetherPost(user, knowTogetherDto);
+        request.checkValidation();
+        knowTogetherService.createNewKnowTogetherPost(user, request);
+    }
+
+    @PostMapping("/offline")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiResponse(responseCode = "201", description = "생성 성공")
+    @Operation(summary = "같이 알아요 생성 - case 2", description = "오프라인 구매 꿀팁 글을 생성합니다.")
+    public void createNewKnowTogetherOfflinePost(@CurrentUser User user, @RequestBody @Valid KnowTogetherOfflineRequest request) {
+        if (user == null)
+            throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
+
+        request.checkValidation();
+        knowTogetherService.createNewKnowTogetherPost(user, request);
     }
 
     @GetMapping("")
     @ApiResponse(responseCode = "200", description = "같이 알아요 목록 조회")
-    public Page<KnowTogetherDto> getKnowTogetherList(Pageable pageable, SaveSearchRequestDto searchRequest) {
-        List<KnowTogetherDto> result = knowTogetherService.getKnowTogetherList(searchRequest, pageable);
-        return new PageImpl<>(result, pageable, result.size());
+    public GlobalResponse<PageImpl<KnowTogetherResponse>> getKnowTogetherList(Pageable pageable, SaveSearchRequestDto searchRequest) {
+        List<KnowTogetherResponse> result = knowTogetherService.getKnowTogetherList(searchRequest, pageable);
+        return new GlobalResponse<>(new PageImpl<>(result, pageable, result.size()));
     }
 
     @GetMapping("/{id}")
     @ApiResponse(responseCode = "200", description = "같이 알아요 단건 조회")
-    public KnowTogetherDto getKnowTogether(@PathVariable @NotNull(message = "게시물 id를 입력해주세요.") Long id) {
-        return knowTogetherService.getKnowTogether(id);
+    public GlobalResponse<KnowTogetherResponse> getKnowTogether(@PathVariable @NotNull(message = "게시물 id를 입력해주세요.") Long id) {
+        return new GlobalResponse<>(knowTogetherService.getKnowTogether(id));
     }
 
     @DeleteMapping("/{id}")

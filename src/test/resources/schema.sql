@@ -168,10 +168,10 @@ create table save
     is_online          tinyint(1)                 null comment '(같이 알아요) 구매처 온오프라인 여부',
     buy_place_lat      double                     null,
     buy_place_lng      double                     null,
+    buy_place_detail   varchar(15)                null comment '오프라인 구매처 위경도에 대한 자세한 텍스트 정보 (상호명 등)',
     save_type          varchar(15)                not null comment '같이사요, 같이 알아요 type',
     created_at         datetime(6)                not null,
     modified_at        datetime(6)                null,
     is_removed         tinyint(1) default (false) not null comment '삭제 여부'
 )
     comment '아껴쓰기 테이블 (같이사요 + 같이 알아요 )';
-

@@ -1,17 +1,21 @@
 package kr.anabada.anabadaserver.domain.save.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
-import kr.anabada.anabadaserver.domain.save.dto.BuyTogetherDto;
 import kr.anabada.anabadaserver.domain.save.dto.SaveSearchRequestDto;
+import kr.anabada.anabadaserver.domain.save.dto.request.BuyTogetherMeetRequest;
+import kr.anabada.anabadaserver.domain.save.dto.request.BuyTogetherParcelRequest;
+import kr.anabada.anabadaserver.domain.save.dto.response.BuyTogetherResponse;
+import kr.anabada.anabadaserver.domain.save.entity.BuyTogether;
 import kr.anabada.anabadaserver.domain.save.service.BuyTogetherService;
 import kr.anabada.anabadaserver.domain.user.entity.User;
 import kr.anabada.anabadaserver.global.auth.CurrentUser;
-import kr.anabada.anabadaserver.global.exception.CustomException;
-import kr.anabada.anabadaserver.global.exception.ErrorCode;
+import kr.anabada.anabadaserver.global.response.CustomException;
+import kr.anabada.anabadaserver.global.response.ErrorCode;
+import kr.anabada.anabadaserver.global.response.GlobalResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -27,28 +31,42 @@ import java.util.List;
 public class BuyTogetherController {
     private final BuyTogetherService buyTogetherService;
 
-    @PostMapping("")
+    @PostMapping("/parcel-delivery")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponse(responseCode = "201", description = "같이사요 생성 성공")
-    public void createNewBuyTogetherPost(@CurrentUser User user, @Validated BuyTogetherDto buyTogetherDto) {
+    @Operation(summary = "같이사요 생성 - case 1", description = "물건 산 이후 택배로 전달하는 같이사요 게시물 생성")
+    public void createNewBuyTogetherParcel(@CurrentUser User user, @RequestBody @Validated BuyTogetherParcelRequest request) {
         if (user == null)
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
 
-        buyTogetherDto.validate();
-        buyTogetherService.createNewBuyTogetherPost(user, buyTogetherDto);
+        request.checkValidation();
+        buyTogetherService.createNewBuyTogetherPost(user, request);
+    }
+
+    @PostMapping("/meet-delivery")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiResponse(responseCode = "201", description = "같이사요 생성 성공")
+    @Operation(summary = "같이사요 생성 - case 2", description = "물건 산 이후 대면으로 전달하는 같이사요 게시물 생성")
+    public void createNewBuyTogetherMeet(@CurrentUser User user, @RequestBody @Validated BuyTogetherMeetRequest request) {
+        if (user == null)
+            throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
+
+        request.checkValidation();
+        buyTogetherService.createNewBuyTogetherPost(user, request);
     }
 
     @GetMapping("")
     @ApiResponse(responseCode = "200", description = "같이사요 목록 조회 성공")
-    public Page<BuyTogetherDto> getBuyTogetherList(Pageable pageable, SaveSearchRequestDto searchRequest) {
-        List<BuyTogetherDto> result = buyTogetherService.getBuyTogetherList(searchRequest, pageable);
-        return new PageImpl<>(result, pageable, result.size());
+    public GlobalResponse<PageImpl<BuyTogetherResponse>> getBuyTogetherList(Pageable pageable, SaveSearchRequestDto searchRequest) {
+        List<BuyTogetherResponse> result = buyTogetherService.getBuyTogetherList(searchRequest, pageable)
+                .stream().map(BuyTogether::toResponse).toList();
+        return new GlobalResponse<>(new PageImpl<>(result, pageable, result.size()));
     }
 
     @GetMapping("/{id}")
     @ApiResponse(responseCode = "200", description = "같이사요 단건 조회 성공")
-    public BuyTogetherDto getBuyTogether(@PathVariable @NotNull(message = "게시물 id를 입력해주세요.") Long id) {
-        return buyTogetherService.getBuyTogether(id);
+    public GlobalResponse<BuyTogetherResponse> getBuyTogether(@PathVariable @NotNull(message = "게시물 id를 입력해주세요.") Long id) {
+        return new GlobalResponse<>(buyTogetherService.getPost(id).toResponse());
     }
 
     @DeleteMapping("/{id}")

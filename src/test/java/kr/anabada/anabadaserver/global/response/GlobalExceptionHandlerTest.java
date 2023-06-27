@@ -1,4 +1,4 @@
-package kr.anabada.anabadaserver.global.exception;
+package kr.anabada.anabadaserver.global.response;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ class GlobalExceptionHandlerTest {
     void testHandleCustomException_Positive() {
         ErrorCode err = ErrorCode.ONLY_ACCESS_USER;
         CustomException e = new CustomException(err);
-        ResponseEntity<ErrorResponse> response = new GlobalExceptionHandler().handleCustomException(e);
+        ResponseEntity<GlobalResponse<Void>> response = new GlobalExceptionHandler().handleCustomException(e);
         assertEquals(err.getStatus(), response.getStatusCode());
     }
 

@@ -37,10 +37,10 @@ public abstract class Save extends BaseTimeEntity {
     private String productUrl;
 
     @Column(name = "buy_place_lat")
-    private Double buyPlaceLat;
+    private Double placeLat;
 
     @Column(name = "buy_place_lng")
-    private Double buyPlaceLng;
+    private Double placeLng;
 
     @Builder.Default
     @Column(name = "is_removed", nullable = false)
