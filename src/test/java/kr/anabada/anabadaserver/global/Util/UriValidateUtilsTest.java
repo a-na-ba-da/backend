@@ -26,10 +26,20 @@ class UriValidateUtilsTest {
         }
 
         @Test
-        @DisplayName("정상 URL을 입력받으면 TRUE 를 반환한다.")
-        void isNotExistUrl() {
+        @DisplayName("정상 URL을 입력받으면 TRUE 를 반환한다. - 1")
+        void isNotExistUrl1() {
             // given
             String url = "https://www.google.com/";
+
+            // when & then
+            Assertions.assertTrue(UriValidateUtils.isExistUrl(url));
+        }
+
+        @Test
+        @DisplayName("정상 URL을 입력받으면 TRUE 를 반환한다. - 2")
+        void isNotExistUrl2() {
+            // given
+            String url = "https://naver.com";
 
             // when & then
             Assertions.assertTrue(UriValidateUtils.isExistUrl(url));
@@ -44,6 +54,5 @@ class UriValidateUtilsTest {
             // when & then
             Assertions.assertTrue(UriValidateUtils.isExistUrl(url));
         }
-
     }
 }
