@@ -71,7 +71,7 @@ class ProductChangeServiceTest {
             productRepository.saveAll(List.of(requesterProduct1, requesterProduct2));
 
             // when & then
-            assertDoesNotThrow(() -> productChangeService.changeRequest(requester, targetProduct.getId(), List.of(requesterProduct1.getId(), requesterProduct2.getId())));
+            assertDoesNotThrow(() -> productChangeService.changeRequest(requester, targetProduct.getId(), List.of(requesterProduct1.getId(), requesterProduct2.getId()), "교환신청합니다~"));
             assertNotNull(requesterProduct1.getId());
             assertNotNull(requesterProduct2.getId());
         }
@@ -93,7 +93,7 @@ class ProductChangeServiceTest {
 
             // when & then
             assertThrows(IllegalArgumentException.class,
-                    () -> productChangeService.changeRequest(requester, targetProduct.getId(), List.of(requesterProduct1.getId(), requesterProduct2.getId())),
+                    () -> productChangeService.changeRequest(requester, targetProduct.getId(), List.of(requesterProduct1.getId(), requesterProduct2.getId()), "교환신청합니다~"),
                     "%d는 변경 신청 가능한 물건이 아닙니다.".formatted(requesterProduct2.getId()));
         }
 
@@ -114,7 +114,7 @@ class ProductChangeServiceTest {
 
             // when & then
             assertThrows(IllegalArgumentException.class,
-                    () -> productChangeService.changeRequest(requester, targetProduct.getId(), List.of(requesterProduct1.getId(), requesterProduct2.getId())),
+                    () -> productChangeService.changeRequest(requester, targetProduct.getId(), List.of(requesterProduct1.getId(), requesterProduct2.getId()), "교환신청합니다~"),
                     "%d는 변경 신청 가능한 물건이 아닙니다.".formatted(targetProduct.getId()));
         }
 
@@ -134,7 +134,7 @@ class ProductChangeServiceTest {
             productRepository.saveAll(List.of(requesterProduct1, requesterProduct2));
 
             // when
-            productChangeService.changeRequest(requester, targetProduct.getId(), List.of(requesterProduct1.getId(), requesterProduct2.getId()));
+            productChangeService.changeRequest(requester, targetProduct.getId(), List.of(requesterProduct1.getId(), requesterProduct2.getId()), "교환신청합니다~");
 
             // then
             assertEquals(REQUESTING, requesterProduct1.getStatus());
@@ -155,7 +155,7 @@ class ProductChangeServiceTest {
 
             // when & then
             assertThrows(IllegalArgumentException.class,
-                    () -> productChangeService.changeRequest(requester, targetProduct.getId(), null),
+                    () -> productChangeService.changeRequest(requester, targetProduct.getId(), null, "교환신청합니다~"),
                     "교환 신청할 물건은 최소 1개 이상이어야 합니다.");
         }
 
@@ -173,7 +173,7 @@ class ProductChangeServiceTest {
 
             // when & then
             assertThrows(IllegalArgumentException.class,
-                    () -> productChangeService.changeRequest(requester, targetProduct.getId(), List.of()),
+                    () -> productChangeService.changeRequest(requester, targetProduct.getId(), List.of(), "교환신청합니다~"),
                     "교환 신청할 물건은 최소 1개 이상이어야 합니다.");
         }
 
@@ -194,7 +194,7 @@ class ProductChangeServiceTest {
             // when & then
             em.remove(targetProduct);
             assertThrows(IllegalArgumentException.class,
-                    () -> productChangeService.changeRequest(requester, targetProduct.getId(), List.of(requesterProduct.getId())),
+                    () -> productChangeService.changeRequest(requester, targetProduct.getId(), List.of(requesterProduct.getId()), "교환신청합니다~"),
                     "상대 물건이 존재하지 않습니다.");
         }
 
@@ -216,7 +216,7 @@ class ProductChangeServiceTest {
             // when & then
             em.remove(requesterProduct1);
             assertThrows(IllegalArgumentException.class,
-                    () -> productChangeService.changeRequest(requester, targetProduct.getId(), List.of(requesterProduct1.getId())),
+                    () -> productChangeService.changeRequest(requester, targetProduct.getId(), List.of(requesterProduct1.getId()), "교환신청합니다~"),
                     "%d는 변경 신청 가능한 물건이 아닙니다.".formatted(requesterProduct1.getId()));
         }
     }
