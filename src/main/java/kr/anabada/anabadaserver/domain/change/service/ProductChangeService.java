@@ -1,7 +1,12 @@
 package kr.anabada.anabadaserver.domain.change.service;
 
+import kr.anabada.anabadaserver.domain.change.dto.ChangeRequestStatus;
 import kr.anabada.anabadaserver.domain.change.dto.ProductStatus;
+import kr.anabada.anabadaserver.domain.change.entity.ChangeRequest;
+import kr.anabada.anabadaserver.domain.change.entity.ChangeRequestProduct;
 import kr.anabada.anabadaserver.domain.change.entity.MyProduct;
+import kr.anabada.anabadaserver.domain.change.respository.ChangeRequestProductRepository;
+import kr.anabada.anabadaserver.domain.change.respository.ChangeRequestRepository;
 import kr.anabada.anabadaserver.domain.change.respository.ProductRepository;
 import kr.anabada.anabadaserver.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +21,11 @@ import java.util.Objects;
 @Transactional(readOnly = true)
 public class ProductChangeService {
     private final ProductRepository productRepository;
+    private final ChangeRequestRepository changeRequestRepository;
+    private final ChangeRequestProductRepository requestProductRepository;
 
     @Transactional
-    public void changeRequest(User user, long targetProductId, List<Long> toChangeProductIds) {
+    public void changeRequest(User user, long targetProductId, List<Long> toChangeProductIds, String message) {
         if (toChangeProductIds == null || toChangeProductIds.isEmpty())
             throw new IllegalArgumentException("교환 신청할 물건은 최소 1개 이상이어야 합니다.");
 
@@ -39,6 +46,25 @@ public class ProductChangeService {
         productRepository.updateStatus(toChangeProductIds, ProductStatus.REQUESTING);
 
         // create change request
-        productRepository.createChangeRequest(targetProductId, toChangeProductIds);
+        ChangeRequest request = ChangeRequest.builder()
+                .productId(targetProductId)
+                .status(ChangeRequestStatus.REQUESTING)
+                .message(message)
+                .requesterId(user.getId())
+                .build();
+        changeRequestRepository.save(request);
+
+        // create change request detail
+        List<ChangeRequestProduct> changeProducts = toChangeProductIds.stream()
+                .map(id -> {
+                    ChangeRequestProduct changeRequestProduct = ChangeRequestProduct.builder()
+                            .productId(id)
+                            .build();
+                    changeRequestProduct.setChangeRequest(request);
+                    return changeRequestProduct;
+                })
+                .toList();
+
+        requestProductRepository.saveAll(changeProducts);
     }
 }

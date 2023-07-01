@@ -7,6 +7,7 @@ import kr.anabada.anabadaserver.global.auth.CurrentUser;
 import kr.anabada.anabadaserver.global.response.CustomException;
 import kr.anabada.anabadaserver.global.response.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,10 +23,11 @@ public class ProductChangeController {
 
     @PostMapping("/{targetProductId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createChangeRequest(@CurrentUser User user, @PathVariable Long targetProductId, List<Long> myProductIds) {
+    public void createChangeRequest(@CurrentUser User user, @PathVariable Long targetProductId, List<Long> myProductIds,
+                                    @NotNull(message = "메시지를 입력해주세요.") @Length(max = 30, message = "메세지는 최대 30자 까지 입력가능합니다.") String message) {
         if (user == null)
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
 
-        productChangeService.changeRequest(user, targetProductId, myProductIds);
+        productChangeService.changeRequest(user, targetProductId, myProductIds, message);
     }
 }
