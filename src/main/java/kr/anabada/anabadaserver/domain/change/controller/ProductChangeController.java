@@ -1,6 +1,8 @@
 package kr.anabada.anabadaserver.domain.change.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotNull;
 import kr.anabada.anabadaserver.domain.change.service.ProductChangeService;
 import kr.anabada.anabadaserver.domain.user.entity.User;
 import kr.anabada.anabadaserver.global.auth.CurrentUser;
@@ -22,7 +24,7 @@ public class ProductChangeController {
     private final ProductChangeService productChangeService;
 
     @PostMapping("/{targetProductId}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "바꿔쓰기 요청 생성")
     public void createChangeRequest(@CurrentUser User user, @PathVariable Long targetProductId, List<Long> myProductIds,
                                     @NotNull(message = "메시지를 입력해주세요.") @Length(max = 30, message = "메세지는 최대 30자 까지 입력가능합니다.") String message) {
         if (user == null)
