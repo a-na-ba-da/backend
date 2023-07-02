@@ -77,8 +77,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         List<MyProduct> result = queryFactory
                 .selectFrom(myProduct)
                 .leftJoin(myProduct.images)
-                .where(myProduct.status.eq(AVAILABLE)
-                        .and(onlyActivatedUser())
+                .where(onlyActivatedUser()
+                        .and(ignoreStatus(searchProduct.searchAllStatus))
                         .and(onlyUserProduct(searchProduct.user))
                         .and(keywordSearch(searchProduct.keyword)))
                 .orderBy(myProduct.id.desc())
@@ -90,6 +90,10 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 result.stream().map(MyProduct::toResponse).toList(),
                 searchProduct.pageable,
                 result.size());
+    }
+
+    private Predicate ignoreStatus(boolean searchAllStatus) {
+        return searchAllStatus ? null : myProduct.status.eq(AVAILABLE);
     }
 
     private Predicate onlyUserProduct(User user) {
@@ -127,7 +131,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             User user,
             String keyword,
             Pageable pageable,
-            boolean isMyProduct
-    ) {
+            boolean isMyProduct,
+            boolean searchAllStatus) {
     }
 }
