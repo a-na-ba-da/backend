@@ -41,11 +41,11 @@ public class ProductService {
         imageService.attach(owner.getId(), request.getImages(), myProduct.getId());
     }
 
-    public Page<MyProductResponse> getMyProducts(User owner, String searchWord, Pageable pageable) {
-        return myProductRepository.findUserProductList(new SearchProductRecord(owner, searchWord, pageable, true));
+    public Page<MyProductResponse> getMyProducts(User owner, String searchWord, Pageable pageable, Boolean searchAllStatus) {
+        return myProductRepository.findUserProductList(new SearchProductRecord(owner, searchWord, pageable, true, searchAllStatus));
     }
 
     public Page<MyProductResponse> getProducts(String searchWord, Pageable pageable) {
-        return myProductRepository.findUserProductList(new SearchProductRecord(null, searchWord, pageable, true));
+        return myProductRepository.findUserProductList(new SearchProductRecord(null, searchWord, pageable, true, false));
     }
 }

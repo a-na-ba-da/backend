@@ -1,17 +1,60 @@
+/* 1. START DELETE TABLE  ---------------- */
+drop table if exists change_request;
+
+drop table if exists change_request_product;
+
+drop table if exists comment;
+
+drop table if exists image;
+
+drop table if exists lend;
+
+drop table if exists member;
+
+drop table if exists message;
+
+drop table if exists message_origin;
+
+drop table if exists my_product;
+
+drop table if exists recycle;
+
+drop table if exists recycle_like;
+
+drop table if exists report;
+
+drop table if exists save;
+/* 1. END DELETE TABLE  ---------------- */
+
+
+/* 2. START CREATE TABLE  ---------------- */
+
 create table change_request
+(
+    id                   bigint auto_increment
+        primary key,
+    product_id           bigint               not null comment '상대물건 fk',
+    requester_id         bigint               not null comment '요청자 fk',
+    request_message      varchar(30)          not null comment '요청자의 메세지',
+    reject_message       varchar(30)          null comment '거절 메세지',
+    status               varchar(15)          null comment '요청 상태',
+    modified_at          datetime(6)          null,
+    created_at           datetime(6)          not null,
+    removed_by_requestee tinyint(1) default 0 not null,
+    removed_by_requester tinyint(1) default 0 not null
+)
+    comment '바꿔주세요';
+
+create table change_request_product
 (
     id                bigint auto_increment
         primary key,
-    product_id        bigint                     not null,
-    created_at        datetime(6)                not null,
-    place             varchar(30)                not null,
-    requester_id      bigint                     not null,
-    requester_product bigint                     not null,
-    reject_message    varchar(30)                null comment '거절 사유',
-    status            tinyint(1)                 null comment '무반응(null), 거절,  승인',
-    is_removed        tinyint(1) default (false) not null
+    change_request_id bigint   not null comment '교환 요청 fk',
+    product_id        bigint   null,
+    created_at        datetime null,
+    modified_at       datetime null
 )
-    comment '바꿔주세요';
+    comment '바꿔주세요 요청 상세 물건';
 
 create table comment
 (
@@ -145,13 +188,6 @@ create table report
     content            varchar(500)         null comment '신고내용',
     confirmed          tinyint(1) default 0 null comment '관리자 확인 여부',
     created_at         datetime(6)          not null
-);
-
-create table requester_product
-(
-    id         bigint auto_increment
-        primary key,
-    product_id bigint not null
 );
 
 create table save

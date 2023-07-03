@@ -2,6 +2,7 @@ package kr.anabada.anabadaserver.domain.change.entity;
 
 import jakarta.persistence.*;
 import kr.anabada.anabadaserver.common.entity.Image;
+import kr.anabada.anabadaserver.domain.change.dto.MyProductResponse;
 import kr.anabada.anabadaserver.domain.change.dto.ProductStatus;
 import kr.anabada.anabadaserver.domain.change.dto.ProductStatusConverter;
 import kr.anabada.anabadaserver.domain.user.entity.User;
@@ -14,6 +15,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import java.util.List;
+import java.util.UUID;
 
 import static kr.anabada.anabadaserver.domain.change.dto.ProductStatus.AVAILABLE;
 
@@ -61,4 +63,17 @@ public class MyProduct {
     @Builder.Default
     @Column(name = "is_removed", nullable = false)
     private Boolean isRemoved = false;
+
+    public MyProductResponse toResponse() {
+        return new MyProductResponse(id, owner.toDto(), name, content, originalPrice, status,
+                images == null ? null :
+                        images.stream()
+                                .map(Image::getId)
+                                .map(UUID::toString)
+                                .toList());
+    }
+
+    public void updateStatus(ProductStatus status) {
+        this.status = status;
+    }
 }

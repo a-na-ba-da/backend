@@ -5,7 +5,7 @@ import kr.anabada.anabadaserver.domain.user.dto.UserDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -29,6 +29,16 @@ public class MyProductResponse {
     @Schema(description = "상품 상태", example = "AVAILABLE")
     private ProductStatus status;
 
-    @Schema(description = "상품 대표 이미지", example = "6d4ca57f-71c6-4886-b464-6d2847b3ebb8")
-    private UUID image;
+    @Schema(description = "상품 이미지 파일 이름")
+    private List<String> images;
+
+    public MyProductResponse(Long id, UserDto owner, String name, String content, int originalPrice, ProductStatus status, List<String> images) {
+        this.id = id;
+        this.owner = owner;
+        this.name = name;
+        this.content = content;
+        this.originalPrice = originalPrice;
+        this.status = status;
+        this.images = images;
+    }
 }

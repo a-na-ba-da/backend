@@ -32,7 +32,7 @@ public class ImageUploadController {
     public GlobalResponse<List<String>> uploadImage(@CurrentUser User user,
                                                     @Schema(description = "업로드할 이미지 파일들", requiredMode = REQUIRED)
                                                     MultipartFile[] uploadFile,
-                                                    @RequestParam @Schema(description = "이미지 타입", example = "BUY_TOGETHER, KNOW_TOGETHER ....")
+                                                    @RequestParam @Schema(description = "이미지 타입", example = "BUY_TOGETHER, KNOW_TOGETHER, MY_PRODUCT ....")
                                                     String type) {
         if (user == null) {
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);

@@ -1,6 +1,5 @@
 package kr.anabada.anabadaserver.domain.change.respository;
 
-import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.QBean;
@@ -10,6 +9,8 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.anabada.anabadaserver.common.dto.DomainType;
 import kr.anabada.anabadaserver.domain.change.dto.MyProductResponse;
+import kr.anabada.anabadaserver.domain.change.dto.ProductStatus;
+import kr.anabada.anabadaserver.domain.change.entity.MyProduct;
 import kr.anabada.anabadaserver.domain.user.dto.UserDto;
 import kr.anabada.anabadaserver.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.UUID;
 
 import static kr.anabada.anabadaserver.common.entity.QImage.image;
@@ -31,8 +33,23 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
+    public void createChangeRequest(Long targetId, List<Long> myProductIds) {
+
+    }
+
+    @Override
+    public void updateStatus(List<Long> productIds, ProductStatus status) {
+        List<MyProduct> products = queryFactory
+                .selectFrom(myProduct)
+                .where(myProduct.id.in(productIds))
+                .fetch();
+
+        products.forEach(product -> product.updateStatus(status));
+    }
+
+ /*   @Override
     public Page<MyProductResponse> findUserProductList(SearchProductRecord searchProduct) {
-        var result = queryFactory
+        List<MyProductResponse> result = queryFactory
                 .select(Projections.fields(MyProductResponse.class,
                         myProduct.id,
                         myProduct.name,
@@ -40,9 +57,9 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                         myProduct.originalPrice,
                         myProduct.status,
                         getOwner().as("owner"),
-                        ExpressionUtils.as(
-                                getMainImage(), "image")))
+                        GroupBy.list(image.id).as("images")))
                 .from(myProduct)
+                .leftJoin(myProduct.images)
                 .where(myProduct.status.eq(AVAILABLE)
                         .and(onlyActivatedUser())
                         .and(onlyUserProduct(searchProduct.user))
@@ -53,6 +70,30 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .fetch();
 
         return new PageImpl<>(result, searchProduct.pageable, result.size());
+    }*/
+
+    @Override
+    public Page<MyProductResponse> findUserProductList(SearchProductRecord searchProduct) {
+        List<MyProduct> result = queryFactory
+                .selectFrom(myProduct)
+                .leftJoin(myProduct.images)
+                .where(onlyActivatedUser()
+                        .and(ignoreStatus(searchProduct.searchAllStatus))
+                        .and(onlyUserProduct(searchProduct.user))
+                        .and(keywordSearch(searchProduct.keyword)))
+                .orderBy(myProduct.id.desc())
+                .offset(searchProduct.pageable.getOffset())
+                .limit(searchProduct.pageable.getPageSize())
+                .fetch();
+
+        return new PageImpl<>(
+                result.stream().map(MyProduct::toResponse).toList(),
+                searchProduct.pageable,
+                result.size());
+    }
+
+    private Predicate ignoreStatus(boolean searchAllStatus) {
+        return searchAllStatus ? null : myProduct.status.eq(AVAILABLE);
     }
 
     private Predicate onlyUserProduct(User user) {
@@ -90,7 +131,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             User user,
             String keyword,
             Pageable pageable,
-            boolean isMyProduct
-    ) {
+            boolean isMyProduct,
+            boolean searchAllStatus) {
     }
 }
