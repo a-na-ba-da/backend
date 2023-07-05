@@ -1,7 +1,6 @@
 package kr.anabada.anabadaserver.domain.change.service;
 
 import jakarta.persistence.EntityManager;
-import kr.anabada.anabadaserver.domain.change.dto.ChangeRequestResponse;
 import kr.anabada.anabadaserver.domain.change.dto.ProductStatus;
 import kr.anabada.anabadaserver.domain.change.entity.MyProduct;
 import kr.anabada.anabadaserver.domain.change.respository.ProductRepository;
@@ -11,7 +10,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -34,26 +32,6 @@ class ProductChangeServiceTest {
 
     @Autowired
     EntityManager em;
-
-    User craeteUser(String nickname) {
-        return User.builder()
-                .nickname(nickname)
-                .role("ROLE_USER")
-                .activated(true)
-                .email("%s@test.com".formatted(nickname))
-                .build();
-    }
-
-    MyProduct createProduct(User owner, String name, ProductStatus status) {
-        return MyProduct.builder()
-                .owner(owner)
-                .name(name)
-                .content("%s 입니다.".formatted(name))
-                .originalPrice(10000)
-                .images(null)
-                .status(status)
-                .build();
-    }
 
     @Nested
     @DisplayName("createChangeRequest 메소드는")

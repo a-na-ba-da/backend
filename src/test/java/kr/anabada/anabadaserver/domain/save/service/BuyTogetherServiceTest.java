@@ -2,7 +2,6 @@ package kr.anabada.anabadaserver.domain.save.service;
 
 import jakarta.persistence.EntityManager;
 import kr.anabada.anabadaserver.common.service.ImageService;
-import kr.anabada.anabadaserver.domain.save.dto.request.BuyTogetherParcelRequest;
 import kr.anabada.anabadaserver.domain.save.dto.request.BuyTogetherRequest;
 import kr.anabada.anabadaserver.domain.save.entity.Save;
 import kr.anabada.anabadaserver.domain.save.repository.SaveRepository;
@@ -20,9 +19,9 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import static kr.anabada.anabadaserver.fixture.dto.BuyTogetherFixture.createBuyTogetherMeet;
+import static kr.anabada.anabadaserver.fixture.dto.BuyTogetherFixture.createBuyTogetherParcel;
 import static kr.anabada.anabadaserver.fixture.entity.UserFixture.createUser;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -107,17 +106,6 @@ class BuyTogetherServiceTest {
     @Nested
     @DisplayName("같이 사요 CASE 2 : 물건 산 이후 택배로 전달하는 경우")
     class SavingCase2 {
-
-        static BuyTogetherRequest createBuyTogetherParcel() {
-            return BuyTogetherParcelRequest.builder()
-                    .title("title")
-                    .content("content")
-                    .pay(10000)
-                    .buyDate(LocalDate.now().plusDays(7))
-                    .productUrl("http://naver.com")
-                    .images(List.of("image1", "image2"))
-                    .build();
-        }
 
         @Test
         @DisplayName("모든 인자값이 정상이면 작성할 수 있다.")
