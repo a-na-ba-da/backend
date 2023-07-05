@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static kr.anabada.anabadaserver.fixture.entity.UserFixture.createUser;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -42,15 +43,6 @@ class KnowTogetherServiceTest {
     @BeforeEach
     void ignoreImageUpload() {
         doNothing().when(imageService).attach(anyLong(), anyList(), anyLong());
-    }
-
-    User createUser(String email, String nickname) {
-        return User.builder()
-                .email(email)
-                .nickname(nickname)
-                .activated(true)
-                .role("USER")
-                .build();
     }
 
     @Nested

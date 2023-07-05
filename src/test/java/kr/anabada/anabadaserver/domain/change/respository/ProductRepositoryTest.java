@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static kr.anabada.anabadaserver.fixture.entity.ProductFixture.createMyProduct;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
@@ -43,17 +44,6 @@ class ProductRepositoryTest {
                 .email("userB@test.com")
                 .activated(true)
                 .role("ROLE_USER")
-                .build();
-    }
-
-    private MyProduct createMyProduct(User owner, String name, String content, ProductStatus status) {
-        return MyProduct.builder()
-                .owner(owner)
-                .name(name)
-                .content(content)
-                .originalPrice(10000)
-                .status(status)
-                .images(null)
                 .build();
     }
 

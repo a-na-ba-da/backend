@@ -1,6 +1,7 @@
 package kr.anabada.anabadaserver.domain.change.service;
 
 import jakarta.persistence.EntityManager;
+import kr.anabada.anabadaserver.domain.change.dto.ChangeRequestResponse;
 import kr.anabada.anabadaserver.domain.change.dto.ProductStatus;
 import kr.anabada.anabadaserver.domain.change.entity.MyProduct;
 import kr.anabada.anabadaserver.domain.change.respository.ProductRepository;
@@ -10,11 +11,14 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static kr.anabada.anabadaserver.domain.change.dto.ProductStatus.REQUESTING;
+import static kr.anabada.anabadaserver.fixture.entity.ProductFixture.createProduct;
+import static kr.anabada.anabadaserver.fixture.entity.UserFixture.craeteUser;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
@@ -94,7 +98,7 @@ class ProductChangeServiceTest {
             // when & then
             assertThrows(IllegalArgumentException.class,
                     () -> productChangeService.changeRequest(requester, targetProduct.getId(), List.of(requesterProduct1.getId(), requesterProduct2.getId()), "교환신청합니다~"),
-                    "%d는 변경 신청 가능한 물건이 아닙니다.".formatted(requesterProduct2.getId()));
+                    "교환 신청에 사용된 나의 물건 중 잘못된 물건이 포함되어 있습니다.");
         }
 
         @Test
