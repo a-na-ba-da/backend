@@ -59,15 +59,16 @@ create table change_request_product
 
 create table comment
 (
-    id           bigint auto_increment
+    id                bigint auto_increment
         primary key,
-    content      varchar(100)    not null comment '댓글 내용',
-    writer       bigint          not null,
-    border_type  varchar(10)     null comment '댓글이 달릴 도메인 타입 (ex. 같이사요 .... 같이 알아요 ....)',
-    class        bit default (0) not null comment '댓글과 대댓글을 구성하기 위한 계층
-0 = 부모, 1 = 자식 (대댓글 )',
-    ordering     smallint        not null comment '댓글과 대댓글의 순서',
-    group_number smallint        not null comment '댓글 그룹'
+    post_type         varchar(15)          not null comment '댓글이 달릴 도메인 타입 (ex. 같이사요 .... 같이 알아요 ....)',
+    post_id           bigint               not null comment '게시글 fk',
+    content           varchar(500)         not null comment '댓글 내용',
+    writer_id         bigint               not null comment '댓글 작성자 fk',
+    parent_comment_id bigint               null comment '대댓글일시.... 부모 댓글의 id값',
+    is_removed        tinyint(1) default 0 not null,
+    created_at        datetime             null,
+    modified_at       datetime             null
 );
 
 create table image
