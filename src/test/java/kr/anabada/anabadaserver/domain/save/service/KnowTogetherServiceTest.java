@@ -35,9 +35,6 @@ class KnowTogetherServiceTest {
     private KnowTogetherService knowTogetherService;
 
     @Autowired
-    private SaveRepository saveRepository;
-
-    @Autowired
     private EntityManager em;
 
     @BeforeEach
