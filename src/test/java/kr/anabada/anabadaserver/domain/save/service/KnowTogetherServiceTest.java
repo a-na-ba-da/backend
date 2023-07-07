@@ -6,7 +6,6 @@ import kr.anabada.anabadaserver.domain.save.dto.request.KnowTogetherOfflineReque
 import kr.anabada.anabadaserver.domain.save.dto.request.KnowTogetherOnlineRequest;
 import kr.anabada.anabadaserver.domain.save.dto.request.KnowTogetherRequest;
 import kr.anabada.anabadaserver.domain.save.entity.Save;
-import kr.anabada.anabadaserver.domain.save.repository.SaveRepository;
 import kr.anabada.anabadaserver.domain.user.entity.User;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
