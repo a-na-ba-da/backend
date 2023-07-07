@@ -51,9 +51,6 @@ public class MyProduct {
     @Column(name = "status", nullable = false)
     private ProductStatus status = AVAILABLE;
 
-//    @Column(name = "category", length = 40)
-//    private String category;
-
     @BatchSize(size = 100)
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
@@ -64,13 +61,26 @@ public class MyProduct {
     @Column(name = "is_removed", nullable = false)
     private Boolean isRemoved = false;
 
-    public MyProductResponse toResponse() {
-        return new MyProductResponse(id, owner.toDto(), name, content, originalPrice, status,
-                images == null ? null :
-                        images.stream()
-                                .map(Image::getId)
-                                .map(UUID::toString)
-                                .toList());
+    public MyProductResponse toResponse(boolean includeOwner) {
+        return includeOwner ? toResponseIncludeOwner() : toResponseExcludeOwner();
+    }
+
+    private MyProductResponse toResponseExcludeOwner() {
+        return new MyProductResponse.ExcludeOwner(id, name, content, originalPrice, status,
+                getImageString());
+    }
+
+    private MyProductResponse toResponseIncludeOwner() {
+        return new MyProductResponse.IncludeOwner(id, name, content, originalPrice, status,
+                getImageString(), owner.toDto());
+    }
+
+    private List<String> getImageString() {
+        return images == null ? null :
+                images.stream()
+                        .map(Image::getId)
+                        .map(UUID::toString)
+                        .toList();
     }
 
     public void updateStatus(ProductStatus status) {

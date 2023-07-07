@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import kr.anabada.anabadaserver.domain.change.entity.ChangeRequest;
 import kr.anabada.anabadaserver.domain.change.entity.ChangeRequestProduct;
-import kr.anabada.anabadaserver.domain.change.entity.MyProduct;
 import kr.anabada.anabadaserver.domain.user.dto.UserDto;
 import lombok.Builder;
 import lombok.Getter;
@@ -57,10 +56,10 @@ public class ChangeRequestResponse {
         public static ReqByMe of(ChangeRequest changeRequest) {
             return ReqByMe.builder()
                     .id(changeRequest.getId())
-                    .targetProduct(changeRequest.getTargetProduct().toResponse())
+                    .targetProduct(changeRequest.getTargetProduct().toResponse(false))
                     .toChangeProducts(changeRequest.getToChangeProducts().stream()
                             .map(ChangeRequestProduct::getProduct)
-                            .map(MyProduct::toResponse)
+                            .map(myProduct -> myProduct.toResponse(false))
                             .toList())
                     .message(changeRequest.getMessage())
                     .rejectMessage(changeRequest.getRejectMessage())
@@ -103,10 +102,10 @@ public class ChangeRequestResponse {
         public static ReqForMe of(ChangeRequest request) {
             return new ReqForMe(
                     request.getId(),
-                    request.getTargetProduct().toResponse(),
+                    request.getTargetProduct().toResponse(false),
                     request.getToChangeProducts().stream()
                             .map(ChangeRequestProduct::getProduct)
-                            .map(MyProduct::toResponse)
+                            .map(myProduct -> myProduct.toResponse(false))
                             .toList(),
                     request.getMessage(),
                     request.getRejectMessage(),
