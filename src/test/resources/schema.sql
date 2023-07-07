@@ -35,13 +35,14 @@ create table change_request
         primary key,
     product_id           bigint               not null comment '상대물건 fk',
     requester_id         bigint               not null comment '요청자 fk',
+    requestee_id         bigint               null,
     request_message      varchar(30)          not null comment '요청자의 메세지',
     reject_message       varchar(30)          null comment '거절 메세지',
     status               varchar(15)          null comment '요청 상태',
     modified_at          datetime(6)          null,
     created_at           datetime(6)          not null,
-    removed_by_requestee tinyint(1) default 0 not null,
-    removed_by_requester tinyint(1) default 0 not null
+    removed_by_requester tinyint(1) default 0 not null comment '요청자가 지웠는지 여부',
+    removed_by_requestee tinyint(1) default 0 not null comment '요청받는이가 지웠는지 여부'
 )
     comment '바꿔주세요';
 
