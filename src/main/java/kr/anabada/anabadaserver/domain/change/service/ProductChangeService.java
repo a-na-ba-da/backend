@@ -24,6 +24,12 @@ public class ProductChangeService {
     private final ChangeRequestRepository changeRequestRepository;
     private final ChangeRequestProductRepository requestProductRepository;
 
+    public ChangeRequestResponse getAllChangeRequest(User user) {
+        return new ChangeRequestResponse(
+                changeRequestRepository.getAllRequestedByMe(user),
+                changeRequestRepository.getAllRequestingForMe(user));
+    }
+
     @Transactional
     public void changeRequest(User user, long targetProductId, List<Long> toChangeProductIds, String message) {
         if (toChangeProductIds == null || toChangeProductIds.isEmpty())
