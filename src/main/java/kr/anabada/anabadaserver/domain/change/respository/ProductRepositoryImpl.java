@@ -87,7 +87,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .fetch();
 
         return new PageImpl<>(
-                result.stream().map(MyProduct::toResponse).toList(),
+                result.stream().map(myProduct -> myProduct.toResponse(true)).toList(),
                 searchProduct.pageable,
                 result.size());
     }

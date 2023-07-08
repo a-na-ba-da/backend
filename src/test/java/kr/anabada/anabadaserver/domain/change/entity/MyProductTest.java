@@ -39,7 +39,7 @@ class MyProductTest {
                 .build();
 
         // when
-        MyProductResponse myProductResponse = myProduct.toResponse();
+        MyProductResponse myProductResponse = myProduct.toResponse(true);
 
         // then
         assertAll(
@@ -68,7 +68,7 @@ class MyProductTest {
                 .build();
 
         // when
-        MyProductResponse myProductResponse = myProduct.toResponse();
+        MyProductResponse myProductResponse = myProduct.toResponse(true);
 
         // then
         assertAll(

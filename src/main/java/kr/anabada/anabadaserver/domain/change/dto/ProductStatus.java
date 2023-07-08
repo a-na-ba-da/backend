@@ -1,8 +1,13 @@
 package kr.anabada.anabadaserver.domain.change.dto;
 
+import io.swagger.v3.oas.annotations.Parameter;
+
 public enum ProductStatus {
+    @Parameter(description = "교환 완료 상태")
     CHANGED("CHANGED", "교환 완료"),
+    @Parameter(description = "교환 요청중 상태")
     REQUESTING("REQUESTING", "교환 요청중"),
+    @Parameter(description = "교환 가능 상태")
     AVAILABLE("AVAILABLE", "교환 가능");
 
     private final String status;

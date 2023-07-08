@@ -2,8 +2,6 @@ package kr.anabada.anabadaserver.domain.save.service;
 
 import jakarta.persistence.EntityManager;
 import kr.anabada.anabadaserver.common.service.ImageService;
-import kr.anabada.anabadaserver.domain.save.dto.request.BuyTogetherMeetRequest;
-import kr.anabada.anabadaserver.domain.save.dto.request.BuyTogetherParcelRequest;
 import kr.anabada.anabadaserver.domain.save.dto.request.BuyTogetherRequest;
 import kr.anabada.anabadaserver.domain.save.entity.Save;
 import kr.anabada.anabadaserver.domain.save.repository.SaveRepository;
@@ -21,8 +19,10 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
 
+import static kr.anabada.anabadaserver.fixture.dto.BuyTogetherFixture.createBuyTogetherMeet;
+import static kr.anabada.anabadaserver.fixture.dto.BuyTogetherFixture.createBuyTogetherParcel;
+import static kr.anabada.anabadaserver.fixture.entity.UserFixture.createUser;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 
@@ -43,30 +43,9 @@ class BuyTogetherServiceTest {
     @Autowired
     private EntityManager em;
 
-    User createUser(String email, String nickname) {
-        return User.builder()
-                .email(email)
-                .nickname(nickname)
-                .activated(true)
-                .role("USER")
-                .build();
-    }
-
     @Nested
     @DisplayName("같이 사요 CASE 1 : 물건 산 이후 대면으로 전달하는 경우")
     class SavingCase1 {
-        static BuyTogetherRequest createBuyTogetherMeet() {
-            return BuyTogetherMeetRequest.builder()
-                    .title("title")
-                    .content("content")
-                    .pay(10000)
-                    .buyDate(LocalDate.now().plusDays(7))
-                    .deliveryPlaceLat(37.123456)
-                    .deliveryPlaceLng(127.123456)
-                    .productUrl("http://naver.com")
-                    .images(List.of("image1", "image2"))
-                    .build();
-        }
 
         @Test
         @DisplayName("모든 인자값이 정상이면 작성할 수 있다.")
@@ -127,17 +106,6 @@ class BuyTogetherServiceTest {
     @Nested
     @DisplayName("같이 사요 CASE 2 : 물건 산 이후 택배로 전달하는 경우")
     class SavingCase2 {
-
-        static BuyTogetherRequest createBuyTogetherParcel() {
-            return BuyTogetherParcelRequest.builder()
-                    .title("title")
-                    .content("content")
-                    .pay(10000)
-                    .buyDate(LocalDate.now().plusDays(7))
-                    .productUrl("http://naver.com")
-                    .images(List.of("image1", "image2"))
-                    .build();
-        }
 
         @Test
         @DisplayName("모든 인자값이 정상이면 작성할 수 있다.")
@@ -224,7 +192,7 @@ class BuyTogetherServiceTest {
             User user = createUser("test@test.com", "test");
             em.persist(user);
 
-            BuyTogetherRequest request = SavingCase1.createBuyTogetherMeet();
+            BuyTogetherRequest request = createBuyTogetherMeet();
             doNothing().when(imageService).attach(any(Long.class), any(), any(Long.class));
 
             Save post = buyTogetherService.createNewBuyTogetherPost(user, request);
@@ -245,7 +213,7 @@ class BuyTogetherServiceTest {
             em.persist(poster);
             em.persist(notPoster);
 
-            BuyTogetherRequest request = SavingCase1.createBuyTogetherMeet();
+            BuyTogetherRequest request = createBuyTogetherMeet();
             doNothing().when(imageService).attach(any(Long.class), any(), any(Long.class));
 
             Save post = buyTogetherService.createNewBuyTogetherPost(poster, request);
@@ -264,7 +232,7 @@ class BuyTogetherServiceTest {
             User poster = createUser("test@test.com", "test");
             em.persist(poster);
 
-            BuyTogetherRequest request = SavingCase1.createBuyTogetherMeet();
+            BuyTogetherRequest request = createBuyTogetherMeet();
             doNothing().when(imageService).attach(any(Long.class), any(), any(Long.class));
 
             Save post = buyTogetherService.createNewBuyTogetherPost(poster, request);
@@ -283,7 +251,7 @@ class BuyTogetherServiceTest {
             User poster = createUser("test@test.com", "test");
             em.persist(poster);
 
-            BuyTogetherRequest request = SavingCase1.createBuyTogetherMeet();
+            BuyTogetherRequest request = createBuyTogetherMeet();
             doNothing().when(imageService).attach(any(Long.class), any(), any(Long.class));
 
             Save post = buyTogetherService.createNewBuyTogetherPost(poster, request);

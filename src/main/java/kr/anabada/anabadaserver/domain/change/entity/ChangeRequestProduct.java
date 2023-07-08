@@ -16,25 +16,22 @@ public class ChangeRequestProduct extends BaseTimeEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-//    @Column(name = "change_request_id", nullable = false)
-//    private Long changeRequestId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private MyProduct product;
 
-    @Column(name = "product_id", nullable = false)
-    private Long productId;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "change_request_id")
     private ChangeRequest changeRequest;
 
-
     @Builder
-    public ChangeRequestProduct(Long id, Long productId) {
+    public ChangeRequestProduct(Long id, MyProduct product) {
         this.id = id;
-        this.productId = productId;
+        this.product = product;
     }
 
     public void setChangeRequest(ChangeRequest changeRequest) {
-        changeRequest.getChangedProducts().add(this);
+        changeRequest.getToChangeProducts().add(this);
         this.changeRequest = changeRequest;
     }
 }

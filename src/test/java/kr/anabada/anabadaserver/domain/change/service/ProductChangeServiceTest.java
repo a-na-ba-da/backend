@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static kr.anabada.anabadaserver.domain.change.dto.ProductStatus.REQUESTING;
+import static kr.anabada.anabadaserver.fixture.entity.ProductFixture.createProduct;
+import static kr.anabada.anabadaserver.fixture.entity.UserFixture.craeteUser;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
@@ -30,26 +32,6 @@ class ProductChangeServiceTest {
 
     @Autowired
     EntityManager em;
-
-    User craeteUser(String nickname) {
-        return User.builder()
-                .nickname(nickname)
-                .role("ROLE_USER")
-                .activated(true)
-                .email("%s@test.com".formatted(nickname))
-                .build();
-    }
-
-    MyProduct createProduct(User owner, String name, ProductStatus status) {
-        return MyProduct.builder()
-                .owner(owner)
-                .name(name)
-                .content("%s 입니다.".formatted(name))
-                .originalPrice(10000)
-                .images(null)
-                .status(status)
-                .build();
-    }
 
     @Nested
     @DisplayName("createChangeRequest 메소드는")
@@ -94,7 +76,7 @@ class ProductChangeServiceTest {
             // when & then
             assertThrows(IllegalArgumentException.class,
                     () -> productChangeService.changeRequest(requester, targetProduct.getId(), List.of(requesterProduct1.getId(), requesterProduct2.getId()), "교환신청합니다~"),
-                    "%d는 변경 신청 가능한 물건이 아닙니다.".formatted(requesterProduct2.getId()));
+                    "교환 신청에 사용된 나의 물건 중 잘못된 물건이 포함되어 있습니다.");
         }
 
         @Test

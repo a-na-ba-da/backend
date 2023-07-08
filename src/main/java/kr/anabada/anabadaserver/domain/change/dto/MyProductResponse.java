@@ -10,12 +10,10 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Schema(description = "상품 조회 응답")
-public class MyProductResponse {
+public abstract class MyProductResponse {
+
     @Schema(description = "상품 id", example = "1")
     private Long id;
-
-    @Schema(description = "상품 소유자 정보")
-    private UserDto owner;
 
     @Schema(description = "상품 이름", example = "이스트라 AN753UHD 스마트 THE 울트라")
     private String name;
@@ -32,13 +30,28 @@ public class MyProductResponse {
     @Schema(description = "상품 이미지 파일 이름")
     private List<String> images;
 
-    public MyProductResponse(Long id, UserDto owner, String name, String content, int originalPrice, ProductStatus status, List<String> images) {
+    private MyProductResponse(Long id, String name, String content, int originalPrice, ProductStatus status, List<String> images) {
         this.id = id;
-        this.owner = owner;
         this.name = name;
         this.content = content;
         this.originalPrice = originalPrice;
         this.status = status;
         this.images = images;
+    }
+
+    public static class IncludeOwner extends MyProductResponse {
+        @Schema(description = "상품 소유자 정보")
+        private final UserDto owner;
+
+        public IncludeOwner(Long id, String name, String content, int originalPrice, ProductStatus status, List<String> images, UserDto owner) {
+            super(id, name, content, originalPrice, status, images);
+            this.owner = owner;
+        }
+    }
+
+    public static class ExcludeOwner extends MyProductResponse {
+        public ExcludeOwner(Long id, String name, String content, int originalPrice, ProductStatus status, List<String> images) {
+            super(id, name, content, originalPrice, status, images);
+        }
     }
 }

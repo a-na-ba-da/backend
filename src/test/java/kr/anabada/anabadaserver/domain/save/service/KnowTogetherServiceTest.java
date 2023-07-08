@@ -6,7 +6,6 @@ import kr.anabada.anabadaserver.domain.save.dto.request.KnowTogetherOfflineReque
 import kr.anabada.anabadaserver.domain.save.dto.request.KnowTogetherOnlineRequest;
 import kr.anabada.anabadaserver.domain.save.dto.request.KnowTogetherRequest;
 import kr.anabada.anabadaserver.domain.save.entity.Save;
-import kr.anabada.anabadaserver.domain.save.repository.SaveRepository;
 import kr.anabada.anabadaserver.domain.user.entity.User;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static kr.anabada.anabadaserver.fixture.entity.UserFixture.createUser;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -34,23 +34,11 @@ class KnowTogetherServiceTest {
     private KnowTogetherService knowTogetherService;
 
     @Autowired
-    private SaveRepository saveRepository;
-
-    @Autowired
     private EntityManager em;
 
     @BeforeEach
     void ignoreImageUpload() {
         doNothing().when(imageService).attach(anyLong(), anyList(), anyLong());
-    }
-
-    User createUser(String email, String nickname) {
-        return User.builder()
-                .email(email)
-                .nickname(nickname)
-                .activated(true)
-                .role("USER")
-                .build();
     }
 
     @Nested

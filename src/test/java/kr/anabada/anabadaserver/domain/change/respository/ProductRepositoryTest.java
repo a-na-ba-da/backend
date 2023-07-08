@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static kr.anabada.anabadaserver.fixture.entity.ProductFixture.createMyProduct;
+import static kr.anabada.anabadaserver.fixture.entity.UserFixture.createUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
@@ -29,32 +31,11 @@ class ProductRepositoryTest {
     private EntityManager em;
 
     private User createUserA() {
-        return User.builder()
-                .nickname("userA")
-                .email("userA@test.com")
-                .activated(true)
-                .role("ROLE_USER")
-                .build();
+        return createUser("usera@test.com", "userA");
     }
 
     private User createUserB() {
-        return User.builder()
-                .nickname("userB")
-                .email("userB@test.com")
-                .activated(true)
-                .role("ROLE_USER")
-                .build();
-    }
-
-    private MyProduct createMyProduct(User owner, String name, String content, ProductStatus status) {
-        return MyProduct.builder()
-                .owner(owner)
-                .name(name)
-                .content(content)
-                .originalPrice(10000)
-                .status(status)
-                .images(null)
-                .build();
+        return createUser("userb@test.com", "userB");
     }
 
     @Nested
