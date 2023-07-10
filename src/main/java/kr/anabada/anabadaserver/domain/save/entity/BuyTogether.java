@@ -10,6 +10,7 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -36,6 +37,10 @@ public class BuyTogether extends Save {
     @Column(name = "pay", columnDefinition = "int unsigned not null")
     private Integer pay;
 
+    // 오프라인 구매시 구매처 상세 정보
+    @Column(name = "buy_place_detail")
+    private String buyPlaceDetail;
+
     @BatchSize(size = 100)
     @JoinColumn(name = "post_id")
     @OneToMany(fetch = FetchType.LAZY)
@@ -50,11 +55,18 @@ public class BuyTogether extends Save {
                 .productUrl(getProductUrl())
                 .createdAt(getCreatedAt())
                 .modifiedAt(getModifiedAt())
+                .isOnlineDeal(isOnlineDeal())
                 .isParcelDelivery(isParcelDelivery)
+                .deliveryPlaceLat(super.getPlaceLat())
+                .deliveryPlaceLng(super.getPlaceLng())
                 .buyDate(buyDate)
                 .images(images.stream().map(Image::getId).map(UUID::toString).toList())
                 .writer(getWriter().toDto())
                 .pay(pay)
                 .build();
+    }
+
+    private boolean isOnlineDeal() {
+        return !StringUtils.hasText(buyPlaceDetail);
     }
 }
