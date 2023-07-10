@@ -14,6 +14,7 @@ import java.util.List;
 @Getter
 @SuperBuilder
 @NoArgsConstructor
+@Schema(description = "같이 사요 생성 (대면 전달) request")
 public class BuyTogetherMeetRequest extends BuyTogetherRequest {
     @Schema(description = "물건을 전달할 인근 위도")
     @Range(min = -90, max = 90, message = "위도의 범위는 -90 ~ 90 입니다.")
