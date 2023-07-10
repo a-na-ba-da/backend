@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class OpenApiConfig {
     @Bean
-    public OpenAPI openAPI(){
+    public OpenAPI openAPI() {
         Info info = new Info()
                 .title("아나바다 API")
                 .description("Anabada API Docs")
