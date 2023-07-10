@@ -24,24 +24,28 @@ import java.util.List;
 @Schema(description = "같이사요 요청", subTypes = {BuyTogetherMeetRequest.class, BuyTogetherParcelRequest.class}, discriminatorProperty = "isParcelDelivery")
 public abstract class BuyTogetherRequest {
 
-    @Parameter(description = "제목")
+    @Schema(description = "제목")
     @Length(min = 2, max = 30, message = "제목은 2자 이상 30자 이하로 작성해주세요.")
     private String title;
 
-    @Parameter(description = "내용")
+    @Schema(description = "내용")
     @Length(min = 5, max = 700, message = "내용은 5자 이상 700자 이하로 작성해주세요.")
     private String content;
 
-    @Parameter(description = "상품 URL")
+    @Schema(description = "온라인에서 구매 할 상품인 경우, URL")
     @Pattern(regexp = "^(http|https)://.*", message = "URL은 http:// 또는 https:// 로 시작해야합니다.")
     @Length(max = 500, message = "상품 URL은 500자 이하로 작성해주세요.")
     private String productUrl;
 
-    @Parameter(description = "구매 예정일")
+    @Schema(description = "오프라인에서 구매 할 상품인 경우, 구매 장소에 대한 간단한 설명 (상호명 등등)")
+    @Length(max = 20, message = "구매 장소에 대한 상호명은 20자 이하로 작성해주세요.")
+    private String buyPlaceDetail;
+
+    @Schema(description = "구매 예정일")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate buyDate;
 
-    @Parameter(description = "상대가 지불해야 할 돈 (택배 전달이라면, 배송비 포함)")
+    @Schema(description = "상대가 지불해야 할 돈 (택배 전달이라면, 배송비 포함)")
     @Positive(message = "상대가 지불해야 할 돈은 0 보다 커야합니다.")
     private Integer pay;
 
