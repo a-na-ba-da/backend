@@ -63,7 +63,7 @@ public class ImageUploadController {
             summary = "이미지 다운로드",
             description = "이미지 파일 이름을 받아서 이미지를 다운로드합니다.<br/>" +
                     "이미지 파일의 바이너리를 반환합니다." +
-                    "<br/><br/> 만약 썸네일용 이미지로 다운로드 하고 싶다면, 파일 이름의 맨앞(prefix)로 thumb 을 붙여서 요청하면 됩니다." +
+                    "<br/><br/> 만약 썸네일용 이미지로 다운로드 하고 싶다면, 파일 이름의 맨앞(prefix)로 thumbnail_ 을 붙여서 요청하면 됩니다." +
                     "<br/> 예시 : /api/v1/image/thumbnail_이미지파일이름"
     )
     @ApiResponse(
