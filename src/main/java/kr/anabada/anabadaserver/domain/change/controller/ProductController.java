@@ -13,6 +13,7 @@ import kr.anabada.anabadaserver.global.response.CustomException;
 import kr.anabada.anabadaserver.global.response.ErrorCode;
 import kr.anabada.anabadaserver.global.response.GlobalResponse;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
@@ -37,11 +38,11 @@ public class ProductController {
     @GetMapping("/my-product")
     @Operation(summary = "내 상품 목록 조회")
     public GlobalResponse<Page<MyProductResponse>> getMyProduct(@CurrentUser User user,
-                                                                @Parameter(description = "검색어 없다면 요청시 제외 할것")
+                                                                @Parameter(description = "검색어 없다면 요청시 제외 할것", required = false)
                                                                 String searchWord,
-                                                                Pageable pageable,
-                                                                @Parameter(description = "true: 전체 물건 조회, false: AVAILABLE 물건만 조회")
-                                                                boolean searchAllStatus) {
+                                                                @Parameter(description = "모든 상태의 상품을 조회할 것인지 여부 (true: 전체 물건 조회, false: AVAILABLE 물건만 조회)", required = false, example = "false")
+                                                                boolean searchAllStatus,
+                                                                @ParameterObject Pageable pageable) {
         if (user == null)
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
 
@@ -53,7 +54,11 @@ public class ProductController {
 
     @GetMapping("/product")
     @Operation(summary = "모든(내 상품 포함) 상품 목록 조회 - (AVAILABLE 상품만 조회)")
-    public GlobalResponse<Page<MyProductResponse>> getAllProduct(String searchWord, Pageable pageable) {
+    public GlobalResponse<Page<MyProductResponse>> getAllProduct(
+            @Parameter(description = "검색어 없다면 요청시 제외 할것", required = false)
+            String searchWord,
+            @ParameterObject
+            Pageable pageable) {
         if (isInvalidSearchWord(searchWord))
             throw new CustomException(ErrorCode.SEARCH_WORD_LENGTH);
 
