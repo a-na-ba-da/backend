@@ -48,7 +48,7 @@ class BuyTogetherServiceTest extends ServiceTestWithoutImageUpload {
             User user = createUser("test@test.com", "test");
             em.persist(user);
 
-            BuyTogetherRequest request = createBuyTogetherMeet();
+            BuyTogetherRequest request = createBuyTogetherMeet(true);
 
             // when
             Save result = buyTogetherService.createNewBuyTogetherPost(user, request);
@@ -65,7 +65,7 @@ class BuyTogetherServiceTest extends ServiceTestWithoutImageUpload {
             User user = createUser("test@test.com", "test");
             em.persist(user);
 
-            BuyTogetherRequest request = createBuyTogetherMeet();
+            BuyTogetherRequest request = createBuyTogetherMeet(true);
             ReflectionTestUtils.setField(request, "deliveryPlaceLat", null);
             ReflectionTestUtils.setField(request, "deliveryPlaceLng", null);
 
@@ -83,7 +83,7 @@ class BuyTogetherServiceTest extends ServiceTestWithoutImageUpload {
             User user = createUser("test@test.com", "test");
             em.persist(user);
 
-            BuyTogetherRequest request = createBuyTogetherMeet();
+            BuyTogetherRequest request = createBuyTogetherMeet(true);
             ReflectionTestUtils.setField(request, "images", null);
 
             // when & then
@@ -114,6 +114,23 @@ class BuyTogetherServiceTest extends ServiceTestWithoutImageUpload {
             Assertions.assertEquals(findPost.getTitle(), request.getTitle());
             Assertions.assertNotNull(findPost.getId());
         }
+
+        @Test
+        @DisplayName("온라인 구매인데, 상품 링크가 없는 경우 작성할 수 없다.")
+        void onlineBought_require_productUrl() {
+            // given
+            User user = createUser("test@test.com", "test");
+            em.persist(user);
+
+            BuyTogetherRequest request = createBuyTogetherParcel(true);
+            ReflectionTestUtils.setField(request, "productUrl", null);
+
+            // when & then
+            Assertions.assertThrows(IllegalArgumentException.class, () -> {
+                buyTogetherService.createNewBuyTogetherPost(user, request);
+            }, "상품 구매처는 온라인 혹은 오프라인 중 하나여야 합니다.");
+        }
+
 
         @Test
         @DisplayName("구매 예정일이 과거로 지정되어있으면, 작성할 수 없다.")
@@ -177,7 +194,7 @@ class BuyTogetherServiceTest extends ServiceTestWithoutImageUpload {
             User user = createUser("test@test.com", "test");
             em.persist(user);
 
-            BuyTogetherRequest request = createBuyTogetherMeet();
+            BuyTogetherRequest request = createBuyTogetherMeet(true);
             Save post = buyTogetherService.createNewBuyTogetherPost(user, request);
             em.persist(post);
 
@@ -196,7 +213,7 @@ class BuyTogetherServiceTest extends ServiceTestWithoutImageUpload {
             em.persist(poster);
             em.persist(notPoster);
 
-            BuyTogetherRequest request = createBuyTogetherMeet();
+            BuyTogetherRequest request = createBuyTogetherMeet(true);
             Save post = buyTogetherService.createNewBuyTogetherPost(poster, request);
             em.persist(post);
 
@@ -213,7 +230,7 @@ class BuyTogetherServiceTest extends ServiceTestWithoutImageUpload {
             User poster = createUser("test@test.com", "test");
             em.persist(poster);
 
-            BuyTogetherRequest request = createBuyTogetherMeet();
+            BuyTogetherRequest request = createBuyTogetherMeet(true);
             Save post = buyTogetherService.createNewBuyTogetherPost(poster, request);
 
             // when & then
@@ -230,7 +247,7 @@ class BuyTogetherServiceTest extends ServiceTestWithoutImageUpload {
             User poster = createUser("test@test.com", "test");
             em.persist(poster);
 
-            BuyTogetherRequest request = createBuyTogetherMeet();
+            BuyTogetherRequest request = createBuyTogetherMeet(true);
             Save post = buyTogetherService.createNewBuyTogetherPost(poster, request);
             buyTogetherService.removeMyPost(poster, post.getId());
 
