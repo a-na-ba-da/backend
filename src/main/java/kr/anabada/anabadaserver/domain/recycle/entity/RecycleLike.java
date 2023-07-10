@@ -5,6 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Entity
+@NoArgsConstructor
 @Table(name = "recycle_like")
 public class RecycleLike {
     @Id
@@ -23,6 +24,4 @@ public class RecycleLike {
         this.recycleId = postId;
         this.userId = userId;
     }
-
-    public RecycleLike() {}
 }
