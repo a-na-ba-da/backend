@@ -115,7 +115,7 @@ public class ImageUploadService {
             throw new RuntimeException(e);
         }
 
-        int maxWidth = 750;
+        int maxWidth = 400;
         int calcHeight = (int) (bo_img.getHeight() * ((double) maxWidth / bo_img.getWidth()));
 
         File thumbnailFile = new File(directory, "thumbnail_" + uuid.toString());
