@@ -1,7 +1,7 @@
 package kr.anabada.anabadaserver.domain.save.service;
 
 import jakarta.persistence.EntityManager;
-import kr.anabada.anabadaserver.common.service.ImageService;
+import kr.anabada.anabadaserver.domain.ServiceTestWithoutImageUpload;
 import kr.anabada.anabadaserver.domain.save.dto.request.BuyTogetherRequest;
 import kr.anabada.anabadaserver.domain.save.entity.Save;
 import kr.anabada.anabadaserver.domain.save.repository.SaveRepository;
@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,16 +22,11 @@ import java.time.LocalDate;
 import static kr.anabada.anabadaserver.fixture.dto.BuyTogetherFixture.createBuyTogetherMeet;
 import static kr.anabada.anabadaserver.fixture.dto.BuyTogetherFixture.createBuyTogetherParcel;
 import static kr.anabada.anabadaserver.fixture.entity.UserFixture.createUser;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 
 @Transactional
 @SpringBootTest
 @DisplayName("아껴쓰기 서비스")
-class BuyTogetherServiceTest {
-
-    @MockBean
-    private ImageService imageService;
+class BuyTogetherServiceTest extends ServiceTestWithoutImageUpload {
 
     @Autowired
     private BuyTogetherService buyTogetherService;
@@ -55,7 +49,6 @@ class BuyTogetherServiceTest {
             em.persist(user);
 
             BuyTogetherRequest request = createBuyTogetherMeet();
-            doNothing().when(imageService).attach(any(Long.class), any(), any(Long.class));
 
             // when
             Save result = buyTogetherService.createNewBuyTogetherPost(user, request);
@@ -66,7 +59,6 @@ class BuyTogetherServiceTest {
             Assertions.assertNotNull(findPost.getId());
         }
 
-
         @DisplayName("대면 전달인데, 물건을 건네줄 위치정보가 없는 경우 작성할 수 없다.")
         void Failure1() {
             // given
@@ -76,8 +68,6 @@ class BuyTogetherServiceTest {
             BuyTogetherRequest request = createBuyTogetherMeet();
             ReflectionTestUtils.setField(request, "deliveryPlaceLat", null);
             ReflectionTestUtils.setField(request, "deliveryPlaceLng", null);
-
-            doNothing().when(imageService).attach(any(Long.class), any(), any(Long.class));
 
             // when & then
             Assertions.assertThrows(IllegalArgumentException.class, () -> {
@@ -114,8 +104,7 @@ class BuyTogetherServiceTest {
             User user = createUser("test@test.com", "test");
             em.persist(user);
 
-            BuyTogetherRequest request = createBuyTogetherParcel();
-            doNothing().when(imageService).attach(any(Long.class), any(), any(Long.class));
+            BuyTogetherRequest request = createBuyTogetherParcel(true);
 
             // when
             Save result = buyTogetherService.createNewBuyTogetherPost(user, request);
@@ -133,10 +122,8 @@ class BuyTogetherServiceTest {
             User user = createUser("test@test.com", "test");
             em.persist(user);
 
-            BuyTogetherRequest request = createBuyTogetherParcel();
+            BuyTogetherRequest request = createBuyTogetherParcel(true);
             ReflectionTestUtils.setField(request, "buyDate", LocalDate.now().minusDays(7));
-
-            doNothing().when(imageService).attach(any(Long.class), any(), any(Long.class));
 
             // when & then
             Assertions.assertThrows(IllegalArgumentException.class, () -> {
@@ -152,10 +139,8 @@ class BuyTogetherServiceTest {
             User user = createUser("test@test.com", "test");
             em.persist(user);
 
-            BuyTogetherRequest request = createBuyTogetherParcel();
+            BuyTogetherRequest request = createBuyTogetherParcel(true);
             ReflectionTestUtils.setField(request, "buyDate", LocalDate.now().plusMonths(2).plusDays(1));
-
-            doNothing().when(imageService).attach(any(Long.class), any(), any(Long.class));
 
             // when & then
             Assertions.assertThrows(IllegalArgumentException.class, () -> {
@@ -170,7 +155,7 @@ class BuyTogetherServiceTest {
             User user = createUser("test@test.com", "test");
             em.persist(user);
 
-            BuyTogetherRequest request = createBuyTogetherParcel();
+            BuyTogetherRequest request = createBuyTogetherParcel(true);
             ReflectionTestUtils.setField(request, "images", null);
 
             // when & then
@@ -193,8 +178,6 @@ class BuyTogetherServiceTest {
             em.persist(user);
 
             BuyTogetherRequest request = createBuyTogetherMeet();
-            doNothing().when(imageService).attach(any(Long.class), any(), any(Long.class));
-
             Save post = buyTogetherService.createNewBuyTogetherPost(user, request);
             em.persist(post);
 
@@ -214,8 +197,6 @@ class BuyTogetherServiceTest {
             em.persist(notPoster);
 
             BuyTogetherRequest request = createBuyTogetherMeet();
-            doNothing().when(imageService).attach(any(Long.class), any(), any(Long.class));
-
             Save post = buyTogetherService.createNewBuyTogetherPost(poster, request);
             em.persist(post);
 
@@ -233,8 +214,6 @@ class BuyTogetherServiceTest {
             em.persist(poster);
 
             BuyTogetherRequest request = createBuyTogetherMeet();
-            doNothing().when(imageService).attach(any(Long.class), any(), any(Long.class));
-
             Save post = buyTogetherService.createNewBuyTogetherPost(poster, request);
 
             // when & then
@@ -252,8 +231,6 @@ class BuyTogetherServiceTest {
             em.persist(poster);
 
             BuyTogetherRequest request = createBuyTogetherMeet();
-            doNothing().when(imageService).attach(any(Long.class), any(), any(Long.class));
-
             Save post = buyTogetherService.createNewBuyTogetherPost(poster, request);
             buyTogetherService.removeMyPost(poster, post.getId());
 
