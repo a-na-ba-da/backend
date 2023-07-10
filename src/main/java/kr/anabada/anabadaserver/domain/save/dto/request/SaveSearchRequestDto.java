@@ -1,4 +1,4 @@
-package kr.anabada.anabadaserver.domain.save.dto;
+package kr.anabada.anabadaserver.domain.save.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
