@@ -1,6 +1,6 @@
 package kr.anabada.anabadaserver.domain.save.repository;
 
-import kr.anabada.anabadaserver.domain.save.dto.SaveSearchRequestDto;
+import kr.anabada.anabadaserver.domain.save.dto.request.SaveSearchRequestDto;
 import kr.anabada.anabadaserver.domain.save.entity.BuyTogether;
 import kr.anabada.anabadaserver.domain.save.entity.KnowTogether;
 import org.springframework.data.domain.Pageable;

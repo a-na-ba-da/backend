@@ -51,7 +51,7 @@ class CommentServiceTest extends ServiceTestWithoutImageUpload {
             User user = createUserA();
             em.persist(user);
 
-            BuyTogetherRequest post = createBuyTogetherParcel();
+            BuyTogetherRequest post = createBuyTogetherParcel(false);
             long postId = buyTogetherService.createNewBuyTogetherPost(user, post).getId();
 
             CommentRequest commentRequest = CommentRequest.builder()
@@ -72,7 +72,7 @@ class CommentServiceTest extends ServiceTestWithoutImageUpload {
             User user = createUserA();
             em.persist(user);
 
-            BuyTogetherRequest post = createBuyTogetherParcel();
+            BuyTogetherRequest post = createBuyTogetherParcel(false);
             long postId = buyTogetherService.createNewBuyTogetherPost(user, post).getId();
 
             CommentRequest commentRequest = CommentRequest.builder()
@@ -96,7 +96,7 @@ class CommentServiceTest extends ServiceTestWithoutImageUpload {
             User user = createUserA();
             em.persist(user);
 
-            BuyTogetherRequest post = createBuyTogetherParcel();
+            BuyTogetherRequest post = createBuyTogetherParcel(false);
             long postId = buyTogetherService.createNewBuyTogetherPost(user, post).getId();
 
             CommentRequest commentRequest = CommentRequest.builder()
@@ -117,7 +117,7 @@ class CommentServiceTest extends ServiceTestWithoutImageUpload {
             User user = createUserA();
             em.persist(user);
 
-            BuyTogetherRequest post = createBuyTogetherParcel();
+            BuyTogetherRequest post = createBuyTogetherParcel(false);
             long postId = buyTogetherService.createNewBuyTogetherPost(user, post).getId();
 
             CommentRequest commentRequest = CommentRequest.builder()
@@ -157,7 +157,7 @@ class CommentServiceTest extends ServiceTestWithoutImageUpload {
             User user = createUserA();
             em.persist(user);
 
-            BuyTogetherRequest post = createBuyTogetherParcel();
+            BuyTogetherRequest post = createBuyTogetherParcel(false);
             long postId = buyTogetherService.createNewBuyTogetherPost(user, post).getId();
 
             CommentRequest commentRequest = CommentRequest.builder()
@@ -180,7 +180,7 @@ class CommentServiceTest extends ServiceTestWithoutImageUpload {
             User user = createUserA();
             em.persist(user);
 
-            BuyTogetherRequest post = createBuyTogetherParcel();
+            BuyTogetherRequest post = createBuyTogetherParcel(false);
             long postId = buyTogetherService.createNewBuyTogetherPost(user, post).getId();
 
             CommentRequest commentRequest = CommentRequest.builder()

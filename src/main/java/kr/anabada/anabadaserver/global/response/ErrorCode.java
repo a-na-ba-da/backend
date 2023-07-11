@@ -28,7 +28,11 @@ public enum ErrorCode {
 
 
     // Third-Party
-    NAVER_PRODUCT_API_FAILED(SERVICE_UNAVAILABLE, "T001", "네이버 상품 API 호출에 실패했습니다. 잠시 후 다시 시도해주세요.");
+    NAVER_PRODUCT_API_FAILED(SERVICE_UNAVAILABLE, "T001", "네이버 상품 API 호출에 실패했습니다. 잠시 후 다시 시도해주세요."),
+
+
+    // File
+    FILE_SYSTEM_EXCEPTION(SERVICE_UNAVAILABLE, "F001", "파일 시스템 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
 
     private final String errorCodeStr;
     private final String message;

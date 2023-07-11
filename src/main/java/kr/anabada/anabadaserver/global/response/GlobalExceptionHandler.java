@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.nio.file.FileSystemException;
+
 import static kr.anabada.anabadaserver.global.response.ErrorCode.*;
 import static kr.anabada.anabadaserver.global.response.GlobalResponse.responseError;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -39,6 +41,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {IllegalStateException.class})
     protected ResponseEntity<GlobalResponse<Void>> handleIllegalStateException(IllegalStateException e) {
         return responseError(ILLEGAL_STATE_EXCEPTION, e);
+    }
+
+    /**
+     * FileSystemException 발생 시, Response 규격에 맞춰 에러 메시지를 반환한다.
+     */
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(value = {FileSystemException.class})
+    protected ResponseEntity<GlobalResponse<Void>> handleFileSystemException(FileSystemException e) {
+        return responseError(FILE_SYSTEM_EXCEPTION, e);
     }
 
     /**

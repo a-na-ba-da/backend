@@ -3,10 +3,11 @@ package kr.anabada.anabadaserver.domain.save.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import kr.anabada.anabadaserver.domain.save.dto.SaveSearchRequestDto;
 import kr.anabada.anabadaserver.domain.save.dto.request.BuyTogetherMeetRequest;
 import kr.anabada.anabadaserver.domain.save.dto.request.BuyTogetherParcelRequest;
+import kr.anabada.anabadaserver.domain.save.dto.request.SaveSearchRequestDto;
 import kr.anabada.anabadaserver.domain.save.dto.response.BuyTogetherResponse;
 import kr.anabada.anabadaserver.domain.save.entity.BuyTogether;
 import kr.anabada.anabadaserver.domain.save.service.BuyTogetherService;
@@ -16,10 +17,10 @@ import kr.anabada.anabadaserver.global.response.CustomException;
 import kr.anabada.anabadaserver.global.response.ErrorCode;
 import kr.anabada.anabadaserver.global.response.GlobalResponse;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public class BuyTogetherController {
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponse(responseCode = "201", description = "같이사요 생성 성공")
     @Operation(summary = "같이사요 생성 - case 1", description = "물건 산 이후 택배로 전달하는 같이사요 게시물 생성")
-    public void createNewBuyTogetherParcel(@CurrentUser User user, @RequestBody @Validated BuyTogetherParcelRequest request) {
+    public void createNewBuyTogetherParcel(@CurrentUser User user, @RequestBody @Valid BuyTogetherParcelRequest request) {
         if (user == null)
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
 
@@ -47,7 +48,7 @@ public class BuyTogetherController {
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponse(responseCode = "201", description = "같이사요 생성 성공")
     @Operation(summary = "같이사요 생성 - case 2", description = "물건 산 이후 대면으로 전달하는 같이사요 게시물 생성")
-    public void createNewBuyTogetherMeet(@CurrentUser User user, @RequestBody @Validated BuyTogetherMeetRequest request) {
+    public void createNewBuyTogetherMeet(@CurrentUser User user, @RequestBody @Valid BuyTogetherMeetRequest request) {
         if (user == null)
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
 
@@ -57,7 +58,8 @@ public class BuyTogetherController {
 
     @GetMapping("")
     @ApiResponse(responseCode = "200", description = "같이사요 목록 조회 성공")
-    public GlobalResponse<PageImpl<BuyTogetherResponse>> getBuyTogetherList(Pageable pageable, SaveSearchRequestDto searchRequest) {
+    public GlobalResponse<PageImpl<BuyTogetherResponse>> getBuyTogetherList(@ParameterObject Pageable pageable,
+                                                                            @ParameterObject SaveSearchRequestDto searchRequest) {
         List<BuyTogetherResponse> result = buyTogetherService.getBuyTogetherList(searchRequest, pageable)
                 .stream().map(BuyTogether::toResponse).toList();
         return new GlobalResponse<>(new PageImpl<>(result, pageable, result.size()));

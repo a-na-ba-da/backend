@@ -1,6 +1,7 @@
 package kr.anabada.anabadaserver.domain.change.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import kr.anabada.anabadaserver.domain.change.dto.ChangeRequestResponse;
@@ -26,7 +27,9 @@ public class ProductChangeController {
     private final ProductChangeService productChangeService;
 
     @GetMapping("")
-    @Operation(summary = "내가 요청 혹은 요청받은 바꿔쓰기 전부 조회")
+    @Operation(
+            summary = "내가 요청 혹은 요청받은 바꿔쓰기 전부 조회"
+    )
     public GlobalResponse<ChangeRequestResponse> getMyChangingRequest(@CurrentUser User user) {
         if (user == null)
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
@@ -36,8 +39,15 @@ public class ProductChangeController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{targetProductId}")
-    @Operation(summary = "바꿔쓰기 요청 생성")
-    public void createChangeRequest(@CurrentUser User user, @PathVariable Long targetProductId, List<Long> myProductIds,
+    @Operation(
+            summary = "바꿔쓰기 요청 생성"
+    )
+    public void createChangeRequest(@CurrentUser User user,
+                                    @Schema(description = "바꿔쓰기 요청을 받을 상품의 ID (변경대상)", required = true, example = "1")
+                                    @PathVariable Long targetProductId,
+                                    @Schema(description = "바꿔쓰기 요청을 보낼 상품들의 ID 리스트 (변경요청)", required = true, example = "[2, 3]")
+                                    List<Long> myProductIds,
+                                    @Schema(description = "바꿔쓰기 요청 메시지", example = "강남역에서 트레이드 함 하실래요? A급 상품들입니다.")
                                     @NotNull(message = "메시지를 입력해주세요.") @Length(max = 30, message = "메세지는 최대 30자 까지 입력가능합니다.") String message) {
         if (user == null)
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
