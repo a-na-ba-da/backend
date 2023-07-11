@@ -15,7 +15,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.FileSystemException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -65,6 +64,7 @@ public class ImageUploadService {
         try {
             // from image path
             directory = ResourceUtils.getFile(imagePath);
+            //new File(ResourceUtils.getFile("classpath:").getPath(), "images");
         } catch (FileNotFoundException e) {
             throw new RuntimeException("이미지 디렉터리 접근 실패");
         }
@@ -115,7 +115,7 @@ public class ImageUploadService {
             throw new RuntimeException(e);
         }
 
-        int maxWidth = 400;
+        int maxWidth = 750;
         int calcHeight = (int) (bo_img.getHeight() * ((double) maxWidth / bo_img.getWidth()));
 
         File thumbnailFile = new File(directory, "thumbnail_" + uuid.toString());
@@ -123,23 +123,6 @@ public class ImageUploadService {
             Thumbnails.of(saveFile)
                     .size(maxWidth, calcHeight)
                     .toFile(thumbnailFile);
-
-            // find file starts thumbnailFile.getName()
-            File[] files = directory.listFiles((dir, name) -> name.startsWith(thumbnailFile.getName()));
-            if (files == null || files.length == 0) {
-                throw new FileSystemException("썸네일 생성 실패");
-            }
-
-            // remove files extension
-            for (File file : files) {
-                String fileName = file.getName();
-                String newFileName = fileName.substring(0, fileName.lastIndexOf("."));
-                File newFile = new File(directory, newFileName);
-                if (!file.renameTo(newFile)) {
-                    throw new FileSystemException("썸네일 생성 실패");
-                }
-            }
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
