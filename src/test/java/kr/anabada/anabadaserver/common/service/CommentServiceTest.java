@@ -17,6 +17,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import static kr.anabada.anabadaserver.fixture.dto.BuyTogetherFixture.createBuyTogetherParcel;
+import static kr.anabada.anabadaserver.fixture.entity.UserFixture.createUser;
 
 @Transactional
 @DisplayName("댓글 서비스에서 - CommentService")
@@ -48,7 +49,7 @@ class CommentServiceTest extends ServiceTestWithoutImageUpload {
         @DisplayName("모든 인자값이 정상이라면 부모 댓글이 작성된다.")
         void success_parent_comment() {
             // given
-            User user = createUserA();
+            User user = createUser("user@naver.com", "1234");
             em.persist(user);
 
             BuyTogetherRequest post = createBuyTogetherParcel();
@@ -69,7 +70,7 @@ class CommentServiceTest extends ServiceTestWithoutImageUpload {
         @DisplayName("모든 인자값이 정상이라면 대댓글이 작성된다.")
         void success_sub_comment() {
             // given
-            User user = createUserA();
+            User user = createUser("user@naver.com", "1234");
             em.persist(user);
 
             BuyTogetherRequest post = createBuyTogetherParcel();
@@ -93,7 +94,7 @@ class CommentServiceTest extends ServiceTestWithoutImageUpload {
         @DisplayName("댓글 내용이 없으면 IAE 예외가 발생한다.")
         void comment_null_error() {
             // given
-            User user = createUserA();
+            User user = createUser("user@naver.com", "1234");
             em.persist(user);
 
             BuyTogetherRequest post = createBuyTogetherParcel();
@@ -114,7 +115,7 @@ class CommentServiceTest extends ServiceTestWithoutImageUpload {
         @DisplayName("작성자가 없으면 DataIntegrityViolationException 예외가 발생한다.")
         void comment_writer_null_error() {
             // given
-            User user = createUserA();
+            User user = createUser("user@naver.com", "1234");
             em.persist(user);
 
             BuyTogetherRequest post = createBuyTogetherParcel();
@@ -135,7 +136,7 @@ class CommentServiceTest extends ServiceTestWithoutImageUpload {
         @DisplayName("존재하지 않는 게시물 id(postId)에 댓글을 작성하면 IAE 예외가 발생한다.")
         void cant_comment_notExist_postId() {
             // given
-            User user = createUserA();
+            User user = createUser("user@naver.com", "1234");
             em.persist(user);
 
             CommentRequest commentRequest = CommentRequest.builder()
@@ -154,7 +155,7 @@ class CommentServiceTest extends ServiceTestWithoutImageUpload {
         @DisplayName("존재하지 않는 게시판(post_type)에 댓글을 작성하면 IAE 예외가 발생한다.")
         void cant_comment_notExist_postType() {
             // given
-            User user = createUserA();
+            User user = createUser("user@naver.com", "1234");
             em.persist(user);
 
             BuyTogetherRequest post = createBuyTogetherParcel();
@@ -177,7 +178,7 @@ class CommentServiceTest extends ServiceTestWithoutImageUpload {
         @DisplayName("댓글 내용이 길면(500자 초과) 작성할 수 없다.")
         void cant_comment_content_too_long() {
             // given
-            User user = createUserA();
+            User user = createUser("user@naver.com", "1234");
             em.persist(user);
 
             BuyTogetherRequest post = createBuyTogetherParcel();
