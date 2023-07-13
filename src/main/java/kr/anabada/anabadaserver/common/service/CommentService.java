@@ -94,4 +94,22 @@ public class CommentService {
 
         return commentRepository.getCommentsByPost(postType, postId);
     }
+
+    /**
+     * 본인이 작성한 댓글을 삭제하는 메서드
+     *
+     * @param user      댓글의 작성자 (본인)
+     * @param commentId 댓글 id
+     */
+    @Transactional
+    public void deleteUserComment(User user, Long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
+
+        if (!comment.getWriter().equals(user)) {
+            throw new IllegalArgumentException("본인의 댓글만 삭제할 수 있습니다.");
+        }
+
+        commentRepository.delete(comment);
+    }
 }

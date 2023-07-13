@@ -59,4 +59,15 @@ public class CommentController {
             @NotNull(message = "조회 할 게시물 id를 입력해주세요") @PathVariable Long postId) {
         return new GlobalResponse<>(commentService.getPostComments(postType, postId));
     }
+
+    @DeleteMapping("/comment/{commentId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "댓글 삭제 API", description = "댓글을 삭제합니다.")
+    public void deleteComment(@CurrentUser User user,
+                              @Parameter(description = "삭제할 댓글의 id", required = true, example = "1")
+                              @NotNull(message = "삭제할 댓글 id를 입력해주세요") @PathVariable Long commentId) {
+        if (user == null) throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
+
+        commentService.deleteUserComment(user, commentId);
+    }
 }
