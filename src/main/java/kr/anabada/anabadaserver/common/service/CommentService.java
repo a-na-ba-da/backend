@@ -59,12 +59,19 @@ public class CommentService {
     }
 
     private Comment returnIfChildComment(Long parentCommentId) {
+        // Check if parentCommentId is null
         if (parentCommentId == null) {
             return null;
         }
-
-        return commentRepository.findById(parentCommentId)
+        // Find the parent comment using parentCommentId
+        Comment parent = commentRepository.findById(parentCommentId)
                 .orElseThrow(() -> new IllegalArgumentException("부모 댓글이 존재하지 않습니다."));
+        // Check if the parent comment has a parent comment (depth is limited to 2 levels)
+        if (parent.getParentComment() != null) {
+            throw new IllegalArgumentException("댓글의 depth는 2단계까지만 가능합니다.");
+        }
+        // Return the parent comment
+        return parent;
     }
 
 
