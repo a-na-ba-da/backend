@@ -233,5 +233,34 @@ class CommentServiceTest extends ServiceTestWithoutImageUpload {
                 commentService.writeNewComment(user, "buy-together", postId, commentRequest);
             });
         }
+
+        @Test
+        @DisplayName("대댓글에 대댓글을 작성할 수 없다 = 댓글의 최대 depth는 2단계이다.")
+        void cant_comment_sub_comment() {
+            // given
+            User user = createUser("james@naver.com", "1234");
+            em.persist(user);
+
+            BuyTogetherRequest post = createBuyTogetherParcel();
+            long postId = buyTogetherService.createNewBuyTogetherPost(user, post).getId();
+
+            CommentRequest commentRequest = CommentRequest.builder()
+                    .content("첫번째 댓글")
+                    .parentCommentId(null)
+                    .build();
+            Long parentCommentId = commentService.writeNewComment(user, "buy-together", postId, commentRequest);
+
+            CommentRequest subCommentRequest = CommentRequest.builder()
+                    .content("대댓글")
+                    .parentCommentId(parentCommentId)
+                    .build();
+            Long subCommentId = commentService.writeNewComment(user, "buy-together", postId, subCommentRequest);
+            ReflectionTestUtils.setField(subCommentRequest, "parentCommentId", subCommentId);
+
+            // when & then
+            Assertions.assertThrows(IllegalArgumentException.class, () -> {
+                commentService.writeNewComment(user, "buy-together", postId, subCommentRequest);
+            }, "댓글의 depth는 2단계까지만 가능합니다.");
+        }
     }
 }
