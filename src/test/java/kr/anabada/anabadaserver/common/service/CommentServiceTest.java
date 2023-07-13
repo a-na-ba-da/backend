@@ -3,6 +3,7 @@ package kr.anabada.anabadaserver.common.service;
 import jakarta.persistence.EntityManager;
 import kr.anabada.anabadaserver.common.dto.CommentRequest;
 import kr.anabada.anabadaserver.common.dto.CommentResponse;
+import kr.anabada.anabadaserver.common.entity.Comment;
 import kr.anabada.anabadaserver.domain.ServiceTestWithoutImageUpload;
 import kr.anabada.anabadaserver.domain.save.dto.request.BuyTogetherRequest;
 import kr.anabada.anabadaserver.domain.save.service.BuyTogetherService;
@@ -261,6 +262,60 @@ class CommentServiceTest extends ServiceTestWithoutImageUpload {
             Assertions.assertThrows(IllegalArgumentException.class, () -> {
                 commentService.writeNewComment(user, "buy-together", postId, subCommentRequest);
             }, "댓글의 depth는 2단계까지만 가능합니다.");
+        }
+    }
+
+    @Nested
+    @DisplayName("댓글을 삭제할 때 - deleteComment()")
+    class deleteComment {
+
+        @Test
+        @DisplayName("본인이 작성한 댓글을 정상적으로 삭제한다.")
+        void delete_comment() {
+            // given
+            User user = createUser("user@naver.com", "test");
+            em.persist(user);
+
+            BuyTogetherRequest post = createBuyTogetherParcel();
+            long postId = buyTogetherService.createNewBuyTogetherPost(user, post).getId();
+
+            CommentRequest commentRequest = CommentRequest.builder()
+                    .content("content")
+                    .parentCommentId(null)
+                    .build();
+
+            Long commentId = commentService.writeNewComment(user, "buy-together", postId, commentRequest);
+
+            // when
+            commentService.deleteUserComment(user, commentId);
+
+            // then
+            assertThat(em.find(Comment.class, commentId)).isNull();
+        }
+
+        @Test
+        @DisplayName("본인이 작성한 댓글이 아니면 IAE 예외가 발생한다.")
+        void cant_delete_not_my_comment() {
+            // given
+            User writer = createUser("writer@naver.com", "writer");
+            User notWriter = createUser("not_writer@naver.com", "notWriter");
+            em.persist(writer);
+            em.persist(notWriter);
+
+            BuyTogetherRequest post = createBuyTogetherParcel();
+            long postId = buyTogetherService.createNewBuyTogetherPost(writer, post).getId();
+
+            CommentRequest commentRequest = CommentRequest.builder()
+                    .content("content")
+                    .parentCommentId(null)
+                    .build();
+
+            Long commentId = commentService.writeNewComment(writer, "buy-together", postId, commentRequest);
+
+            // when & then
+            Assertions.assertThrows(IllegalArgumentException.class,
+                    () -> commentService.deleteUserComment(notWriter, commentId),
+                    "본인의 댓글만 삭제할 수 있습니다.");
         }
     }
 }
