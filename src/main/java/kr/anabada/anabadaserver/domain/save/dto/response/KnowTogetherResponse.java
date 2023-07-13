@@ -18,8 +18,8 @@ public class KnowTogetherResponse extends LocalDateResponse {
     private String title;
     private String content;
     private String productUrl;
-    private Double deliveryPlaceLat;
-    private Double deliveryPlaceLng;
+    private Double buyPlaceLat;
+    private Double buyPlaceLng;
     private Boolean isOnline;
     private String buyPlaceDetail;
     private List<String> images;

@@ -50,6 +50,8 @@ public class BuyTogether extends Save {
                 .productUrl(getProductUrl())
                 .createdAt(getCreatedAt())
                 .modifiedAt(getModifiedAt())
+                .buyPlaceLat(super.getPlaceLat())
+                .buyPlaceLng(super.getPlaceLng())
                 .isParcelDelivery(isParcelDelivery)
                 .buyDate(buyDate)
                 .images(images.stream().map(Image::getId).map(UUID::toString).toList())
