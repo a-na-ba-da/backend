@@ -40,7 +40,7 @@ class CommentServiceTest extends ServiceTestWithoutImageUpload {
     @Nested
     @DisplayName("댓글을 조회할 때 - getPostComments()")
     class readComment {
-        
+
         @Test
         @DisplayName("대댓글도 함께 조회된다.")
         void read_comment_success() {
@@ -79,7 +79,6 @@ class CommentServiceTest extends ServiceTestWithoutImageUpload {
                     .containsExactly(tuple("댓글작성자닉네임", "대댓글 내용"));
 
         }
-
     }
 
     @Nested
@@ -129,7 +128,6 @@ class CommentServiceTest extends ServiceTestWithoutImageUpload {
                 commentService.writeNewComment(user, "buy-together", postId, commentRequest);
             });
         }
-
 
         @Test
         @DisplayName("댓글 내용이 없으면 IAE 예외가 발생한다.")
