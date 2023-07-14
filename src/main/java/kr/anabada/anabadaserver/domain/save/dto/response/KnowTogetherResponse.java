@@ -22,5 +22,6 @@ public class KnowTogetherResponse extends LocalDateResponse {
     private Double deliveryPlaceLng;
     private Boolean isOnline;
     private String buyPlaceDetail;
+    private long commentCount;
     private List<String> images;
 }
