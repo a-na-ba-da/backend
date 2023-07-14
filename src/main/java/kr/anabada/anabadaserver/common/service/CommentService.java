@@ -48,9 +48,11 @@ public class CommentService {
         // check postType && postId exists
         switch (postType) {
             case "buy-together" -> saveRepository.findBuyTogetherById(postId)
-                    .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
+                    .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."))
+                    .increaseCommentCount();
             case "know-together" -> saveRepository.findKnowTogetherById(postId)
-                    .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
+                    .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."))
+                    .increaseCommentCount();
             default -> throw new IllegalArgumentException("postType 인자값이 잘못되었습니다.");
         }
 

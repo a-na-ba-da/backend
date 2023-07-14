@@ -4,7 +4,12 @@ import jakarta.persistence.EntityManager;
 import kr.anabada.anabadaserver.common.dto.CommentRequest;
 import kr.anabada.anabadaserver.domain.ServiceTestWithoutImageUpload;
 import kr.anabada.anabadaserver.domain.save.dto.request.BuyTogetherRequest;
+import kr.anabada.anabadaserver.domain.save.dto.request.KnowTogetherRequest;
+import kr.anabada.anabadaserver.domain.save.entity.BuyTogether;
+import kr.anabada.anabadaserver.domain.save.entity.KnowTogether;
+import kr.anabada.anabadaserver.domain.save.entity.Save;
 import kr.anabada.anabadaserver.domain.save.service.BuyTogetherService;
+import kr.anabada.anabadaserver.domain.save.service.KnowTogetherService;
 import kr.anabada.anabadaserver.domain.user.entity.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +22,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import static kr.anabada.anabadaserver.fixture.dto.BuyTogetherFixture.createBuyTogetherParcel;
+import static kr.anabada.anabadaserver.fixture.dto.KnowTogetherFixture.createKnowTogetherOnline;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @Transactional
 @DisplayName("댓글 서비스에서 - CommentService")
@@ -27,6 +34,9 @@ class CommentServiceTest extends ServiceTestWithoutImageUpload {
 
     @Autowired
     private BuyTogetherService buyTogetherService;
+
+    @Autowired
+    private KnowTogetherService knowTogetherService;
 
     @Autowired
     private EntityManager em;
@@ -87,7 +97,6 @@ class CommentServiceTest extends ServiceTestWithoutImageUpload {
                 commentService.writeNewComment(user, "buy-together", postId, commentRequest);
             });
         }
-
 
         @Test
         @DisplayName("댓글 내용이 없으면 IAE 예외가 발생한다.")
@@ -192,6 +201,61 @@ class CommentServiceTest extends ServiceTestWithoutImageUpload {
             Assertions.assertThrowsExactly(InvalidDataAccessResourceUsageException.class, () -> {
                 commentService.writeNewComment(user, "buy-together", postId, commentRequest);
             });
+        }
+
+        @Nested
+        @DisplayName("게시판 댓글 수 칼럼 테스트")
+        class commentIncreaseTest {
+
+            @Test
+            @DisplayName("'같이사요'에서 댓글이 작성되면 게시판 내 댓글 수가 1 증가한다.")
+            void increaseComment_BuyTogether() {
+                // given
+                User user = createUserA();
+                em.persist(user);
+
+                BuyTogetherRequest post = createBuyTogetherParcel();
+                Save buyTogether = buyTogetherService.createNewBuyTogetherPost(user, post);
+                long postId = buyTogether.getId();
+                long originalCommentCount = buyTogether.getCommentCount();
+
+                CommentRequest commentRequest = CommentRequest.builder()
+                        .content("댓글 내용")
+                        .parentCommentId(null)
+                        .build();
+
+                // when
+                commentService.writeNewComment(user, "buy-together", postId, commentRequest);
+
+                // then
+                assertThat(originalCommentCount).isZero();
+                assertThat(em.find(BuyTogether.class, postId).getCommentCount()).isEqualTo(1);
+            }
+
+            @Test
+            @DisplayName("'같이알아요'에서 댓글이 작성되면 게시판 내 댓글 수가 1 증가한다.")
+            void increaseComment_KnowTogether() {
+                // given
+                User user = createUserA();
+                em.persist(user);
+
+                KnowTogetherRequest post = createKnowTogetherOnline();
+                Save knowTogether = knowTogetherService.createNewKnowTogetherPost(user, post);
+                long postId = knowTogether.getId();
+                long originalCommentCount = knowTogether.getCommentCount();
+
+                CommentRequest commentRequest = CommentRequest.builder()
+                        .content("댓글 내용")
+                        .parentCommentId(null)
+                        .build();
+
+                // when
+                commentService.writeNewComment(user, "know-together", postId, commentRequest);
+
+                // then
+                assertThat(originalCommentCount).isZero();
+                assertThat(em.find(KnowTogether.class, postId).getCommentCount()).isEqualTo(1);
+            }
         }
     }
 }

@@ -24,5 +24,6 @@ public class BuyTogetherResponse extends LocalDateResponse {
     private LocalDate buyDate;
     private Integer pay;
     private UserDto writer;
+    private long commentCount;
     private List<String> images;
 }
