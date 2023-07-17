@@ -23,6 +23,7 @@ public class CommentRepositoryCustomImpl implements CommentRepositoryCustom {
                 .leftJoin(comment.writer).fetchJoin()
                 .where(checkPost(postType, postId)
                         .and(isParentComment()))
+                .orderBy(comment.id.asc(), comment.childComments.any().id.asc())
                 .fetch();
 
         return commentToResponse(result);
