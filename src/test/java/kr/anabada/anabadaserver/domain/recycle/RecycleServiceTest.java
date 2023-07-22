@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import static kr.anabada.anabadaserver.fixture.entity.UserFixture.createUser;
+
 @Transactional
 @SpringBootTest
 public class RecycleServiceTest {
@@ -23,7 +25,7 @@ public class RecycleServiceTest {
 
     @Test
     @DisplayName("게시글 작성 성공")
-    void createNewRecyclePost(){
+    void createNewRecyclePost() {
         // given
         User user = createUser("test@test.com", "testUser");
         userRepository.save(user);
@@ -39,14 +41,5 @@ public class RecycleServiceTest {
         // then
         Assertions.assertNotNull(newRecyclePost.getId());
 
-    }
-
-    private User createUser(String email, String nickname){
-        return User.builder()
-                .email(email)
-                .activated(true)
-                .nickname(nickname)
-                .role("ROLE_USER")
-                .build();
     }
 }
