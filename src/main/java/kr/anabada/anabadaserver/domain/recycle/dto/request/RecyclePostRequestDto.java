@@ -10,7 +10,6 @@ import lombok.Setter;
 
 @Getter
 @NoArgsConstructor
-@Builder
 public class RecyclePostRequestDto {
     @NotNull(message = "게시글 제목을 입력해주세요.")
     private String title;
@@ -22,7 +21,8 @@ public class RecyclePostRequestDto {
         this.title = title;
         this.content = content;
     }
-
+    
+    @Builder
     public Recycle toEntity(User writer, RecyclePostRequestDto recyclePostRequestDto) {
         return Recycle.builder()
                 .title(recyclePostRequestDto.getTitle())
