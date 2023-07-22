@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/recycle")
+@Tag(name = "다시쓰기", description = "다시쓰기 API 모음")
 public class RecycleController {
     private final RecycleService recycleService;
 
