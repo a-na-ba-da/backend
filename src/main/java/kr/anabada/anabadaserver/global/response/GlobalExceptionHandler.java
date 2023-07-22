@@ -59,4 +59,13 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<GlobalResponse<Void>> handleCustomException(CustomException e) {
         return responseError(e);
     }
+
+    /**
+     * HttpMessageNotReadableException 발생 시, Response 규격에 맞춰 에러 메시지를 반환한다.
+     */
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(value = {org.springframework.http.converter.HttpMessageNotReadableException.class})
+    protected ResponseEntity<GlobalResponse<Void>> handleHttpMessageNotReadableException(org.springframework.http.converter.HttpMessageNotReadableException e) {
+        return responseError(INVALID_INPUT_VALUE, e);
+    }
 }
