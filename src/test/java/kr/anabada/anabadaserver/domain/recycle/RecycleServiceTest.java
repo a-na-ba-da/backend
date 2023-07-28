@@ -42,4 +42,29 @@ public class RecycleServiceTest {
         Assertions.assertNotNull(newRecyclePost.getId());
 
     }
+
+    @Test
+    @DisplayName("게시글 수정 성공")
+    void modifyRecyclePost(){
+        // given
+        User user = createUser("test@test.com", "testUser");
+        userRepository.save(user);
+
+        RecyclePostRequestDto recyclePostRequestDto = RecyclePostRequestDto.builder()
+                .title("title")
+                .content("content")
+                .build();
+
+        Recycle newRecyclePost = recycleService.createNewRecyclePost(user, recyclePostRequestDto);
+
+        recyclePostRequestDto = RecyclePostRequestDto.builder()
+                .title("modified title")
+                .content("modified content")
+                .build();
+
+
+        // when & then
+        recycleService.modifyRecyclePost(user, newRecyclePost.getId(), recyclePostRequestDto);
+
+    }
 }
