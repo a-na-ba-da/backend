@@ -32,4 +32,14 @@ public class RecycleController {
 
     }
 
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponse(responseCode = "204")
+    public void modifyRecyclePost(@CurrentUser User user, Long recycleId, @RequestBody @Valid RecyclePostRequestDto recyclePostRequestDto) {
+        if (user == null)
+            throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
+
+        recycleService.modifyRecyclePost(user, recycleId, recyclePostRequestDto);
+    }
+
 }

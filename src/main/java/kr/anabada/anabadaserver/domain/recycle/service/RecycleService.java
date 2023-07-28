@@ -30,4 +30,19 @@ public class RecycleService {
         return recycleRepository.save(newRecyclePost);
     }
 
+    public void modifyRecyclePost(User user, Long recycleId, RecyclePostRequestDto recyclePostRequestDto) {
+        Recycle originalPost = recycleRepository.findByIdAndWriter(recycleId, user.getId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
+
+        if(recyclePostRequestDto.getTitle() == null)
+            throw new IllegalArgumentException("게시물 제목이 비어있습니다.");
+
+        if(recyclePostRequestDto.getContent() == null)
+            throw new IllegalArgumentException("게시물 내용이 비어있습니다.");
+
+        if(!originalPost.getWriter().equals(user.getId()))
+            throw new IllegalArgumentException("해당 게시물의 작성자가 아닙니다.");
+
+        originalPost.setPost(recyclePostRequestDto.getTitle(), recyclePostRequestDto.getContent());
+    }
 }
