@@ -2,6 +2,7 @@ package kr.anabada.anabadaserver.domain.recycle.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import kr.anabada.anabadaserver.domain.recycle.dto.request.RecyclePostRequestDto;
 import kr.anabada.anabadaserver.domain.recycle.service.RecycleService;
