@@ -35,18 +35,19 @@ public class SaveRepositoryImpl implements SaveRepositoryCustom {
         }
 
         if (searchRequest.fullySetLocationInfo()) {
-            // add order by
-            orderSpecifier = new OrderSpecifier<>(DESC,
-                    Expressions.stringTemplate("ST_Distance_Sphere({0}, {1})",
-                            Expressions.stringTemplate("POINT({0}, {1})",
-                                    searchRequest.getLng(),
-                                    searchRequest.getLat()
-                            ),
-                            Expressions.stringTemplate("POINT({0}, {1})",
-                                    buyTogether.placeLng,
-                                    buyTogether.placeLat
-                            )
-                    ));
+            builder.and(
+                            Expressions.stringTemplate("ST_Distance_Sphere({0}, {1})",
+                                    Expressions.stringTemplate("POINT({0}, {1})",
+                                            searchRequest.getLng(),
+                                            searchRequest.getLat()
+                                    ),
+                                    Expressions.stringTemplate("POINT({0}, {1})",
+                                            buyTogether.placeLng,
+                                            buyTogether.placeLat
+                                    )
+                            ).castToNum(Double.class).lt(searchRequest.getDistance())
+                    )
+                    .or(buyTogether.productUrl.isNotNull());
         }
 
         if (searchRequest.isEnableKeywordSearch()) {
@@ -72,18 +73,19 @@ public class SaveRepositoryImpl implements SaveRepositoryCustom {
         }
 
         if (searchRequest.fullySetLocationInfo()) {
-            // add order by
-            orderSpecifier = new OrderSpecifier<>(DESC,
-                    Expressions.stringTemplate("ST_Distance_Sphere({0}, {1})",
-                            Expressions.stringTemplate("POINT({0}, {1})",
-                                    searchRequest.getLng(),
-                                    searchRequest.getLat()
-                            ),
-                            Expressions.stringTemplate("POINT({0}, {1})",
-                                    knowTogether.placeLng,
-                                    knowTogether.placeLat
-                            )
-                    ));
+            builder.and(
+                            Expressions.stringTemplate("ST_Distance_Sphere({0}, {1})",
+                                    Expressions.stringTemplate("POINT({0}, {1})",
+                                            searchRequest.getLng(),
+                                            searchRequest.getLat()
+                                    ),
+                                    Expressions.stringTemplate("POINT({0}, {1})",
+                                            buyTogether.placeLng,
+                                            buyTogether.placeLat
+                                    )
+                            ).castToNum(Double.class).lt(searchRequest.getDistance())
+                    )
+                    .or(buyTogether.productUrl.isNotNull());
         }
 
         if (searchRequest.isEnableKeywordSearch()) {
