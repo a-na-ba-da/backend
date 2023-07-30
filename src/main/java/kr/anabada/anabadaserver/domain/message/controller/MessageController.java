@@ -7,10 +7,7 @@ import kr.anabada.anabadaserver.global.auth.CurrentUser;
 import kr.anabada.anabadaserver.global.response.CustomException;
 import kr.anabada.anabadaserver.global.response.ErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,11 +16,12 @@ public class MessageController {
     private final MessageService messageService;
 
     @GetMapping("/{postType}/{postId}")
-    public void sendMessage(@CurrentUser User user, @PathVariable DomainType postType, @PathVariable Long postId) {
+    public void sendMessage(@CurrentUser User user, @PathVariable DomainType postType, @PathVariable Long postId,
+                            @RequestBody String message) {
         if (user == null)
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
 
-        messageService.sendMessage(user, postType, postId);
+        messageService.sendMessage(user, postType, postId, message);
     }
 
 }
