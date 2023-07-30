@@ -43,6 +43,10 @@ public abstract class Save extends BaseTimeEntity {
     private Double placeLng;
 
     @Builder.Default
+    @Column(name = "comment_cnt")
+    private long commentCount = 0;
+
+    @Builder.Default
     @Column(name = "is_removed", nullable = false)
     private Boolean isRemoved = false;
 
@@ -52,5 +56,17 @@ public abstract class Save extends BaseTimeEntity {
 
     public void setRemoved(Boolean removed) {
         isRemoved = removed;
+    }
+
+    public void increaseCommentCount() {
+        this.commentCount++;
+    }
+
+    public void decreaseCommentCount() {
+        if (this.commentCount > 0) {
+            this.commentCount--;
+        } else {
+            this.commentCount = 0;
+        }
     }
 }

@@ -208,6 +208,7 @@ create table save
     buy_place_lng      double                     null,
     buy_place_detail   varchar(15)                null comment '오프라인 구매처 위경도에 대한 자세한 텍스트 정보 (상호명 등)',
     save_type          varchar(15)                not null comment '같이사요, 같이 알아요 type',
+    comment_cnt        bigint     default 0       null comment '댓글 갯수',
     created_at         datetime(6)                not null,
     modified_at        datetime(6)                null,
     is_removed         tinyint(1) default (false) not null comment '삭제 여부'

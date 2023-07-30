@@ -26,6 +26,8 @@ public class BuyTogetherResponse extends LocalDateResponse {
     private Integer pay;
     @Schema(description = "작성자")
     private UserDto writer;
+    @Schema(description = "댓글 수 카운트")
+    private long commentCount;
     @Schema(description = "이미지들")
     private List<String> images;
 

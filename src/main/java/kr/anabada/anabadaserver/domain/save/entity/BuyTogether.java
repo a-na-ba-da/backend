@@ -60,6 +60,7 @@ public class BuyTogether extends Save {
                 .deliveryPlaceLat(super.getPlaceLat())
                 .deliveryPlaceLng(super.getPlaceLng())
                 .buyDate(buyDate)
+                .commentCount(getCommentCount())
                 .images(images.stream().map(Image::getId).map(UUID::toString).toList())
                 .writer(getWriter().toDto())
                 .pay(pay)
