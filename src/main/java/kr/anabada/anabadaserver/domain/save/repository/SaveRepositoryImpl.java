@@ -49,6 +49,11 @@ public class SaveRepositoryImpl implements SaveRepositoryCustom {
                     ));
         }
 
+        if (searchRequest.isEnableKeywordSearch()) {
+            builder.and(buyTogether.title.contains(searchRequest.getKeyword())
+                    .or(buyTogether.content.contains(searchRequest.getKeyword())));
+        }
+
         return queryFactory.selectFrom(buyTogether)
                 .where(builder)
                 .orderBy(orderSpecifier)
@@ -79,6 +84,11 @@ public class SaveRepositoryImpl implements SaveRepositoryCustom {
                                     knowTogether.placeLat
                             )
                     ));
+        }
+
+        if (searchRequest.isEnableKeywordSearch()) {
+            builder.and(knowTogether.title.contains(searchRequest.getKeyword())
+                    .or(knowTogether.content.contains(searchRequest.getKeyword())));
         }
 
         return queryFactory.selectFrom(knowTogether)
