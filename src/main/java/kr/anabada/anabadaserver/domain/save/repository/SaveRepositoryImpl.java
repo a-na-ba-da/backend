@@ -4,7 +4,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import kr.anabada.anabadaserver.domain.save.dto.SaveSearchRequestDto;
+import kr.anabada.anabadaserver.domain.save.dto.request.SaveSearchRequestDto;
 import kr.anabada.anabadaserver.domain.save.entity.BuyTogether;
 import kr.anabada.anabadaserver.domain.save.entity.KnowTogether;
 import kr.anabada.anabadaserver.domain.save.entity.Save;
