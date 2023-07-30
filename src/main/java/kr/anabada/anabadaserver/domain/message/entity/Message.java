@@ -1,6 +1,7 @@
 package kr.anabada.anabadaserver.domain.message.entity;
 
 import jakarta.persistence.*;
+import kr.anabada.anabadaserver.common.entity.BaseTimeEntity;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -8,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Entity
 @Table(name = "message")
-public class Message {
+public class Message extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

@@ -1,14 +1,13 @@
 package kr.anabada.anabadaserver.domain.message.entity;
 
 import jakarta.persistence.*;
+import kr.anabada.anabadaserver.common.entity.BaseTimeEntity;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Entity
 @Table(name = "message_origin")
-public class MessageOrigin {
+public class MessageOrigin extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -19,7 +18,4 @@ public class MessageOrigin {
 
     @Column(name = "message_detail_id", nullable = false)
     private Long messageDetailId;
-
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
 }
