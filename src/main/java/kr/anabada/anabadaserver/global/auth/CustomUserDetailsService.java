@@ -5,6 +5,7 @@ import kr.anabada.anabadaserver.domain.user.entity.User;
 import kr.anabada.anabadaserver.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,6 +19,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository accountRepository;
 
     @Override
+    @Cacheable(value = "user", key = "#email", unless = "#result == null")
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         log.info("called loadUserByUsername. email: {}", email);
         User account = accountRepository.findByEmail(email)

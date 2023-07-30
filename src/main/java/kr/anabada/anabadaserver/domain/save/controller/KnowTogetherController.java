@@ -5,9 +5,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import kr.anabada.anabadaserver.domain.save.dto.SaveSearchRequestDto;
 import kr.anabada.anabadaserver.domain.save.dto.request.KnowTogetherOfflineRequest;
 import kr.anabada.anabadaserver.domain.save.dto.request.KnowTogetherOnlineRequest;
+import kr.anabada.anabadaserver.domain.save.dto.request.SaveSearchRequestDto;
 import kr.anabada.anabadaserver.domain.save.dto.response.KnowTogetherResponse;
 import kr.anabada.anabadaserver.domain.save.service.KnowTogetherService;
 import kr.anabada.anabadaserver.domain.user.entity.User;
@@ -16,6 +16,7 @@ import kr.anabada.anabadaserver.global.response.CustomException;
 import kr.anabada.anabadaserver.global.response.ErrorCode;
 import kr.anabada.anabadaserver.global.response.GlobalResponse;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -56,7 +57,8 @@ public class KnowTogetherController {
 
     @GetMapping("")
     @ApiResponse(responseCode = "200", description = "같이 알아요 목록 조회")
-    public GlobalResponse<PageImpl<KnowTogetherResponse>> getKnowTogetherList(Pageable pageable, SaveSearchRequestDto searchRequest) {
+    public GlobalResponse<PageImpl<KnowTogetherResponse>> getKnowTogetherList(@ParameterObject Pageable pageable,
+                                                                              @ParameterObject SaveSearchRequestDto searchRequest) {
         List<KnowTogetherResponse> result = knowTogetherService.getKnowTogetherList(searchRequest, pageable);
         return new GlobalResponse<>(new PageImpl<>(result, pageable, result.size()));
     }
