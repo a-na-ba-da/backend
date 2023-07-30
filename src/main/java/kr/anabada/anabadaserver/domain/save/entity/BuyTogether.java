@@ -55,8 +55,6 @@ public class BuyTogether extends Save {
                 .productUrl(getProductUrl())
                 .createdAt(getCreatedAt())
                 .modifiedAt(getModifiedAt())
-                .buyPlaceLat(super.getPlaceLat())
-                .buyPlaceLng(super.getPlaceLng())
                 .isOnlineDeal(isOnlineDeal())
                 .isParcelDelivery(isParcelDelivery)
                 .deliveryPlaceLat(super.getPlaceLat())
