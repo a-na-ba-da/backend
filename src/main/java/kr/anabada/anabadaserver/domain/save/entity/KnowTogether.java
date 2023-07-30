@@ -41,6 +41,8 @@ public class KnowTogether extends Save {
                 .productUrl(super.getProductUrl())
                 .createdAt(super.getCreatedAt())
                 .modifiedAt(super.getModifiedAt())
+                .buyPlaceLng(super.getPlaceLng())
+                .buyPlaceLat(super.getPlaceLat())
                 .commentCount(super.getCommentCount())
                 .buyPlaceDetail(buyPlaceDetail)
                 .isOnline(isOnline)
