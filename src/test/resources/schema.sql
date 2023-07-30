@@ -199,7 +199,7 @@ create table save
     writer             bigint                     not null,
     title              varchar(50)                not null,
     content            varchar(700)               not null,
-    is_online_delivery tinyint(1)                 null comment '(같이사요 ) 전달방법 ( 대, 비대면 )',
+    is_parcel_delivery tinyint(1)                 null comment '(같이사요 ) 전달방법 ( 대, 비대면 )',
     buy_date           date                       null comment '(같이사요 ) 구매일',
     product_url        varchar(500)               null comment '(같이사요,  같이 알아요 ) 상품 주소',
     pay                int                        null comment '(같이사요 ) 너가 내야되는 돈',
@@ -208,6 +208,7 @@ create table save
     buy_place_lng      double                     null,
     buy_place_detail   varchar(15)                null comment '오프라인 구매처 위경도에 대한 자세한 텍스트 정보 (상호명 등)',
     save_type          varchar(15)                not null comment '같이사요, 같이 알아요 type',
+    comment_cnt        bigint     default 0       null comment '댓글 갯수',
     created_at         datetime(6)                not null,
     modified_at        datetime(6)                null,
     is_removed         tinyint(1) default (false) not null comment '삭제 여부'

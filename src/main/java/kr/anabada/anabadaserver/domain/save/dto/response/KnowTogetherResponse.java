@@ -13,14 +13,30 @@ import java.util.List;
 @Schema(description = "같이알아요 응답 값")
 public class KnowTogetherResponse extends LocalDateResponse {
 
+    @Schema(description = "index")
     private Long id;
+    @Schema(description = "작성자")
     private UserDto writer;
+    @Schema(description = "제목")
     private String title;
+    @Schema(description = "내용")
     private String content;
-    private String productUrl;
-    private Double buyPlaceLat;
-    private Double buyPlaceLng;
+    @Schema(description = "이미지 리스트")
+    private List<String> images;
+
+    // 온/오프라인 구매 관련 필드
+    @Schema(description = "온라인 구매 여부")
     private Boolean isOnline;
+    @Schema(description = "온라인 구매라면, 상품 주소")
+    private String productUrl;
+    @Schema(description = "오프라인 구매라면, 구매 장소의 위도")
+    private Double buyPlaceLat;
+    @Schema(description = "오프라인 구매라면, 구매 장소의 경도")
+    private Double buyPlaceLng;
+    @Schema(description = "오프라인 구매라면, 구매 장소의 상호 혹은 주소 문자열")
     private String buyPlaceDetail;
+  
+    @Schema(description = "댓글 수 카운트")
+    private long commentCount;
     private List<String> images;
 }
