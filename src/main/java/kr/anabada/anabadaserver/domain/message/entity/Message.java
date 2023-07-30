@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import kr.anabada.anabadaserver.common.entity.BaseTimeEntity;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Entity
 @Table(name = "message")
@@ -32,9 +30,6 @@ public class Message extends BaseTimeEntity {
 
     @Column(name = "receiver_id", nullable = false)
     private Long receiverId;
-
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
 
     @Column(name = "message_type", nullable = false, length = 10)
     private String messageType;
