@@ -47,6 +47,13 @@ public class SaveSearchRequestDto {
     }
 
     public boolean fullySetLocationInfo() {
+        if (distance != null) {
+            if (distance < 0)
+                throw new IllegalArgumentException("거리는 0 이상의 값을 입력해주세요.");
+
+            if (distance > 50000)
+                throw new IllegalArgumentException("거리는 50000 이하의 값을 입력해주세요.");
+        }
         return lat != null && lng != null && distance != null;
     }
 
