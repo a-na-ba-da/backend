@@ -2,6 +2,8 @@ package kr.anabada.anabadaserver.domain.message.entity;
 
 import jakarta.persistence.*;
 import kr.anabada.anabadaserver.common.entity.BaseTimeEntity;
+import kr.anabada.anabadaserver.domain.message.dto.MessageType;
+import kr.anabada.anabadaserver.domain.message.dto.MessageTypeConverter;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,10 +30,15 @@ public class Message extends BaseTimeEntity {
     @JoinColumn(name = "message_origin_id", nullable = false)
     private MessageOrigin messageOrigin;
 
+    @Convert(converter = MessageTypeConverter.class)
+    @Column(name = "message_type", columnDefinition = "smallint")
+    private MessageType messageType;
+
     @Builder
-    public Message(String content, MessageOrigin messageOrigin) {
+    public Message(String content, MessageOrigin messageOrigin, MessageType messageType) {
         this.content = content;
         this.messageOrigin = messageOrigin;
+        this.messageType = messageType;
     }
 
     public static Message createWelcomeMessage(MessageOrigin messageOrigin, LocalDateTime createdAt) {
@@ -42,8 +49,8 @@ public class Message extends BaseTimeEntity {
                         messageOrigin.getSender().getNickname(),
                         messageOrigin.getReceiver().getNickname(),
                         messageOrigin.getMessageType().getKo(),
-                        formatter.format(createdAt))
-                )
+                        formatter.format(createdAt)))
+                .messageType(MessageType.NOTIFICATION)
                 .messageOrigin(messageOrigin)
                 .build();
     }

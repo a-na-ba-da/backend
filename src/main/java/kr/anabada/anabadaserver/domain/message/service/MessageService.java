@@ -1,6 +1,7 @@
 package kr.anabada.anabadaserver.domain.message.service;
 
 import kr.anabada.anabadaserver.common.dto.DomainType;
+import kr.anabada.anabadaserver.domain.message.dto.MessageType;
 import kr.anabada.anabadaserver.domain.message.entity.Message;
 import kr.anabada.anabadaserver.domain.message.entity.MessageOrigin;
 import kr.anabada.anabadaserver.domain.message.repository.MessageOriginRepository;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 import static kr.anabada.anabadaserver.domain.message.entity.Message.createWelcomeMessage;
@@ -24,6 +26,10 @@ public class MessageService {
     private final MessageRepository messageRepository;
     private final MessageOriginRepository messageOriginRepository;
     private final SaveRepository saveRepository;
+
+    private static MessageType getMessageType(User me, MessageOrigin messageRoom) {
+        return messageRoom.getSender() == me ? MessageType.SENDER_SEND : MessageType.RECEIVER_SEND;
+    }
 
     @Transactional
     public Message sendMessage(User user, DomainType postType, Long postId, String message) {
@@ -53,6 +59,7 @@ public class MessageService {
         // 메세지 방에 메세지 저장
         Message messageEntity = Message.builder()
                 .content(message)
+                .messageType(getMessageType(user, messageRoom))
                 .messageOrigin(messageRoom)
                 .build();
 

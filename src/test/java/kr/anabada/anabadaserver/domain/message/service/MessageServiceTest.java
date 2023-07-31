@@ -3,6 +3,7 @@ package kr.anabada.anabadaserver.domain.message.service;
 import jakarta.persistence.EntityManager;
 import kr.anabada.anabadaserver.common.dto.DomainType;
 import kr.anabada.anabadaserver.domain.ServiceTestWithoutImageUpload;
+import kr.anabada.anabadaserver.domain.message.dto.MessageType;
 import kr.anabada.anabadaserver.domain.save.entity.Save;
 import kr.anabada.anabadaserver.domain.save.service.KnowTogetherService;
 import kr.anabada.anabadaserver.domain.user.entity.User;
@@ -44,6 +45,8 @@ class MessageServiceTest extends ServiceTestWithoutImageUpload {
                 .isNotNull()
                 .extracting("content")
                 .isEqualTo("message");
+                .extracting("content", "messageType")
+                .containsExactly("message", MessageType.SENDER_SEND);
     }
 
     @Test
