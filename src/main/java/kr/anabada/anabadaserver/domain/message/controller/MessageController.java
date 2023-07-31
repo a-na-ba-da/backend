@@ -2,6 +2,7 @@ package kr.anabada.anabadaserver.domain.message.controller;
 
 import kr.anabada.anabadaserver.common.dto.DomainType;
 import kr.anabada.anabadaserver.domain.message.dto.MessageSummaryResponse;
+import kr.anabada.anabadaserver.domain.message.entity.Message;
 import kr.anabada.anabadaserver.domain.message.service.MessageService;
 import kr.anabada.anabadaserver.domain.user.entity.User;
 import kr.anabada.anabadaserver.global.auth.CurrentUser;
@@ -20,7 +21,7 @@ public class MessageController {
     private final MessageService messageService;
 
     @GetMapping("")
-    public GlobalResponse<List<MessageSummaryResponse>> getMessageList(@CurrentUser User user) {
+    public GlobalResponse<List<MessageSummaryResponse>> getMyAllMessageSummarized(@CurrentUser User user) {
         if (user == null)
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
 
@@ -30,12 +31,14 @@ public class MessageController {
     }
 
     @GetMapping("/{postType}/{postId}")
-    public void sendMessage(@CurrentUser User user, @PathVariable DomainType postType, @PathVariable Long postId,
-                            @RequestBody String message) {
+    public GlobalResponse<Message> sendMessage(@CurrentUser User user, @PathVariable DomainType postType, @PathVariable Long postId,
+                                               @RequestBody String message) {
         if (user == null)
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
 
-        messageService.sendMessage(user, postType, postId, message);
+        return new GlobalResponse<>(
+                messageService.sendMessage(user, postType, postId, message)
+        );
     }
 
 }
