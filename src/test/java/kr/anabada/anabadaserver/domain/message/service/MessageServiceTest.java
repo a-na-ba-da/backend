@@ -49,7 +49,7 @@ class MessageServiceTest extends ServiceTestWithoutImageUpload {
     @Test
     @DisplayName("본인이 작성한 게시물에는 메세지를 보낼 수 없다.")
     void cant_send_message_to_myPost() {
-// given
+        // given
         User sender = createUser("sender@naver.com", "sender");
         em.persist(sender);
 
@@ -59,6 +59,5 @@ class MessageServiceTest extends ServiceTestWithoutImageUpload {
         assertThrows(IllegalArgumentException.class,
                 () -> messageService.sendMessage(sender, DomainType.KNOW_TOGETHER, post.getId(), "message"),
                 "자신의 게시글에는 메세지를 보낼 수 없습니다.");
-
     }
 }
