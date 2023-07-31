@@ -16,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "message_origin")
 public class MessageOrigin extends BaseTimeEntity {
+    @OrderBy("id ASC")
     @OneToMany(mappedBy = "messageOrigin")
     private final List<Message> messages = new ArrayList<>();
 
@@ -45,5 +46,12 @@ public class MessageOrigin extends BaseTimeEntity {
 
     public void addMessage(Message message) {
         this.messages.add(message);
+    }
+
+    public User getInterlocutor(User requester) {
+        if (this.sender.equals(requester)) {
+            return this.receiver;
+        }
+        return this.sender;
     }
 }

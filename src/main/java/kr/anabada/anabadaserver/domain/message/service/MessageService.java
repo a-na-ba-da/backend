@@ -1,6 +1,7 @@
 package kr.anabada.anabadaserver.domain.message.service;
 
 import kr.anabada.anabadaserver.common.dto.DomainType;
+import kr.anabada.anabadaserver.domain.message.dto.MessageSummaryResponse;
 import kr.anabada.anabadaserver.domain.message.dto.MessageType;
 import kr.anabada.anabadaserver.domain.message.entity.Message;
 import kr.anabada.anabadaserver.domain.message.entity.MessageOrigin;
@@ -29,6 +30,10 @@ public class MessageService {
 
     private static MessageType getMessageType(User me, MessageOrigin messageRoom) {
         return messageRoom.getSender() == me ? MessageType.SENDER_SEND : MessageType.RECEIVER_SEND;
+    }
+
+    public List<MessageSummaryResponse> getMyAllMessageSummarized(User requester) {
+        return messageRepository.getMyAllMessageSummarized(requester);
     }
 
     @Transactional
