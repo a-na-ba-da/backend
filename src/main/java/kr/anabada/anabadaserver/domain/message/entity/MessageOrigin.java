@@ -26,7 +26,7 @@ public class MessageOrigin extends BaseTimeEntity {
     private Long id;
     @Enumerated(EnumType.STRING)
     @Column(name = "message_type", nullable = false, length = 10)
-    private DomainType messageType;
+    private DomainType messagePostType;
     @Column(name = "message_post_id", nullable = false)
     private Long messagePostId;
     @OneToOne(fetch = FetchType.LAZY)
@@ -37,8 +37,8 @@ public class MessageOrigin extends BaseTimeEntity {
     private User receiver;
 
     @Builder
-    public MessageOrigin(DomainType messageType, User sender, User receiver, Long messagePostId) {
-        this.messageType = messageType;
+    public MessageOrigin(DomainType messagePostType, User sender, User receiver, Long messagePostId) {
+        this.messagePostType = messagePostType;
         this.sender = sender;
         this.receiver = receiver;
         this.messagePostId = messagePostId;

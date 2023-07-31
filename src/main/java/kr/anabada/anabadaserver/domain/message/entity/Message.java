@@ -64,7 +64,7 @@ public class Message extends BaseTimeEntity {
                 .content(String.format("본 메세지는 %s님이 %s님에게 %s를 통해 메세지입니다. (%s에 자동 생성된 메세지)",
                         messageOrigin.getSender().getNickname(),
                         messageOrigin.getReceiver().getNickname(),
-                        messageOrigin.getMessageType().getKo(),
+                        messageOrigin.getMessagePostType().getKo(),
                         formatter.format(createdAt)))
                 .messageType(MessageType.NOTIFICATION)
                 .messageOrigin(messageOrigin)

@@ -45,7 +45,7 @@ public class MessageService {
                 .orElseGet(() -> {
                     // 메세지 방 생성
                     MessageOrigin messageOrigin = MessageOrigin.builder()
-                            .messageType(postType)
+                            .messagePostType(postType)
                             .messagePostId(postId)
                             .receiver(receiver)
                             .sender(user)
