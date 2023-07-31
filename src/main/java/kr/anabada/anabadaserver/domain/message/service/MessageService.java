@@ -28,7 +28,7 @@ public class MessageService {
     private final MessageOriginRepository messageOriginRepository;
     private final SaveRepository saveRepository;
 
-    private static MessageType getMessageType(User me, MessageOrigin messageRoom) {
+    private MessageType parseSendBy(User me, MessageOrigin messageRoom) {
         return messageRoom.getSender() == me ? MessageType.SENDER_SEND : MessageType.RECEIVER_SEND;
     }
 
@@ -64,7 +64,7 @@ public class MessageService {
         // 메세지 방에 메세지 저장
         Message messageEntity = Message.builder()
                 .content(message)
-                .messageType(getMessageType(user, messageRoom))
+                .messageType(parseSendBy(user, messageRoom))
                 .messageOrigin(messageRoom)
                 .build();
 
