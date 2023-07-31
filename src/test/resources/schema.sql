@@ -133,9 +133,11 @@ create table message
     id                  bigint auto_increment
         primary key,
     content             varchar(500)         not null comment '쪽지 내용',
-    message_type        smallint             not null comment '메세지 타입 ( 0 = 알림, 1 = sender가 보냄, 11 = receiver가 보냄)',
+    message_type        smallint             null comment '메세지 타입 ( 0 = 알림, 1 = sender가 보냄, 11 = receiver가 보냄)',
     deleted_by_sender   tinyint(1) default 0 null,
-    deleted_by_receiver tinyint(1) default 0 null,
+    deleted_by_receiver tinyint(1) default 0 not null,
+    is_read_by_sender   tinyint(1) default 0 not null,
+    is_read_by_receiver tinyint(1) default 0 not null,
     message_origin_id   bigint               not null comment '메세지의 원천',
     created_at          datetime(6)          not null,
     modified_at         datetime(6)          null,

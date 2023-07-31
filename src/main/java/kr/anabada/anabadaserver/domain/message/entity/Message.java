@@ -26,6 +26,13 @@ public class Message extends BaseTimeEntity {
     private Long id;
     @Column(name = "content", nullable = false, length = 500)
     private String content;
+
+    @Column(name = "is_read_by_sender")
+    private boolean isReadBySender = false;
+
+    @Column(name = "is_read_by_receiver")
+    private boolean isReadByReceiver = false;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "message_origin_id", nullable = false)
     private MessageOrigin messageOrigin;
@@ -37,6 +44,15 @@ public class Message extends BaseTimeEntity {
     @Builder
     public Message(String content, MessageOrigin messageOrigin, MessageType messageType) {
         this.content = content;
+        this.messageOrigin = messageOrigin;
+        this.messageType = messageType;
+    }
+
+    public Message(Long id, String content, boolean isReadBySender, boolean isReadByReceiver, MessageOrigin messageOrigin, MessageType messageType) {
+        this.id = id;
+        this.content = content;
+        this.isReadBySender = isReadBySender;
+        this.isReadByReceiver = isReadByReceiver;
         this.messageOrigin = messageOrigin;
         this.messageType = messageType;
     }
