@@ -1,7 +1,6 @@
 package kr.anabada.anabadaserver.domain.message.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import kr.anabada.anabadaserver.domain.message.dto.MessageDetailResponse;
 import kr.anabada.anabadaserver.domain.message.dto.MessageSummaryResponse;
 import kr.anabada.anabadaserver.domain.message.dto.MessageType;
 import kr.anabada.anabadaserver.domain.message.dto.MessageTypeResponse;
@@ -52,8 +51,8 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
     }
 
     @Override
-    public MessageDetailResponse getMyMessageDetail(User user, long messageRoomId, LocalDateTime timestamp) {
-        var searched = queryFactory.selectFrom(messageOrigin)
+    public MessageOrigin getMyMessageDetail(User user, long messageRoomId, LocalDateTime timestamp) {
+        return queryFactory.selectFrom(messageOrigin)
                 .join(messageOrigin.messages).fetchJoin()
                 .join(messageOrigin.receiver).fetchJoin()
                 .join(messageOrigin.sender).fetchJoin()
@@ -64,21 +63,6 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
                 .orderBy(messageOrigin.id.desc())
                 .limit(20)
                 .fetchOne();
-
-        if (searched == null)
-            throw new IllegalArgumentException("메시지 방이 존재하지 않습니다.");
-
-        var response = new MessageDetailResponse(searched.getMessagePostType(),
-                searched.getId(),
-                searched.getInterlocutor(searched.getSender()).toDto());
-
-        searched.getMessages().forEach(message -> response.addMessageResponse(
-                message.getId(),
-                message.getContent(),
-                message.getCreatedAt(),
-                parseSendBy(user, searched, message.getMessageType())));
-
-        return response;
     }
 
     private MessageTypeResponse parseSendBy(User me, MessageOrigin messageRoom, MessageType messageType) {

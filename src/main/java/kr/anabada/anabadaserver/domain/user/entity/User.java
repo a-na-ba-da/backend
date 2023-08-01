@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 @Getter
 @Entity
 @Builder
@@ -40,5 +42,28 @@ public class User {
                 .nickname(nickname)
                 .activated(activated)
                 .build();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (!Objects.equals(id, user.id)) return false;
+        if (!email.equals(user.email)) return false;
+        if (!activated.equals(user.activated)) return false;
+        return role.equals(user.role);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + nickname.hashCode();
+        result = 31 * result + email.hashCode();
+        result = 31 * result + activated.hashCode();
+        result = 31 * result + role.hashCode();
+        return result;
     }
 }

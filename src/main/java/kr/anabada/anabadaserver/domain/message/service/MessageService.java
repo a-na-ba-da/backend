@@ -4,6 +4,7 @@ import kr.anabada.anabadaserver.common.dto.DomainType;
 import kr.anabada.anabadaserver.domain.message.dto.MessageDetailResponse;
 import kr.anabada.anabadaserver.domain.message.dto.MessageSummaryResponse;
 import kr.anabada.anabadaserver.domain.message.dto.MessageType;
+import kr.anabada.anabadaserver.domain.message.dto.MessageTypeResponse;
 import kr.anabada.anabadaserver.domain.message.entity.Message;
 import kr.anabada.anabadaserver.domain.message.entity.MessageOrigin;
 import kr.anabada.anabadaserver.domain.message.repository.MessageOriginRepository;
@@ -31,6 +32,19 @@ public class MessageService {
 
     private MessageType parseSendBy(User me, MessageOrigin messageRoom) {
         return messageRoom.getSender() == me ? MessageType.SENDER_SEND : MessageType.RECEIVER_SEND;
+    }
+
+    private MessageTypeResponse parseSendBy(User me, MessageOrigin messageRoom, MessageType messageType) {
+        if (messageType.equals(MessageType.NOTIFICATION))
+            return MessageTypeResponse.NOTIFICATION;
+
+        if (messageRoom.getSender().equals(me) && messageType.equals(MessageType.SENDER_SEND))
+            return MessageTypeResponse.ME;
+
+        if (messageRoom.getReceiver().equals(me) && messageType.equals(MessageType.RECEIVER_SEND))
+            return MessageTypeResponse.ME;
+
+        return MessageTypeResponse.INTERLOCUTOR;
     }
 
     public List<MessageSummaryResponse> getMyAllMessageSummarized(User requester) {
@@ -102,7 +116,33 @@ public class MessageService {
         return post.getWriter();
     }
 
+    @Transactional
     public MessageDetailResponse getMyMessageDetail(User user, LocalDateTime timestamp, long messageRoomId) {
-        return messageRepository.getMyMessageDetail(user, messageRoomId, timestamp);
+        MessageOrigin messageRoom = messageRepository.getMyMessageDetail(user, messageRoomId, timestamp);
+        if (messageRoom == null)
+            throw new IllegalArgumentException("메시지 방이 존재하지 않습니다.");
+
+
+        // parse
+        var response = new MessageDetailResponse(messageRoom.getMessagePostType(),
+                messageRoom.getId(),
+                messageRoom.getInterlocutor(messageRoom.getSender()).toDto());
+
+        messageRoom.getMessages().forEach(message -> response.addMessageResponse(
+                message.getId(),
+                message.getContent(),
+                message.getCreatedAt(),
+                parseSendBy(user, messageRoom, message.getMessageType())));
+
+        // 읽음 처리
+        boolean senderIsRequester = messageRoom.getSender().equals(user);
+        List<Message> messages = messageRoom.getMessages().stream()
+                .filter(message -> !message.isRead())
+                .filter(message -> (senderIsRequester && message.getMessageType().equals(MessageType.RECEIVER_SEND) ||
+                        (!senderIsRequester && message.getMessageType().equals(MessageType.SENDER_SEND))))
+                .toList();
+        messageRepository.markMessagesAsRead(messages);
+
+        return response;
     }
 }
