@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import kr.anabada.anabadaserver.common.dto.DomainType;
 import kr.anabada.anabadaserver.domain.ServiceTestWithoutImageUpload;
 import kr.anabada.anabadaserver.domain.message.dto.MessageType;
+import kr.anabada.anabadaserver.domain.message.entity.Message;
 import kr.anabada.anabadaserver.domain.save.entity.Save;
 import kr.anabada.anabadaserver.domain.save.service.KnowTogetherService;
 import kr.anabada.anabadaserver.domain.user.entity.User;
@@ -11,6 +12,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 import static kr.anabada.anabadaserver.fixture.dto.KnowTogetherFixture.createKnowTogetherOnline;
 import static kr.anabada.anabadaserver.fixture.entity.UserFixture.createUser;
@@ -47,6 +50,29 @@ class MessageServiceTest extends ServiceTestWithoutImageUpload {
                 .isEqualTo("message");
                 .extracting("content", "messageType")
                 .containsExactly("message", MessageType.SENDER_SEND);
+    }
+
+    @Test
+    @DisplayName("A가 B에게 메세지를 보내고, B가 메세지를 조회하면 A가 보낸 메세지는 읽음 상태로 변경된다.")
+    void check_message_read_status() {
+        // given
+        User A = createUser("aaaa@naver.com", "aaaa");
+        User B = createUser("bbbb@naver.com", "bbbb");
+        em.persist(A);
+        em.persist(B);
+
+        Save post = knowTogetherService.createNewKnowTogetherPost(B, createKnowTogetherOnline());
+        Message msg = messageService.sendMessage(A, DomainType.KNOW_TOGETHER, post.getId(), "message");
+        long chatRoomId = msg.getMessageOrigin().getId();
+        em.clear();
+        em.flush();
+
+        // when
+        messageService.getMyMessageDetail(B, LocalDateTime.now(), chatRoomId);
+
+        // then
+        em.clear();
+        assertThat(em.find(Message.class, msg.getId()).isRead()).isTrue();
     }
 
     @Test
