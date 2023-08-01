@@ -22,18 +22,20 @@ public class MessageDetailResponse {
         this.interlocutor = interlocutor;
     }
 
-    public void addMessageResponse(String message, LocalDateTime sentAt, MessageTypeResponse sentWho) {
-        messages.add(new MessageDetail(message, sentAt, sentWho));
+    public void addMessageResponse(long id, String message, LocalDateTime sentAt, MessageTypeResponse sentWho) {
+        messages.add(new MessageDetail(id, message, sentAt, sentWho));
     }
 
     @Getter
     static class MessageDetail {
+        long id;
         String message;
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         MessageTypeResponse sentWho;
         LocalDateTime sentAt;
 
-        public MessageDetail(String message, LocalDateTime sentAt, MessageTypeResponse sentWho) {
+        public MessageDetail(long id, String message, LocalDateTime sentAt, MessageTypeResponse sentWho) {
+            this.id = id;
             this.message = message;
             this.sentWho = sentWho;
             this.sentAt = sentAt;

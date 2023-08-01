@@ -73,6 +73,7 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
                 searched.getInterlocutor(searched.getSender()).toDto());
 
         searched.getMessages().forEach(message -> response.addMessageResponse(
+                message.getId(),
                 message.getContent(),
                 message.getCreatedAt(),
                 parseSendBy(user, searched, message.getMessageType())));
