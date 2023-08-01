@@ -18,4 +18,8 @@ public enum DomainType {
         }
         throw new IllegalArgumentException("존재하지 않는 도메인 타입입니다.");
     }
+
+    public String getKo() {
+        return ko;
+    }
 }
