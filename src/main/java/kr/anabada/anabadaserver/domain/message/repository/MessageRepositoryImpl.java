@@ -1,12 +1,16 @@
 package kr.anabada.anabadaserver.domain.message.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import kr.anabada.anabadaserver.domain.message.dto.MessageDetailResponse;
 import kr.anabada.anabadaserver.domain.message.dto.MessageSummaryResponse;
+import kr.anabada.anabadaserver.domain.message.dto.MessageType;
+import kr.anabada.anabadaserver.domain.message.dto.MessageTypeResponse;
 import kr.anabada.anabadaserver.domain.message.entity.Message;
 import kr.anabada.anabadaserver.domain.message.entity.MessageOrigin;
 import kr.anabada.anabadaserver.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +51,47 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
         return result;
     }
 
+    @Override
+    public MessageDetailResponse getMyMessageDetail(User user, long messageRoomId, LocalDateTime timestamp) {
+        var searched = queryFactory.selectFrom(messageOrigin)
+                .join(messageOrigin.messages).fetchJoin()
+                .join(messageOrigin.receiver).fetchJoin()
+                .join(messageOrigin.sender).fetchJoin()
+                .where(messageOrigin.id.eq(messageRoomId)
+                        .and(timestamp == null ?
+                                null : messageOrigin.createdAt.before(timestamp))
+                        .and(messageOrigin.sender.eq(user).or(messageOrigin.receiver.eq(user))))
+                .orderBy(messageOrigin.id.desc())
+                .limit(20)
+                .fetchOne();
+
+        if (searched == null)
+            throw new IllegalArgumentException("메시지 방이 존재하지 않습니다.");
+
+        var response = new MessageDetailResponse(searched.getMessagePostType(),
+                searched.getId(),
+                searched.getInterlocutor(searched.getSender()).toDto());
+
+        searched.getMessages().forEach(message -> response.addMessageResponse(
+                message.getContent(),
+                message.getCreatedAt(),
+                parseSendBy(user, searched, message.getMessageType())));
+
+        return response;
+    }
+
+    private MessageTypeResponse parseSendBy(User me, MessageOrigin messageRoom, MessageType messageType) {
+        if (messageType.equals(MessageType.NOTIFICATION))
+            return MessageTypeResponse.NOTIFICATION;
+
+        if (messageRoom.getSender().equals(me) && messageType.equals(MessageType.SENDER_SEND))
+            return MessageTypeResponse.ME;
+
+        if (messageRoom.getReceiver().equals(me) && messageType.equals(MessageType.RECEIVER_SEND))
+            return MessageTypeResponse.ME;
+
+        return MessageTypeResponse.INTERLOCUTOR;
+    }
 
     private Message parseLastMessage(MessageOrigin messageOrigin) {
         // todo: 로직 보강

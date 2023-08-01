@@ -1,6 +1,7 @@
 package kr.anabada.anabadaserver.domain.message.service;
 
 import kr.anabada.anabadaserver.common.dto.DomainType;
+import kr.anabada.anabadaserver.domain.message.dto.MessageDetailResponse;
 import kr.anabada.anabadaserver.domain.message.dto.MessageSummaryResponse;
 import kr.anabada.anabadaserver.domain.message.dto.MessageType;
 import kr.anabada.anabadaserver.domain.message.entity.Message;
@@ -99,5 +100,9 @@ public class MessageService {
             throw new IllegalArgumentException("자신의 게시글에는 메세지를 보낼 수 없습니다.");
         }
         return post.getWriter();
+    }
+
+    public MessageDetailResponse getMyMessageDetail(User user, LocalDateTime timestamp, long messageRoomId) {
+        return messageRepository.getMyMessageDetail(user, messageRoomId, timestamp);
     }
 }

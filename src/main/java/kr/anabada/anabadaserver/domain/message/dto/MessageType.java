@@ -1,10 +1,16 @@
 package kr.anabada.anabadaserver.domain.message.dto;
 
+import lombok.Getter;
+
+/**
+ * 메세지를 데이터베이스 상에 저장될 때,<br/>
+ * 메세지의 방향(누가 누구에게 보내주었는지)을 명시해주기 위해 사용하는 Enum <br/>
+ */
+@Getter
 public enum MessageType {
-    // 메세지 타입 ( 0 = 알림, 1 = sender가 보냄, 11 = receiver가 보냄)
-    NOTIFICATION(0),
-    SENDER_SEND(1),
-    RECEIVER_SEND(11);
+    NOTIFICATION(0), // 시스템이 보냄
+    SENDER_SEND(1), // 전송자(Sender)가 보냄
+    RECEIVER_SEND(11); // 수신자(Receiver)가 보냄
 
     private final int value;
 
@@ -24,9 +30,5 @@ public enum MessageType {
         }
 
         return null;
-    }
-
-    public int getValue() {
-        return value;
     }
 }

@@ -11,28 +11,32 @@ import java.util.List;
 
 @Getter
 public class MessageDetailResponse {
-    final List<MessageDetail> messageDetail = new ArrayList<>();
-    DomainType messageOriginType;
-    Long messageOriginId;
+    final List<MessageDetail> messages = new ArrayList<>();
+    DomainType messagePostType;
+    Long messageRoomId;
     UserDto interlocutor;
 
-    public MessageDetailResponse(DomainType messageOriginType, Long messageOriginId, UserDto interlocutor) {
-        this.messageOriginType = messageOriginType;
-        this.messageOriginId = messageOriginId;
+    public MessageDetailResponse(DomainType messagePostType, Long messageRoomId, UserDto interlocutor) {
+        this.messagePostType = messagePostType;
+        this.messageRoomId = messageRoomId;
         this.interlocutor = interlocutor;
+    }
+
+    public void addMessageResponse(String message, LocalDateTime sentAt, MessageTypeResponse sentWho) {
+        messages.add(new MessageDetail(message, sentAt, sentWho));
     }
 
     @Getter
     static class MessageDetail {
         String message;
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        MessageTypeResponse sentWho;
         LocalDateTime sentAt;
-        MessageType type;
 
-        public MessageDetail(String message, LocalDateTime sentAt, MessageType type) {
+        public MessageDetail(String message, LocalDateTime sentAt, MessageTypeResponse sentWho) {
             this.message = message;
+            this.sentWho = sentWho;
             this.sentAt = sentAt;
-            this.type = type;
         }
     }
 }

@@ -12,6 +12,7 @@ import kr.anabada.anabadaserver.global.response.GlobalResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -27,6 +28,18 @@ public class MessageController {
 
         return new GlobalResponse<>(
                 messageService.getMyAllMessageSummarized(user)
+        );
+    }
+
+    @GetMapping("/{messageRoomId}")
+    public GlobalResponse<MessageDetailResponse> getMyMessageDetail(@CurrentUser User user,
+                                                                    LocalDateTime timestamp,
+                                                                    @PathVariable long messageRoomId) {
+        if (user == null)
+            throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
+
+        return new GlobalResponse<>(
+                messageService.getMyMessageDetail(user, timestamp, messageRoomId)
         );
     }
 
