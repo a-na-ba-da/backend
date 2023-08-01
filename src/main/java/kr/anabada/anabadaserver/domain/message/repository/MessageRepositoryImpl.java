@@ -106,9 +106,11 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
         boolean senderIsRequester = messageOrigin.getSender().equals(requester);
 
         for (Message message : messages) {
-            if (senderIsRequester && !message.isReadBySender()
-                    || !senderIsRequester && !message.isReadByReceiver()) {
-                unreadCount++;
+            if (!message.isRead()) {
+                if (senderIsRequester && message.getMessageType().equals(MessageType.RECEIVER_SEND)
+                        || !senderIsRequester && message.getMessageType().equals(MessageType.SENDER_SEND)) {
+                    unreadCount++;
+                }
             }
         }
 
