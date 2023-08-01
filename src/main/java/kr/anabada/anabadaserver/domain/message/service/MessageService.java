@@ -87,32 +87,32 @@ public class MessageService {
     }
 
     private User checkValidPostType(User user, DomainType postType, Long postId) {
-        switch (postType) {
-            case BUY_TOGETHER -> {
-                return checkValidBuyTogether(user, postId);
-            }
-            case KNOW_TOGETHER -> {
-                return checkValidKnowTogether(user, postId);
-            }
+        User postWriter = switch (postType) {
+            case BUY_TOGETHER -> checkValidBuyTogether(user, postId);
+            case KNOW_TOGETHER -> checkValidKnowTogether(user, postId);
+            case MY_PRODUCT -> throw new IllegalArgumentException("내 상품에는 메세지를 보낼 수 없습니다.");
             default -> throw new IllegalArgumentException("수신자를 확인 할 수 없어 메세지를 보낼 수 없습니다.");
+        };
+
+        // 내 게시물에 메세지를 보내는 경우
+        if (Objects.equals(postWriter.getId(), user.getId())) {
+            // 이미 생성된 채팅방의 경우에만 허용
+            if (!messageOriginRepository.isAlreadyExistChatroom(postId, postType, postWriter))
+                throw new IllegalArgumentException("자신의 게시글에는 첫 메세지를 보낼 수 없습니다.");
         }
+
+        return postWriter;
     }
 
     private User checkValidKnowTogether(User user, Long postId) {
         Save post = saveRepository.findKnowTogetherById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
-        if (Objects.equals(post.getWriter().getId(), user.getId())) {
-            throw new IllegalArgumentException("자신의 게시글에는 메세지를 보낼 수 없습니다.");
-        }
         return post.getWriter();
     }
 
     private User checkValidBuyTogether(User user, Long postId) {
         Save post = saveRepository.findBuyTogetherById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
-        if (Objects.equals(post.getWriter().getId(), user.getId())) {
-            throw new IllegalArgumentException("자신의 게시글에는 메세지를 보낼 수 없습니다.");
-        }
         return post.getWriter();
     }
 

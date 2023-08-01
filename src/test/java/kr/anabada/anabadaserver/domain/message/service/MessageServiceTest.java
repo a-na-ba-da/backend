@@ -76,6 +76,31 @@ class MessageServiceTest extends ServiceTestWithoutImageUpload {
     }
 
     @Test
+    @DisplayName("상대방의 메세지를 읽었을때만 메세지가 읽음 상태로 변경된다. (내가 보낸 메세지는 내가 아무리 읽어도 읽음 상태가 아니다.)")
+    void check_message_read_status2() {
+        // given
+        User A = createUser("aaaa@naver.com", "aaaa");
+        User B = createUser("bbbb@naver.com", "bbbb");
+        em.persist(A);
+        em.persist(B);
+
+        Save post = knowTogetherService.createNewKnowTogetherPost(B, createKnowTogetherOnline());
+        Message sent = messageService.sendMessage(A, DomainType.KNOW_TOGETHER, post.getId(), "sent");
+        Message received = messageService.sendMessage(B, DomainType.KNOW_TOGETHER, post.getId(), "received");
+        long chatRoomId = sent.getMessageOrigin().getId();
+        em.clear();
+        em.flush();
+
+        // when
+        messageService.getMyMessageDetail(A, LocalDateTime.now(), chatRoomId);
+
+        // then
+        em.clear();
+        assertThat(em.find(Message.class, sent.getId()).isRead()).isFalse();
+        assertThat(em.find(Message.class, received.getId()).isRead()).isTrue();
+    }
+
+    @Test
     @DisplayName("본인이 작성한 게시물에는 메세지를 보낼 수 없다.")
     void cant_send_message_to_myPost() {
         // given
