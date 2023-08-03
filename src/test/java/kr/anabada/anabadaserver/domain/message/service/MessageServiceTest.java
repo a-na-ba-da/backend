@@ -46,8 +46,6 @@ class MessageServiceTest extends ServiceTestWithoutImageUpload {
         // when & then
         assertThat(messageService.sendMessage(sender, DomainType.KNOW_TOGETHER, post.getId(), "message"))
                 .isNotNull()
-                .extracting("content")
-                .isEqualTo("message");
                 .extracting("content", "messageType")
                 .containsExactly("message", MessageType.SENDER_SEND);
     }
@@ -89,7 +87,6 @@ class MessageServiceTest extends ServiceTestWithoutImageUpload {
         Message received = messageService.sendMessage(B, DomainType.KNOW_TOGETHER, post.getId(), "received");
         long chatRoomId = sent.getMessageOrigin().getId();
         em.clear();
-        em.flush();
 
         // when
         messageService.getMyMessageDetail(A, LocalDateTime.now(), chatRoomId);
@@ -101,7 +98,7 @@ class MessageServiceTest extends ServiceTestWithoutImageUpload {
     }
 
     @Test
-    @DisplayName("본인이 작성한 게시물에는 메세지를 보낼 수 없다.")
+    @DisplayName("본인이 작성한 게시물에는 첫 메세지를 보낼 수 없다.")
     void cant_send_message_to_myPost() {
         // given
         User sender = createUser("sender@naver.com", "sender");
@@ -112,6 +109,54 @@ class MessageServiceTest extends ServiceTestWithoutImageUpload {
         // when & then
         assertThrows(IllegalArgumentException.class,
                 () -> messageService.sendMessage(sender, DomainType.KNOW_TOGETHER, post.getId(), "message"),
-                "자신의 게시글에는 메세지를 보낼 수 없습니다.");
+                "자신의 게시글에는 첫 메세지를 보낼 수 없습니다.");
+    }
+
+
+    @Test
+    @DisplayName("존재하지 않는 게시물에 대해서는 채팅을 생성 할 수 없다.")
+    void cant_create_chat_for_unknown_post() {
+        // given
+        User sender = createUser("sender@naver.com", "sender");
+        em.persist(sender);
+        long unknownPostId = 29229229293L;
+
+        // when & then
+        assertThrows(IllegalArgumentException.class,
+                () -> messageService.sendMessage(sender, DomainType.BUY_TOGETHER, unknownPostId, "message"),
+                "수신자를 확인 할 수 없어 메세지를 보낼 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 게시물 타입에 대해서는 채팅을 생성 할 수 없다.")
+    void cant_create_chat_for_unknown_postType() {
+        // given
+        User sender = createUser("sender@naver.com", "sender");
+        em.persist(sender);
+        DomainType unknownPostType = null;
+
+        // when & then
+        assertThrows(NullPointerException.class,
+                () -> messageService.sendMessage(sender, unknownPostType, 1L, "message"));
+    }
+
+    @Test
+    @DisplayName("메세지의 송수신자가 아닌 사용자는 메세지 상세를 열람 할 수 없다.")
+    void cant_read_message_with_no_related() {
+        // given
+        User sender = createUser("sender@naver.com", "sender");
+        User receiver = createUser("receiver@naver.com", "receiver");
+        User other = createUser("other@naver.com", "other");
+        em.persist(sender);
+        em.persist(receiver);
+        em.persist(other);
+
+        Save post = knowTogetherService.createNewKnowTogetherPost(receiver, createKnowTogetherOnline());
+        Message chat = messageService.sendMessage(sender, DomainType.KNOW_TOGETHER, post.getId(), "message");
+
+        // when
+        assertThrows(IllegalArgumentException.class,
+                () -> messageService.getMyMessageDetail(other, LocalDateTime.now(), chat.getMessageOrigin().getId()),
+                "메세지 방이 존재하지 않습니다.");
     }
 }
