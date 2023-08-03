@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.CREATED;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/message")
@@ -46,12 +47,11 @@ public class MessageController {
     @GetMapping("/{postType}/{postId}")
     public GlobalResponse<Message> sendMessage(@CurrentUser User user, @PathVariable DomainType postType, @PathVariable Long postId,
                                                @RequestBody String message) {
+    @ResponseStatus(CREATED)
         if (user == null)
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
 
-        return new GlobalResponse<>(
-                messageService.sendMessage(user, postType, postId, message)
-        );
+        messageService.sendMessage(user, postType, postId, message);
     }
 
 }
