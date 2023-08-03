@@ -35,6 +35,8 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
                 result.add(
                         new MessageSummaryResponse(
                                 list.getId(),
+                                list.getMessagePostType(),
+                                list.getMessagePostId(),
                                 list.getInterlocutor(requester).toDto(),
                                 parseLastMessage(list).getContent(),
                                 parseLastMessage(list).getCreatedAt(),
