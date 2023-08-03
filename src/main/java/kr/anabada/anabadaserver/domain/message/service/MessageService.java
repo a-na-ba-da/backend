@@ -91,7 +91,6 @@ public class MessageService {
             case BUY_TOGETHER -> checkValidBuyTogether(postId);
             case KNOW_TOGETHER -> checkValidKnowTogether(postId);
             case MY_PRODUCT -> throw new IllegalArgumentException("내 상품에는 메세지를 보낼 수 없습니다.");
-            default -> throw new IllegalArgumentException("수신자를 확인 할 수 없어 메세지를 보낼 수 없습니다.");
         };
 
         // 내 게시물에 메세지를 보내는 경우
