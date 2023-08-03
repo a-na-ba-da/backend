@@ -15,7 +15,9 @@ import java.time.LocalDateTime;
 public class MessageSummaryResponse {
     @Schema(description = "메세지방 ID")
     long messageRoomId;
+    @Schema(description = "메세지가 시작된 게시물 타입")
     DomainType postType;
+    @Schema(description = "메세지가 시작된 게시물 ID")
     Long postId;
     @Schema(description = "상대방 정보")
     UserDto interlocutor;
