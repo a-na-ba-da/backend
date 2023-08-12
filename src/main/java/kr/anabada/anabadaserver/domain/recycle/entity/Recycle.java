@@ -10,13 +10,11 @@ import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Entity
-@Builder
 @NoArgsConstructor
 @Table(name = "recycle")
 @Where(clause = "is_removed = false")
@@ -63,12 +61,5 @@ public class Recycle {
 
     public void setWriter(User writer) {
         this.writer = writer.getId();
-    }
-
-    public void setPost(String title, String content){
-        if(StringUtils.hasText(title))
-            this.title = title;
-        if(StringUtils.hasText(content))
-            this.content = content;
     }
 }
