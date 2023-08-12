@@ -43,6 +43,17 @@ public class RecycleService {
         originalPost.setPost(recyclePostRequest);
     }
 
+    @Transactional
+    public void deleteRecyclePost(User user, Long recycleId) {
+        Recycle recycle = recycleRepository.findByIdAndWriter(recycleId, user.getId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
+
+        if(!recycle.getWriter().equals(user.getId()))
+            throw new IllegalArgumentException("해당 게시물의 작성자가 아닙니다.");
+
+        recycleRepository.delete(recycle);
+    }
+
     public List<Recycle> getRecycleList(Pageable pageable) {
         return recycleRepository.findByRecycleList(pageable);
     }

@@ -50,6 +50,16 @@ public class RecycleController {
         recycleService.modifyRecyclePost(user, recycleId, recyclePostRequest);
     }
 
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponse(responseCode = "204", description = "다시쓰기 삭제 성공")
+    public void deleteRecycelPost(@CurrentUser User user, Long recycleId){
+        if (user == null)
+            throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
+
+        recycleService.deleteRecyclePost(user, recycleId);
+    }
+
     @GetMapping("")
     @ApiResponse(responseCode = "200", description = "다시쓰기 목록 조회 성공")
     public GlobalResponse<PageImpl<RecycleResponse>> getRecycleList(@ParameterObject Pageable pageable){
