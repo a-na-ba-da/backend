@@ -31,4 +31,14 @@ public class RecycleController {
         recycleService.createNewRecyclePost(user, recyclePostRequest);
     }
 
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponse(responseCode = "204", description = "다시쓰기 수정 성공")
+    public void modifyRecyclePost(@CurrentUser User user, Long recycleId, @RequestBody @Valid RecyclePostRequest recyclePostRequest) {
+        if (user == null)
+            throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
+
+        recycleService.modifyRecyclePost(user, recycleId, recyclePostRequest);
+    }
+
 }

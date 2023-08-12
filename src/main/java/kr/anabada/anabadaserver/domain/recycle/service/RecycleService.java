@@ -27,4 +27,16 @@ public class RecycleService {
 
         return recycleRepository.save(newRecyclePost);
     }
+
+    public void modifyRecyclePost(User writer, Long recycleId, RecyclePostRequest recyclePostRequest) {
+        recyclePostRequest.checkValidation();
+
+        Recycle originalPost = recycleRepository.findByIdAndWriter(recycleId, writer.getId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
+
+        if(!originalPost.getWriter().equals(writer.getId()))
+            throw new IllegalArgumentException("해당 게시물의 작성자가 아닙니다.");
+
+        originalPost.setPost(recyclePostRequest);
+    }
 }

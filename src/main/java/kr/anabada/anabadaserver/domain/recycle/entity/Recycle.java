@@ -1,6 +1,7 @@
 package kr.anabada.anabadaserver.domain.recycle.entity;
 
 import jakarta.persistence.*;
+import kr.anabada.anabadaserver.domain.recycle.dto.request.RecyclePostRequest;
 import kr.anabada.anabadaserver.domain.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 
@@ -61,5 +63,12 @@ public class Recycle {
 
     public void setWriter(User writer) {
         this.writer = writer.getId();
+    }
+
+    public void setPost(RecyclePostRequest recyclePostRequest){
+        if(StringUtils.hasText(recyclePostRequest.getTitle()))
+            this.title = recyclePostRequest.getTitle();
+        if(StringUtils.hasText(recyclePostRequest.getContent()))
+            this.content = recyclePostRequest.getContent();
     }
 }
