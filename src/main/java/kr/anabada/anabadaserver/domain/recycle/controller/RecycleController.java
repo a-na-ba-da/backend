@@ -59,4 +59,10 @@ public class RecycleController {
         return new GlobalResponse<>(new PageImpl<>(recycleList, pageable, recycleList.size()));
     }
 
+    @GetMapping("/{id}")
+    @ApiResponse(responseCode = "200", description = "다시쓰기 단건 조회 성공")
+    public GlobalResponse<RecycleResponse> getRecycle(@PathVariable @NotNull(message = "게시물 id를 입력해주세요.") Long id){
+        return new GlobalResponse<>(recycleService.getRecycle(id).toResponse());
+    }
+
 }

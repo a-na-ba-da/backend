@@ -34,6 +34,7 @@ public class Recycle {
 
     @OneToOne
     @JoinColumn(name = "writer", nullable = false)
+//    @Column(name = "id", nullable = false)
     private User writer;
 
     @Column(name = "content", length = 300)
