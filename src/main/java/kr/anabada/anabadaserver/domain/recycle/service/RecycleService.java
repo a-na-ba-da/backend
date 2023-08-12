@@ -6,8 +6,11 @@ import kr.anabada.anabadaserver.domain.recycle.entity.Recycle;
 import kr.anabada.anabadaserver.domain.recycle.repository.RecycleRepository;
 import kr.anabada.anabadaserver.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 
 @Service
@@ -38,5 +41,9 @@ public class RecycleService {
             throw new IllegalArgumentException("해당 게시물의 작성자가 아닙니다.");
 
         originalPost.setPost(recyclePostRequest);
+    }
+
+    public List<Recycle> getRecycleList(Pageable pageable) {
+        return recycleRepository.findByRecycleList(pageable);
     }
 }

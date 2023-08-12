@@ -3,15 +3,24 @@ package kr.anabada.anabadaserver.domain.recycle.controller;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import kr.anabada.anabadaserver.domain.recycle.dto.request.RecyclePostRequest;
+import kr.anabada.anabadaserver.domain.recycle.dto.response.RecycleResponse;
+import kr.anabada.anabadaserver.domain.recycle.entity.Recycle;
 import kr.anabada.anabadaserver.domain.recycle.service.RecycleService;
 import kr.anabada.anabadaserver.domain.user.entity.User;
 import kr.anabada.anabadaserver.global.auth.CurrentUser;
 import kr.anabada.anabadaserver.global.response.CustomException;
 import kr.anabada.anabadaserver.global.response.ErrorCode;
+import kr.anabada.anabadaserver.global.response.GlobalResponse;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -39,6 +48,15 @@ public class RecycleController {
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
 
         recycleService.modifyRecyclePost(user, recycleId, recyclePostRequest);
+    }
+
+    @GetMapping("")
+    @ApiResponse(responseCode = "200", description = "다시쓰기 목록 조회 성공")
+    public GlobalResponse<PageImpl<RecycleResponse>> getRecycleList(@ParameterObject Pageable pageable){
+        List<RecycleResponse> recycleList = recycleService.getRecycleList(pageable)
+                .stream().map(Recycle::toResponse).toList();
+
+        return new GlobalResponse<>(new PageImpl<>(recycleList, pageable, recycleList.size()));
     }
 
 }

@@ -40,7 +40,7 @@ public class RecyclePostRequest {
         return Recycle.builder()
                 .title(recyclePostRequest.getTitle())
                 .content(recyclePostRequest.getContent())
-                .writer(writer.getId())
+                .writer(writer)
                 .build();
     }
 
