@@ -34,7 +34,7 @@ public class RecycleService {
     public void modifyRecyclePost(User writer, Long recycleId, RecyclePostRequest recyclePostRequest) {
         recyclePostRequest.checkValidation();
 
-        Recycle originalPost = recycleRepository.findByIdAndWriter(recycleId, writer.getId())
+        Recycle originalPost = recycleRepository.findByIdAndWriter(recycleId, writer)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
 
         if(!originalPost.getWriter().equals(writer.getId()))
@@ -44,11 +44,11 @@ public class RecycleService {
     }
 
     @Transactional
-    public void deleteRecyclePost(User user, Long recycleId) {
-        Recycle recycle = recycleRepository.findByIdAndWriter(recycleId, user.getId())
+    public void deleteRecyclePost(User writer, Long recycleId) {
+        Recycle recycle = recycleRepository.findByIdAndWriter(recycleId, writer)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
 
-        if(!recycle.getWriter().equals(user.getId()))
+        if(!recycle.getWriter().equals(writer.getId()))
             throw new IllegalArgumentException("해당 게시물의 작성자가 아닙니다.");
 
         recycleRepository.delete(recycle);
