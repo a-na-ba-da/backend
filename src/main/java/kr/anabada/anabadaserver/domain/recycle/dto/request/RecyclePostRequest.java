@@ -2,9 +2,7 @@ package kr.anabada.anabadaserver.domain.recycle.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Size;
-import kr.anabada.anabadaserver.common.entity.Image;
 import kr.anabada.anabadaserver.domain.recycle.entity.Recycle;
-import kr.anabada.anabadaserver.domain.user.entity.User;
 import kr.anabada.anabadaserver.global.response.CustomException;
 import kr.anabada.anabadaserver.global.response.ErrorCode;
 import lombok.Builder;
@@ -13,7 +11,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
