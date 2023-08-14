@@ -6,6 +6,7 @@ import kr.anabada.anabadaserver.domain.recycle.entity.Recycle;
 import kr.anabada.anabadaserver.domain.recycle.repository.RecycleRepository;
 import kr.anabada.anabadaserver.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -24,13 +26,16 @@ public class RecycleService {
     public Recycle createNewRecyclePost(User writer, RecyclePostRequest recyclePostRequest) {
         recyclePostRequest.checkValidation();
 
-        Recycle newRecyclePost = recyclePostRequest.toEntity(writer, recyclePostRequest);
+        Recycle post = recyclePostRequest.toEntity();
+        post.setWriter(writer);
 
+        Recycle newRecyclePost = recycleRepository.save(post);
         imageService.attach(writer.getId(), recyclePostRequest.getImages(), newRecyclePost.getId());
 
-        return recycleRepository.save(newRecyclePost);
+        return newRecyclePost;
     }
 
+    @Transactional
     public void modifyRecyclePost(User writer, Long recycleId, RecyclePostRequest recyclePostRequest) {
         recyclePostRequest.checkValidation();
 
