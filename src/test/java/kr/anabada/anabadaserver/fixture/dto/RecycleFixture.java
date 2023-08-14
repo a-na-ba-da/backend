@@ -12,4 +12,12 @@ public class RecycleFixture {
                 .images(List.of("image1", "image2"))
                 .build();
     }
+
+    public static RecyclePostRequest modifyRecycle(){
+        return RecyclePostRequest.builder()
+                .title("modifyTitle")
+                .content("modifyContent")
+                .images(List.of("image3", "image4"))
+                .build();
+    }
 }
