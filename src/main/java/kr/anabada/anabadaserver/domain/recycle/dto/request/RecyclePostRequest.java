@@ -2,6 +2,7 @@ package kr.anabada.anabadaserver.domain.recycle.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Size;
+import kr.anabada.anabadaserver.common.entity.Image;
 import kr.anabada.anabadaserver.domain.recycle.entity.Recycle;
 import kr.anabada.anabadaserver.domain.user.entity.User;
 import kr.anabada.anabadaserver.global.response.CustomException;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
@@ -36,12 +38,13 @@ public class RecyclePostRequest {
         this.images = images;
     }
 
-    public Recycle toEntity(User writer, RecyclePostRequest recyclePostRequest) {
-        return Recycle.builder()
-                .title(recyclePostRequest.getTitle())
-                .content(recyclePostRequest.getContent())
-                .writer(writer)
-                .build();
+    public Recycle toEntity(/*User writer, RecyclePostRequest recyclePostRequest*/) {
+//        return Recycle.builder()
+//                .title(recyclePostRequest.getTitle())
+//                .content(recyclePostRequest.getContent())
+//                .writer(writer)
+//                .build();
+        throw new IllegalStateException("데이터를 변환할 수 없습니다.");
     }
 
     public void checkValidation(){
