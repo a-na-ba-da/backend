@@ -8,8 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface RecycleRepository extends JpaRepository<Recycle, Long> {
+public interface RecycleRepository extends JpaRepository<Recycle, Long>, RecycleRepositoryCustom {
     Optional<Recycle> findByIdAndWriter(Long recycleId, User userId);
-
-    List<Recycle> findByRecycleList(Pageable pageable);
 }
