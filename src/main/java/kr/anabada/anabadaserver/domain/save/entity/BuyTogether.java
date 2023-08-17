@@ -26,7 +26,7 @@ import java.util.UUID;
 public class BuyTogether extends Save {
 
     // 물건 전달 방법
-    @Column(name = "is_parcel_delivery")
+    @Column(name = "is_online_delivery")
     private Boolean isParcelDelivery;
 
     // 구매 예정일 (NULL = 협의 or 상관없음)
@@ -60,6 +60,7 @@ public class BuyTogether extends Save {
                 .deliveryPlaceLat(super.getPlaceLat())
                 .deliveryPlaceLng(super.getPlaceLng())
                 .buyDate(buyDate)
+                .commentCount(getCommentCount())
                 .images(images.stream().map(Image::getId).map(UUID::toString).toList())
                 .writer(getWriter().toDto())
                 .pay(pay)

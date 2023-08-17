@@ -35,4 +35,7 @@ public class KnowTogetherResponse extends LocalDateResponse {
     private Double buyPlaceLng;
     @Schema(description = "오프라인 구매라면, 구매 장소의 상호 혹은 주소 문자열")
     private String buyPlaceDetail;
+
+    @Schema(description = "댓글 수 카운트")
+    private long commentCount;
 }

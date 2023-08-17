@@ -5,7 +5,12 @@ import kr.anabada.anabadaserver.common.dto.CommentRequest;
 import kr.anabada.anabadaserver.common.dto.CommentResponse;
 import kr.anabada.anabadaserver.domain.ServiceTestWithoutImageUpload;
 import kr.anabada.anabadaserver.domain.save.dto.request.BuyTogetherRequest;
+import kr.anabada.anabadaserver.domain.save.dto.request.KnowTogetherRequest;
+import kr.anabada.anabadaserver.domain.save.entity.BuyTogether;
+import kr.anabada.anabadaserver.domain.save.entity.KnowTogether;
+import kr.anabada.anabadaserver.domain.save.entity.Save;
 import kr.anabada.anabadaserver.domain.save.service.BuyTogetherService;
+import kr.anabada.anabadaserver.domain.save.service.KnowTogetherService;
 import kr.anabada.anabadaserver.domain.user.entity.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -20,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static kr.anabada.anabadaserver.fixture.dto.BuyTogetherFixture.createBuyTogetherParcel;
+import static kr.anabada.anabadaserver.fixture.dto.KnowTogetherFixture.createKnowTogetherOnline;
 import static kr.anabada.anabadaserver.fixture.entity.UserFixture.createUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
@@ -35,6 +41,9 @@ class CommentServiceTest extends ServiceTestWithoutImageUpload {
     private BuyTogetherService buyTogetherService;
 
     @Autowired
+    private KnowTogetherService knowTogetherService;
+
+    @Autowired
     private EntityManager em;
 
     @Nested
@@ -48,7 +57,7 @@ class CommentServiceTest extends ServiceTestWithoutImageUpload {
             User user = createUser("user@naver.com", "댓글작성자닉네임");
             em.persist(user);
 
-            BuyTogetherRequest post = createBuyTogetherParcel();
+            BuyTogetherRequest post = createBuyTogetherParcel(true);
             long postId = buyTogetherService.createNewBuyTogetherPost(user, post).getId();
 
             CommentRequest parentCommentRequest = CommentRequest.builder()
@@ -234,33 +243,88 @@ class CommentServiceTest extends ServiceTestWithoutImageUpload {
             });
         }
 
-        @Test
-        @DisplayName("대댓글에 대댓글을 작성할 수 없다 = 댓글의 최대 depth는 2단계이다.")
-        void cant_comment_sub_comment() {
-            // given
-            User user = createUser("james@naver.com", "1234");
-            em.persist(user);
+        @Nested
+        @DisplayName("게시판 댓글 수 칼럼 테스트")
+        class commentIncreaseTest {
 
-            BuyTogetherRequest post = createBuyTogetherParcel();
-            long postId = buyTogetherService.createNewBuyTogetherPost(user, post).getId();
+            @Test
+            @DisplayName("'같이사요'에서 댓글이 작성되면 게시판 내 댓글 수가 1 증가한다.")
+            void increaseComment_BuyTogether() {
+                // given
+                User user = createUser("user@naver.com", "1234");
+                em.persist(user);
 
-            CommentRequest commentRequest = CommentRequest.builder()
-                    .content("첫번째 댓글")
-                    .parentCommentId(null)
-                    .build();
-            Long parentCommentId = commentService.writeNewComment(user, "buy-together", postId, commentRequest);
+                BuyTogetherRequest post = createBuyTogetherParcel(true);
+                Save buyTogether = buyTogetherService.createNewBuyTogetherPost(user, post);
+                long postId = buyTogether.getId();
+                long originalCommentCount = buyTogether.getCommentCount();
 
-            CommentRequest subCommentRequest = CommentRequest.builder()
-                    .content("대댓글")
-                    .parentCommentId(parentCommentId)
-                    .build();
-            Long subCommentId = commentService.writeNewComment(user, "buy-together", postId, subCommentRequest);
-            ReflectionTestUtils.setField(subCommentRequest, "parentCommentId", subCommentId);
+                CommentRequest commentRequest = CommentRequest.builder()
+                        .content("댓글 내용")
+                        .parentCommentId(null)
+                        .build();
 
-            // when & then
-            Assertions.assertThrows(IllegalArgumentException.class, () -> {
-                commentService.writeNewComment(user, "buy-together", postId, subCommentRequest);
-            }, "댓글의 depth는 2단계까지만 가능합니다.");
+                // when
+                commentService.writeNewComment(user, "buy-together", postId, commentRequest);
+
+                // then
+                assertThat(originalCommentCount).isZero();
+                assertThat(em.find(BuyTogether.class, postId).getCommentCount()).isEqualTo(1);
+            }
+
+            @Test
+            @DisplayName("'같이알아요'에서 댓글이 작성되면 게시판 내 댓글 수가 1 증가한다.")
+            void increaseComment_KnowTogether() {
+                // given
+                User user = createUser("user@naver.com", "1234");
+                em.persist(user);
+
+                KnowTogetherRequest post = createKnowTogetherOnline();
+                Save knowTogether = knowTogetherService.createNewKnowTogetherPost(user, post);
+                long postId = knowTogether.getId();
+                long originalCommentCount = knowTogether.getCommentCount();
+
+                CommentRequest commentRequest = CommentRequest.builder()
+                        .content("댓글 내용")
+                        .parentCommentId(null)
+                        .build();
+
+                // when
+                commentService.writeNewComment(user, "know-together", postId, commentRequest);
+
+                // then
+                assertThat(originalCommentCount).isZero();
+                assertThat(em.find(KnowTogether.class, postId).getCommentCount()).isEqualTo(1);
+            }
+
+            @Test
+            @DisplayName("대댓글에 대댓글을 작성할 수 없다 = 댓글의 최대 depth는 2단계이다.")
+            void cant_comment_sub_comment() {
+                // given
+                User user = createUser("james@naver.com", "1234");
+                em.persist(user);
+
+                BuyTogetherRequest post = createBuyTogetherParcel(true);
+                long postId = buyTogetherService.createNewBuyTogetherPost(user, post).getId();
+
+                CommentRequest commentRequest = CommentRequest.builder()
+                        .content("첫번째 댓글")
+                        .parentCommentId(null)
+                        .build();
+                Long parentCommentId = commentService.writeNewComment(user, "buy-together", postId, commentRequest);
+
+                CommentRequest subCommentRequest = CommentRequest.builder()
+                        .content("대댓글")
+                        .parentCommentId(parentCommentId)
+                        .build();
+                Long subCommentId = commentService.writeNewComment(user, "buy-together", postId, subCommentRequest);
+                ReflectionTestUtils.setField(subCommentRequest, "parentCommentId", subCommentId);
+
+                // when & then
+                Assertions.assertThrows(IllegalArgumentException.class, () -> {
+                    commentService.writeNewComment(user, "buy-together", postId, subCommentRequest);
+                }, "댓글의 depth는 2단계까지만 가능합니다.");
+            }
         }
     }
 }

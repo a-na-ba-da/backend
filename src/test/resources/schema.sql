@@ -28,7 +28,6 @@ drop table if exists save;
 
 
 /* 2. START CREATE TABLE  ---------------- */
-
 create table change_request
 (
     id                   bigint auto_increment
@@ -118,11 +117,14 @@ create table member
 
 create table message_origin
 (
-    id                bigint      not null
+    id              bigint auto_increment
         primary key,
-    message_type      varchar(10) not null comment '메세지가 어떤 도메인으로 부터 시작되었는지 확인하는 타입 스트링',
-    message_detail_id bigint      not null comment '메세지의 타입 엔티티에서 id 값',
-    created_at        datetime(6) not null
+    message_type    varchar(30) not null comment '메세지가 어떤 도메인으로 부터 시작되었는지 확인하는 타입 스트링',
+    message_post_id bigint      not null comment '메세지의 타입 엔티티에서 id 값',
+    sender_id       bigint      null comment '메세지 보내는 사람 id',
+    receiver_id     bigint      null comment '메세지 받는 사람의 id',
+    created_at      datetime(6) not null,
+    modified_at     datetime(6) null
 )
     comment '메세지의 원천';
 
@@ -130,16 +132,14 @@ create table message
 (
     id                  bigint auto_increment
         primary key,
-    title               varchar(50)                not null,
-    content             varchar(500)               not null,
-    deleted_by_sender   tinyint(1) default (false) not null,
-    deleted_by_receiver tinyint(1) default (false) not null,
-    sender_id           bigint                     not null,
-    receiver_id         bigint                     not null,
-    created_at          datetime(6)                not null,
-    message_type        varchar(10)                not null comment '메세지가 어떤 도메인으로 부터 시작되었는지 확인하는 타입 스트링',
-    message_detail_id   bigint                     not null comment 'message_type 엔티티의 id',
-    message_origin_id   bigint                     not null comment '메세지의 원천',
+    content             varchar(500)         not null comment '쪽지 내용',
+    message_type        smallint             null comment '메세지 타입 ( 0 = 알림, 1 = sender가 보냄, 11 = receiver가 보냄)',
+    deleted_by_sender   tinyint(1) default 0 null,
+    deleted_by_receiver tinyint(1) default 0 not null,
+    is_read             tinyint(1) default 0 not null,
+    message_origin_id   bigint               not null comment '메세지의 원천',
+    created_at          datetime(6)          not null,
+    modified_at         datetime(6)          null,
     constraint fk_message_message_origin
         foreign key (message_origin_id) references message_origin (id)
 );
@@ -199,7 +199,7 @@ create table save
     writer             bigint                     not null,
     title              varchar(50)                not null,
     content            varchar(700)               not null,
-    is_parcel_delivery tinyint(1)                 null comment '(같이사요 ) 전달방법 ( 대, 비대면 )',
+    is_online_delivery tinyint(1)                 null comment '(같이사요 ) 전달방법 ( 대, 비대면 )',
     buy_date           date                       null comment '(같이사요 ) 구매일',
     product_url        varchar(500)               null comment '(같이사요,  같이 알아요 ) 상품 주소',
     pay                int                        null comment '(같이사요 ) 너가 내야되는 돈',
@@ -208,6 +208,7 @@ create table save
     buy_place_lng      double                     null,
     buy_place_detail   varchar(15)                null comment '오프라인 구매처 위경도에 대한 자세한 텍스트 정보 (상호명 등)',
     save_type          varchar(15)                not null comment '같이사요, 같이 알아요 type',
+    comment_cnt        bigint     default 0       null comment '댓글 갯수 카운트',
     created_at         datetime(6)                not null,
     modified_at        datetime(6)                null,
     is_removed         tinyint(1) default (false) not null comment '삭제 여부'

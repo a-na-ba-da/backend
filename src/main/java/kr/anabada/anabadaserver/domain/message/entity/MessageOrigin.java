@@ -1,25 +1,57 @@
 package kr.anabada.anabadaserver.domain.message.entity;
 
 import jakarta.persistence.*;
+import kr.anabada.anabadaserver.common.dto.DomainType;
+import kr.anabada.anabadaserver.common.entity.BaseTimeEntity;
+import kr.anabada.anabadaserver.domain.user.entity.User;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
+@NoArgsConstructor
 @Table(name = "message_origin")
-public class MessageOrigin {
+public class MessageOrigin extends BaseTimeEntity {
+    @OrderBy("id ASC")
+    @OneToMany(mappedBy = "messageOrigin")
+    private final List<Message> messages = new ArrayList<>();
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-
+    @Enumerated(EnumType.STRING)
     @Column(name = "message_type", nullable = false, length = 10)
-    private String messageType;
+    private DomainType messagePostType;
+    @Column(name = "message_post_id", nullable = false)
+    private Long messagePostId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sender_id")
+    private User sender;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receiver_id")
+    private User receiver;
 
-    @Column(name = "message_detail_id", nullable = false)
-    private Long messageDetailId;
+    @Builder
+    public MessageOrigin(DomainType messagePostType, User sender, User receiver, Long messagePostId) {
+        this.messagePostType = messagePostType;
+        this.sender = sender;
+        this.receiver = receiver;
+        this.messagePostId = messagePostId;
+    }
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+    public void addMessage(Message message) {
+        this.messages.add(message);
+    }
+
+    public User getInterlocutor(User requester) {
+        if (this.sender.equals(requester)) {
+            return this.receiver;
+        }
+        return this.sender;
+    }
 }
