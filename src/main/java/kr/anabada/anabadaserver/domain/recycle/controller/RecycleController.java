@@ -25,7 +25,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1//")
+@RequestMapping("/api/v1/recycle")
 @Tag(name = "다시쓰기", description = "다시쓰기 API 모음")
 public class RecycleController {
     private final RecycleService recycleService;
