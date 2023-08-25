@@ -58,7 +58,7 @@ class ProductChangeServiceTest {
             Long requestId = productChangeService.getAllChangeRequest(requestee).getRequestingForMeList().get(0).getId();
 
             // when
-            productChangeService.rejectChangeRequest(requestee, requesterProduct.getId(), "거절합니다~");
+            productChangeService.rejectChangeRequest(requestee, requestId, "거절합니다~");
 
             // then
             assertEquals(AVAILABLE, requesterProduct.getStatus());
@@ -88,7 +88,7 @@ class ProductChangeServiceTest {
             // when & then
             Assertions.assertThrows(
                     IllegalArgumentException.class,
-                    () -> productChangeService.rejectChangeRequest(another, requesterProduct.getId(), "거절합니다~"),
+                    () -> productChangeService.rejectChangeRequest(another, requestId, "거절합니다~"),
                     "본인에게 온 교환 신청만 거절할 수 있습니다."
             );
         }
@@ -116,7 +116,7 @@ class ProductChangeServiceTest {
             Long requestId = productChangeService.getAllChangeRequest(requestee).getRequestingForMeList().get(0).getId();
 
             // when
-            productChangeService.acceptChangeRequest(requestee, requesterProduct.getId());
+            productChangeService.acceptChangeRequest(requestee, requestId);
 
             // then
             assertEquals(ProductStatus.CHANGED, requesterProduct.getStatus());
@@ -146,7 +146,7 @@ class ProductChangeServiceTest {
             // when & then
             Assertions.assertThrows(
                     IllegalArgumentException.class,
-                    () -> productChangeService.acceptChangeRequest(another, requesterProduct.getId()),
+                    () -> productChangeService.acceptChangeRequest(another, requestId),
                     "본인에게 온 교환 신청만 수락할 수 있습니다."
             );
         }
@@ -173,7 +173,7 @@ class ProductChangeServiceTest {
             // when & then
             Assertions.assertThrows(
                     IllegalArgumentException.class,
-                    () -> productChangeService.acceptChangeRequest(requester, requesterProduct.getId()),
+                    () -> productChangeService.acceptChangeRequest(requester, requestId),
                     "양측 물건중 이미 교환 완료된 물건이 존재합니다."
             );
         }
