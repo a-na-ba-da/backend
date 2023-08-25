@@ -88,10 +88,9 @@ public class MessageService {
 
     private User checkValidPostType(User user, DomainType postType, Long postId) {
         User postWriter = switch (postType) {
-            case BUY_TOGETHER -> checkValidBuyTogether(user, postId);
-            case KNOW_TOGETHER -> checkValidKnowTogether(user, postId);
+            case BUY_TOGETHER -> checkValidBuyTogether(postId);
+            case KNOW_TOGETHER -> checkValidKnowTogether(postId);
             case MY_PRODUCT -> throw new IllegalArgumentException("내 상품에는 메세지를 보낼 수 없습니다.");
-            default -> throw new IllegalArgumentException("수신자를 확인 할 수 없어 메세지를 보낼 수 없습니다.");
         };
 
         // 내 게시물에 메세지를 보내는 경우
@@ -104,13 +103,13 @@ public class MessageService {
         return postWriter;
     }
 
-    private User checkValidKnowTogether(User user, Long postId) {
+    private User checkValidKnowTogether(Long postId) {
         Save post = saveRepository.findKnowTogetherById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
         return post.getWriter();
     }
 
-    private User checkValidBuyTogether(User user, Long postId) {
+    private User checkValidBuyTogether(Long postId) {
         Save post = saveRepository.findBuyTogetherById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
         return post.getWriter();
