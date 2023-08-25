@@ -21,8 +21,8 @@ import java.util.UUID;
 
 @Getter
 @Entity
-@NoArgsConstructor
 @SuperBuilder
+@NoArgsConstructor
 @Table(name = "recycle")
 @Where(clause = "is_removed = false")
 @SQLDelete(sql = "UPDATE recycle SET is_removed = true WHERE id = ?")
@@ -42,14 +42,6 @@ public class Recycle extends BaseTimeEntity {
     @Column(name = "content", length = 300)
     private String content;
 
-//    @CreatedDate
-//    @Column(name = "created_at", nullable = false)
-//    private LocalDateTime createdAt;
-//
-//    @LastModifiedDate
-//    @Column(name = "modified_at")
-//    private LocalDateTime modifiedAt;
-
     @Builder.Default
     @Column(name = "is_removed", nullable = false)
     private Boolean isRemoved = false;
@@ -64,10 +56,10 @@ public class Recycle extends BaseTimeEntity {
         this.writer = writer;
     }
 
-    public void setPost(RecyclePostRequest recyclePostRequest){
-        if(StringUtils.hasText(recyclePostRequest.getTitle()))
+    public void setPost(RecyclePostRequest recyclePostRequest) {
+        if (StringUtils.hasText(recyclePostRequest.getTitle()))
             this.title = recyclePostRequest.getTitle();
-        if(StringUtils.hasText(recyclePostRequest.getContent()))
+        if (StringUtils.hasText(recyclePostRequest.getContent()))
             this.content = recyclePostRequest.getContent();
     }
 
