@@ -94,12 +94,12 @@ public class ProductChangeService {
         changeRequest.setStatus(ChangeRequestStatus.ACCEPTED);
 
         // change target product status to CHANGED
-        if (changeRequest.getTargetProduct().getStatus() != ProductStatus.REQUESTING)
+        if (changeRequest.getTargetProduct().getStatus() == ProductStatus.CHANGED)
             throw new IllegalArgumentException("양측 물건중 이미 교환 완료된 물건이 존재합니다.");
 
         changeRequest.getTargetProduct().setStatus(ProductStatus.CHANGED);
         changeRequest.getToChangeProducts().forEach(product -> {
-            if (product.getProduct().getStatus() != ProductStatus.REQUESTING)
+            if (product.getProduct().getStatus() == ProductStatus.CHANGED)
                 throw new IllegalArgumentException("양측 물건중 이미 교환 완료된 물건이 존재합니다.");
             product.getProduct().setStatus(ProductStatus.CHANGED);
         });
