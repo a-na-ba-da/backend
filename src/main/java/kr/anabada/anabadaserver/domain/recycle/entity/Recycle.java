@@ -56,7 +56,7 @@ public class Recycle extends BaseTimeEntity {
         this.writer = writer;
     }
 
-    public void setPost(RecyclePostRequest recyclePostRequest) {
+    public void editPost(RecyclePostRequest recyclePostRequest) {
         if (StringUtils.hasText(recyclePostRequest.getTitle()))
             this.title = recyclePostRequest.getTitle();
         if (StringUtils.hasText(recyclePostRequest.getContent()))

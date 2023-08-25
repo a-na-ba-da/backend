@@ -45,7 +45,7 @@ public class RecycleService {
         if(!originalPost.getWriter().getId().equals(writer.getId()))
             throw new IllegalArgumentException("해당 게시물의 작성자가 아닙니다.");
 
-        originalPost.setPost(recyclePostRequest);
+        originalPost.editPost(recyclePostRequest);
     }
 
     @Transactional
