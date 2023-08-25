@@ -82,6 +82,11 @@ public abstract class BuyTogetherRequest {
             throw new IllegalArgumentException("상품 구매처는 온라인 혹은 오프라인 중 하나여야 합니다.");
         }
 
+        // check pay is not null and positive
+        if (pay == null || pay <= 0) {
+            throw new IllegalArgumentException("상대가 지불해야 할 돈은 0 보다 커야합니다.");
+        }
+
 
         if (images == null || images.isEmpty()) {
             // 이미지를 업로드 하지 않았을때

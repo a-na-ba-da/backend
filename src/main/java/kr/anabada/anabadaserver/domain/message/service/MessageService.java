@@ -9,6 +9,8 @@ import kr.anabada.anabadaserver.domain.message.entity.Message;
 import kr.anabada.anabadaserver.domain.message.entity.MessageOrigin;
 import kr.anabada.anabadaserver.domain.message.repository.MessageOriginRepository;
 import kr.anabada.anabadaserver.domain.message.repository.MessageRepository;
+import kr.anabada.anabadaserver.domain.recycle.entity.Recycle;
+import kr.anabada.anabadaserver.domain.recycle.repository.RecycleRepository;
 import kr.anabada.anabadaserver.domain.save.entity.Save;
 import kr.anabada.anabadaserver.domain.save.repository.SaveRepository;
 import kr.anabada.anabadaserver.domain.user.entity.User;
@@ -29,6 +31,7 @@ public class MessageService {
     private final MessageRepository messageRepository;
     private final MessageOriginRepository messageOriginRepository;
     private final SaveRepository saveRepository;
+    private final RecycleRepository recycleRepository;
 
     private MessageType parseSendBy(User me, MessageOrigin messageRoom) {
         return messageRoom.getSender() == me ? MessageType.SENDER_SEND : MessageType.RECEIVER_SEND;
@@ -90,6 +93,7 @@ public class MessageService {
         User postWriter = switch (postType) {
             case BUY_TOGETHER -> checkValidBuyTogether(postId);
             case KNOW_TOGETHER -> checkValidKnowTogether(postId);
+            case RECYCLE -> checkValidRecycle(postId);
             case MY_PRODUCT -> throw new IllegalArgumentException("내 상품에는 메세지를 보낼 수 없습니다.");
         };
 
@@ -101,6 +105,12 @@ public class MessageService {
         }
 
         return postWriter;
+    }
+
+    private User checkValidRecycle(Long postId) {
+        Recycle post = recycleRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
+        return post.getWriter();
     }
 
     private User checkValidKnowTogether(Long postId) {
