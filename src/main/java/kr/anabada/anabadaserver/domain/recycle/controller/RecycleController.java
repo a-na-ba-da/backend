@@ -25,7 +25,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/recycle")
+@RequestMapping("/api/v1/recycling")
 @Tag(name = "다시쓰기", description = "다시쓰기 API 모음")
 public class RecycleController {
     private final RecycleService recycleService;
@@ -33,8 +33,8 @@ public class RecycleController {
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponse(responseCode = "201", description = "다시쓰기 생성 성공")
-    public void createNewRecyclePost(@CurrentUser User user, @RequestBody @Valid RecyclePostRequest recyclePostRequest){
-        if(user == null)
+    public void createNewRecyclePost(@CurrentUser User user, @RequestBody @Valid RecyclePostRequest recyclePostRequest) {
+        if (user == null)
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
 
         recycleService.createNewRecyclePost(user, recyclePostRequest);
@@ -53,7 +53,7 @@ public class RecycleController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponse(responseCode = "204", description = "다시쓰기 삭제 성공")
-    public void deleteRecycelPost(@CurrentUser User user, @PathVariable @NotNull(message = "삭제할 게시물 id가 없습니다.") Long recycleId){
+    public void deleteRecycelPost(@CurrentUser User user, @PathVariable @NotNull(message = "삭제할 게시물 id가 없습니다.") Long recycleId) {
         if (user == null)
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
 
@@ -62,7 +62,7 @@ public class RecycleController {
 
     @GetMapping("")
     @ApiResponse(responseCode = "200", description = "다시쓰기 목록 조회 성공")
-    public GlobalResponse<PageImpl<RecycleResponse>> getRecycleList(@ParameterObject Pageable pageable){
+    public GlobalResponse<PageImpl<RecycleResponse>> getRecycleList(@ParameterObject Pageable pageable) {
         List<RecycleResponse> recycleList = recycleService.getRecycleList(pageable)
                 .stream().map(Recycle::toResponse).toList();
 
@@ -71,7 +71,7 @@ public class RecycleController {
 
     @GetMapping("/{id}")
     @ApiResponse(responseCode = "200", description = "다시쓰기 단건 조회 성공")
-    public GlobalResponse<RecycleResponse> getRecycle(@PathVariable @NotNull(message = "게시물 id를 입력해주세요.") Long id){
+    public GlobalResponse<RecycleResponse> getRecycle(@PathVariable @NotNull(message = "게시물 id를 입력해주세요.") Long id) {
         return new GlobalResponse<>(recycleService.getRecycle(id).toResponse());
     }
 
