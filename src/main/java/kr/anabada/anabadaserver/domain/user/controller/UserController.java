@@ -11,10 +11,7 @@ import kr.anabada.anabadaserver.global.response.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -32,5 +29,18 @@ public class UserController {
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
 
         userService.changeMyInformation(user, request);
+    }
+
+
+    // todo 내 활동 내역 확인
+    @GetMapping("/activity")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponse(responseCode = "200", description = "내 활동 내역 조회 성공")
+    @Operation(summary = "내 활동 내역 조회", description = "내가 작성한 글들을 확인 할 수 있음")
+    public void getMyActivity(@CurrentUser User user) {
+        if (user == null)
+            throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
+
+        userService.getMyActivity(user);
     }
 }

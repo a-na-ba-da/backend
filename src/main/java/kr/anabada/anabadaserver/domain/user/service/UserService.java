@@ -18,4 +18,8 @@ public class UserService {
             user.changeNickname(request.getNickname());
         }
     }
+
+    public void getMyActivity(User user) {
+
+    }
 }
