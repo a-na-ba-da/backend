@@ -1,10 +1,13 @@
 package kr.anabada.anabadaserver.domain.change.service;
 
 import jakarta.persistence.EntityManager;
+import kr.anabada.anabadaserver.domain.change.dto.ChangeRequestStatus;
 import kr.anabada.anabadaserver.domain.change.dto.ProductStatus;
+import kr.anabada.anabadaserver.domain.change.entity.ChangeRequest;
 import kr.anabada.anabadaserver.domain.change.entity.MyProduct;
 import kr.anabada.anabadaserver.domain.change.respository.ProductRepository;
 import kr.anabada.anabadaserver.domain.user.entity.User;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -14,14 +17,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static kr.anabada.anabadaserver.domain.change.dto.ProductStatus.REQUESTING;
+import static kr.anabada.anabadaserver.domain.change.dto.ProductStatus.*;
 import static kr.anabada.anabadaserver.fixture.entity.ProductFixture.createProduct;
 import static kr.anabada.anabadaserver.fixture.entity.UserFixture.craeteUser;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 @SpringBootTest
-@DisplayName("내 물건 교환 신청 서비스")
+@DisplayName("내 물건 교환 신청 서비스에서")
 class ProductChangeServiceTest {
 
     @Autowired
@@ -32,6 +35,169 @@ class ProductChangeServiceTest {
 
     @Autowired
     EntityManager em;
+
+    @Nested
+    @DisplayName("rejectChangeRequest 메소드는")
+    class rejectChangeRequest {
+
+        @Test
+        @DisplayName("모든 인자값이 정상일때 교환 신청이 정상적으로 거절된다.")
+        void success() {
+            // given
+            User requester = craeteUser("requester");
+            User requestee = craeteUser("requestee");
+            em.persist(requester);
+            em.persist(requestee);
+
+            MyProduct requesterProduct = createProduct(requester, "requesterProduct", AVAILABLE);
+            MyProduct requesteeProduct = createProduct(requestee, "requesteeProduct", AVAILABLE);
+            em.persist(requesterProduct);
+            em.persist(requesteeProduct);
+
+            long requestId = productChangeService.changeRequest(requester, requesteeProduct.getId(), List.of(requesterProduct.getId()), "교환신청합니다~");
+
+            // when
+            productChangeService.rejectChangeRequest(requestee, requestId, "거절합니다~");
+
+            // then
+            assertEquals(AVAILABLE, requesterProduct.getStatus());
+            assertEquals(AVAILABLE, requesteeProduct.getStatus());
+            assertEquals(ChangeRequestStatus.REJECTED, em.find(ChangeRequest.class, requestId).getStatus());
+        }
+
+        @Test
+        @DisplayName("requestee 가 아닌 다른 사용자가 교환을 거절하면 예외가 발생한다.")
+        void can_reject_only_requestee() {
+            // given
+            User requester = craeteUser("requester");
+            User requestee = craeteUser("requestee");
+            User another = craeteUser("another");
+            em.persist(requester);
+            em.persist(requestee);
+            em.persist(another);
+
+            MyProduct requesterProduct = createProduct(requester, "requesterProduct", AVAILABLE);
+            MyProduct requesteeProduct = createProduct(requestee, "requesteeProduct", AVAILABLE);
+            em.persist(requesterProduct);
+            em.persist(requesteeProduct);
+
+            long requestId = productChangeService.changeRequest(requester, requesteeProduct.getId(), List.of(requesterProduct.getId()), "교환신청합니다~");
+
+            // when & then
+            Assertions.assertThrows(
+                    IllegalArgumentException.class,
+                    () -> productChangeService.rejectChangeRequest(another, requestId, "거절합니다~"),
+                    "본인에게 온 교환 신청만 거절할 수 있습니다."
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("acceptChangeRequest 메소드는")
+    class acceptChangeRequest {
+
+        @Test
+        @DisplayName("모든 인자값이 정상일때 교환 신청이 정상적으로 수행된다.")
+        void success() {
+            // given
+            User requester = craeteUser("requester");
+            User requestee = craeteUser("requestee");
+            em.persist(requester);
+            em.persist(requestee);
+
+            MyProduct requesterProduct = createProduct(requester, "requesterProduct", AVAILABLE);
+            MyProduct requesteeProduct = createProduct(requestee, "requesteeProduct", AVAILABLE);
+            em.persist(requesterProduct);
+            em.persist(requesteeProduct);
+
+            long requestId = productChangeService.changeRequest(requester, requesteeProduct.getId(), List.of(requesterProduct.getId()), "교환신청합니다~");
+
+            // when
+            productChangeService.acceptChangeRequest(requestee, requestId);
+
+            // then
+            assertEquals(ProductStatus.CHANGED, requesterProduct.getStatus());
+            assertEquals(ProductStatus.CHANGED, requesteeProduct.getStatus());
+            assertEquals(ChangeRequestStatus.ACCEPTED, em.find(ChangeRequest.class, requestId).getStatus());
+        }
+
+        @Test
+        @DisplayName("requestee 가 아닌 다른 사용자가 교환을 수락하면 예외가 발생한다.")
+        void can_accept_change_only_requestee() {
+            // given
+            User requester = craeteUser("requester");
+            User requestee = craeteUser("requestee");
+            User another = craeteUser("another");
+            em.persist(requester);
+            em.persist(requestee);
+            em.persist(another);
+
+            MyProduct requesterProduct = createProduct(requester, "requesterProduct", AVAILABLE);
+            MyProduct requesteeProduct = createProduct(requestee, "requesteeProduct", AVAILABLE);
+            em.persist(requesterProduct);
+            em.persist(requesteeProduct);
+
+            long requestId = productChangeService.changeRequest(requester, requesteeProduct.getId(), List.of(requesterProduct.getId()), "교환신청합니다~");
+
+            // when & then
+            Assertions.assertThrows(
+                    IllegalArgumentException.class,
+                    () -> productChangeService.acceptChangeRequest(another, requestId),
+                    "본인에게 온 교환 신청만 수락할 수 있습니다."
+            );
+        }
+
+        @Test
+        @DisplayName("양측 물건중 하나라도 교환중인 상태가 아니면 교환을 수락할 수 없다.")
+        void can_accept_all_product_status_ok() {
+            // given
+            User requester = craeteUser("requester");
+            User requestee = craeteUser("requestee");
+            em.persist(requester);
+            em.persist(requestee);
+
+            MyProduct requesterProduct = createProduct(requester, "requesterProduct", AVAILABLE);
+            MyProduct requesteeProduct = createProduct(requestee, "requesteeProduct", AVAILABLE);
+            em.persist(requesterProduct);
+            em.persist(requesteeProduct);
+
+            long requestId = productChangeService.changeRequest(requester, requesteeProduct.getId(), List.of(requesterProduct.getId()), "교환신청합니다~");
+
+            requesterProduct.setStatus(CHANGED);
+
+            // when & then
+            Assertions.assertThrows(
+                    IllegalArgumentException.class,
+                    () -> productChangeService.acceptChangeRequest(requester, requestId),
+                    "양측 물건중 이미 교환 완료된 물건이 존재합니다."
+            );
+        }
+
+        @Test
+        @DisplayName("한번 거절한 교환 신청은 다시 수락할 수 없다.")
+        void cant_re_accept_after_reject() {
+            // given
+            User requester = craeteUser("requester");
+            User requestee = craeteUser("requestee");
+            em.persist(requester);
+            em.persist(requestee);
+
+            MyProduct requesterProduct = createProduct(requester, "requesterProduct", AVAILABLE);
+            MyProduct requesteeProduct = createProduct(requestee, "requesteeProduct", AVAILABLE);
+            em.persist(requesterProduct);
+            em.persist(requesteeProduct);
+
+            long requestId = productChangeService.changeRequest(requester, requesteeProduct.getId(), List.of(requesterProduct.getId()), "교환신청합니다~");
+            productChangeService.rejectChangeRequest(requestee, requestId, "거절합니다~");
+
+            // when & then
+            Assertions.assertThrows(
+                    IllegalArgumentException.class,
+                    () -> productChangeService.acceptChangeRequest(requestee, requestId),
+                    "진행중인 교환 신청만 수락할 수 있습니다."
+            );
+        }
+    }
 
     @Nested
     @DisplayName("createChangeRequest 메소드는")
