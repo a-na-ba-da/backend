@@ -175,12 +175,27 @@ class ProductChangeServiceTest {
 
         @Test
         @DisplayName("한번 거절한 교환 신청은 다시 수락할 수 없다.")
-        void test() {
+        void cant_re_accept_after_reject() {
             // given
+            User requester = craeteUser("requester");
+            User requestee = craeteUser("requestee");
+            em.persist(requester);
+            em.persist(requestee);
 
-            // when
+            MyProduct requesterProduct = createProduct(requester, "requesterProduct", AVAILABLE);
+            MyProduct requesteeProduct = createProduct(requestee, "requesteeProduct", AVAILABLE);
+            em.persist(requesterProduct);
+            em.persist(requesteeProduct);
 
-            // then
+            long requestId = productChangeService.changeRequest(requester, requesteeProduct.getId(), List.of(requesterProduct.getId()), "교환신청합니다~");
+            productChangeService.rejectChangeRequest(requestee, requestId, "거절합니다~");
+
+            // when & then
+            Assertions.assertThrows(
+                    IllegalArgumentException.class,
+                    () -> productChangeService.acceptChangeRequest(requestee, requestId),
+                    "진행중인 교환 신청만 수락할 수 있습니다."
+            );
         }
     }
 
