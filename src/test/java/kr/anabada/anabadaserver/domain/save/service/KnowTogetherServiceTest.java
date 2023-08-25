@@ -1,16 +1,17 @@
 package kr.anabada.anabadaserver.domain.save.service;
 
 import jakarta.persistence.EntityManager;
-import kr.anabada.anabadaserver.common.service.ImageService;
+import kr.anabada.anabadaserver.domain.ServiceTestWithoutImageUpload;
 import kr.anabada.anabadaserver.domain.save.dto.request.KnowTogetherOfflineRequest;
 import kr.anabada.anabadaserver.domain.save.dto.request.KnowTogetherOnlineRequest;
 import kr.anabada.anabadaserver.domain.save.dto.request.KnowTogetherRequest;
 import kr.anabada.anabadaserver.domain.save.entity.Save;
 import kr.anabada.anabadaserver.domain.user.entity.User;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,28 +19,16 @@ import java.util.List;
 
 import static kr.anabada.anabadaserver.fixture.entity.UserFixture.createUser;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doNothing;
 
 @Transactional
-@SpringBootTest
 @DisplayName("아껴쓰기 서비스 - 같이 알아요")
-class KnowTogetherServiceTest {
-
-    @MockBean
-    private ImageService imageService;
+class KnowTogetherServiceTest extends ServiceTestWithoutImageUpload {
 
     @Autowired
     private KnowTogetherService knowTogetherService;
 
     @Autowired
     private EntityManager em;
-
-    @BeforeEach
-    void ignoreImageUpload() {
-        doNothing().when(imageService).attach(anyLong(), anyList(), anyLong());
-    }
 
     @Nested
     @DisplayName("같이 알아요 CASE 1 : 온라인 구매 꿀팁 관련")
