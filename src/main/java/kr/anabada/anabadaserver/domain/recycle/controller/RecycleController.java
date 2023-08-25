@@ -40,7 +40,7 @@ public class RecycleController {
         recycleService.createNewRecyclePost(user, recyclePostRequest);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{recycleId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponse(responseCode = "201", description = "다시쓰기 수정 성공")
     public void modifyRecyclePost(@CurrentUser User user, @PathVariable @NotNull(message = "게시물 id를 입력해주세요.") Long recycleId, @RequestBody @Valid RecyclePostRequest recyclePostRequest) {
@@ -50,7 +50,7 @@ public class RecycleController {
         recycleService.modifyRecyclePost(user, recycleId, recyclePostRequest);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{recycleId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponse(responseCode = "204", description = "다시쓰기 삭제 성공")
     public void deleteRecycelPost(@CurrentUser User user, @PathVariable @NotNull(message = "삭제할 게시물 id가 없습니다.") Long recycleId) {
