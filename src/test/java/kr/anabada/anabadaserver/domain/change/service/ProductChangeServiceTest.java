@@ -54,8 +54,7 @@ class ProductChangeServiceTest {
             em.persist(requesterProduct);
             em.persist(requesteeProduct);
 
-            productChangeService.changeRequest(requester, requesteeProduct.getId(), List.of(requesterProduct.getId()), "교환신청합니다~");
-            Long requestId = productChangeService.getAllChangeRequest(requestee).getRequestingForMeList().get(0).getId();
+            long requestId = productChangeService.changeRequest(requester, requesteeProduct.getId(), List.of(requesterProduct.getId()), "교환신청합니다~");
 
             // when
             productChangeService.rejectChangeRequest(requestee, requestId, "거절합니다~");
@@ -82,8 +81,7 @@ class ProductChangeServiceTest {
             em.persist(requesterProduct);
             em.persist(requesteeProduct);
 
-            productChangeService.changeRequest(requester, requesteeProduct.getId(), List.of(requesterProduct.getId()), "교환신청합니다~");
-            Long requestId = productChangeService.getAllChangeRequest(requestee).getRequestingForMeList().get(0).getId();
+            long requestId = productChangeService.changeRequest(requester, requesteeProduct.getId(), List.of(requesterProduct.getId()), "교환신청합니다~");
 
             // when & then
             Assertions.assertThrows(
@@ -112,8 +110,7 @@ class ProductChangeServiceTest {
             em.persist(requesterProduct);
             em.persist(requesteeProduct);
 
-            productChangeService.changeRequest(requester, requesteeProduct.getId(), List.of(requesterProduct.getId()), "교환신청합니다~");
-            Long requestId = productChangeService.getAllChangeRequest(requestee).getRequestingForMeList().get(0).getId();
+            long requestId = productChangeService.changeRequest(requester, requesteeProduct.getId(), List.of(requesterProduct.getId()), "교환신청합니다~");
 
             // when
             productChangeService.acceptChangeRequest(requestee, requestId);
@@ -140,8 +137,7 @@ class ProductChangeServiceTest {
             em.persist(requesterProduct);
             em.persist(requesteeProduct);
 
-            productChangeService.changeRequest(requester, requesteeProduct.getId(), List.of(requesterProduct.getId()), "교환신청합니다~");
-            Long requestId = productChangeService.getAllChangeRequest(requestee).getRequestingForMeList().get(0).getId();
+            long requestId = productChangeService.changeRequest(requester, requesteeProduct.getId(), List.of(requesterProduct.getId()), "교환신청합니다~");
 
             // when & then
             Assertions.assertThrows(
@@ -165,8 +161,7 @@ class ProductChangeServiceTest {
             em.persist(requesterProduct);
             em.persist(requesteeProduct);
 
-            productChangeService.changeRequest(requester, requesteeProduct.getId(), List.of(requesterProduct.getId()), "교환신청합니다~");
-            Long requestId = productChangeService.getAllChangeRequest(requestee).getRequestingForMeList().get(0).getId();
+            long requestId = productChangeService.changeRequest(requester, requesteeProduct.getId(), List.of(requesterProduct.getId()), "교환신청합니다~");
 
             requesterProduct.setStatus(CHANGED);
 

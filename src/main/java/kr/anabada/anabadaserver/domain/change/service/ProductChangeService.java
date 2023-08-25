@@ -34,7 +34,7 @@ public class ProductChangeService {
     }
 
     @Transactional
-    public void changeRequest(User requestUser, long targetProductId, List<Long> toChangeProductIds, String message) {
+    public long changeRequest(User requestUser, long targetProductId, List<Long> toChangeProductIds, String message) {
         if (toChangeProductIds == null || toChangeProductIds.isEmpty())
             throw new IllegalArgumentException("교환 신청할 물건은 최소 1개 이상이어야 합니다.");
 
@@ -77,6 +77,7 @@ public class ProductChangeService {
                 .toList();
 
         requestProductRepository.saveAll(changeProducts);
+        return request.getId();
     }
 
     @Transactional
