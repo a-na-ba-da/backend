@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 @SpringBootTest
-@DisplayName("내 물건 교환 신청 서비스")
+@DisplayName("내 물건 교환 신청 서비스에서")
 class ProductChangeServiceTest {
 
     @Autowired
