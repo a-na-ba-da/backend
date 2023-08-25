@@ -53,7 +53,7 @@ public class RecycleController {
     @DeleteMapping("/{recycleId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponse(responseCode = "204", description = "다시쓰기 삭제 성공")
-    public void deleteRecycelPost(@CurrentUser User user, @PathVariable @NotNull(message = "삭제할 게시물 id가 없습니다.") Long recycleId) {
+    public void deleteRecyclePost(@CurrentUser User user, @PathVariable @NotNull(message = "삭제할 게시물 id가 없습니다.") Long recycleId) {
         if (user == null)
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
 
