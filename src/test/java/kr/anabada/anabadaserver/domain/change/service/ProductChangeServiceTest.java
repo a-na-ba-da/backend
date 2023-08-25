@@ -1,7 +1,9 @@
 package kr.anabada.anabadaserver.domain.change.service;
 
 import jakarta.persistence.EntityManager;
+import kr.anabada.anabadaserver.domain.change.dto.ChangeRequestStatus;
 import kr.anabada.anabadaserver.domain.change.dto.ProductStatus;
+import kr.anabada.anabadaserver.domain.change.entity.ChangeRequest;
 import kr.anabada.anabadaserver.domain.change.entity.MyProduct;
 import kr.anabada.anabadaserver.domain.change.respository.ProductRepository;
 import kr.anabada.anabadaserver.domain.user.entity.User;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static kr.anabada.anabadaserver.domain.change.dto.ProductStatus.AVAILABLE;
 import static kr.anabada.anabadaserver.domain.change.dto.ProductStatus.REQUESTING;
 import static kr.anabada.anabadaserver.fixture.entity.ProductFixture.createProduct;
 import static kr.anabada.anabadaserver.fixture.entity.UserFixture.craeteUser;
@@ -32,6 +35,37 @@ class ProductChangeServiceTest {
 
     @Autowired
     EntityManager em;
+
+    @Nested
+    @DisplayName("acceptChangeRequest 메소드는")
+    class acceptChangeRequest {
+
+        @Test
+        @DisplayName("모든 인자값이 정상일때 교환 신청이 정상적으로 수행된다.")
+        void success() {
+            // given
+            User requester = craeteUser("requester");
+            User requestee = craeteUser("requestee");
+            em.persist(requester);
+            em.persist(requestee);
+
+            MyProduct requesterProduct = createProduct(requester, "requesterProduct", AVAILABLE);
+            MyProduct requesteeProduct = createProduct(requestee, "requesteeProduct", AVAILABLE);
+            em.persist(requesterProduct);
+            em.persist(requesteeProduct);
+
+            productChangeService.changeRequest(requester, requesteeProduct.getId(), List.of(requesterProduct.getId()), "교환신청합니다~");
+            Long requestId = productChangeService.getAllChangeRequest(requestee).getRequestingForMeList().get(0).getId();
+
+            // when
+            productChangeService.acceptChangeRequest(requestee, requesterProduct.getId());
+
+            // then
+            assertEquals(ProductStatus.CHANGED, requesterProduct.getStatus());
+            assertEquals(ProductStatus.CHANGED, requesteeProduct.getStatus());
+            assertEquals(ChangeRequestStatus.ACCEPTED, em.find(ChangeRequest.class, requestId).getStatus());
+        }
+    }
 
     @Nested
     @DisplayName("createChangeRequest 메소드는")
