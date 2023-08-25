@@ -46,6 +46,8 @@ public class RecycleService {
             throw new IllegalArgumentException("해당 게시물의 작성자가 아닙니다.");
 
         originalPost.editPost(recyclePostRequest);
+
+        // TODO 이미지 수정
     }
 
     @Transactional
