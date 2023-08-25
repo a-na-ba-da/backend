@@ -6,7 +6,8 @@ import lombok.Getter;
 public enum DomainType {
     BUY_TOGETHER("같이 사요"),
     KNOW_TOGETHER("같이 알아요"),
-    MY_PRODUCT("내 상품");
+    MY_PRODUCT("내 상품"),
+    RECYCLE("다시쓰기");
 
     private final String ko;
 
