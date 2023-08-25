@@ -66,6 +66,32 @@ class ProductChangeServiceTest {
             assertEquals(ChangeRequestStatus.REJECTED, em.find(ChangeRequest.class, requestId).getStatus());
         }
 
+        @Test
+        @DisplayName("requestee 가 아닌 다른 사용자가 교환을 거절하면 예외가 발생한다.")
+        void can_reject_only_requestee() {
+            // given
+            User requester = craeteUser("requester");
+            User requestee = craeteUser("requestee");
+            User another = craeteUser("another");
+            em.persist(requester);
+            em.persist(requestee);
+            em.persist(another);
+
+            MyProduct requesterProduct = createProduct(requester, "requesterProduct", AVAILABLE);
+            MyProduct requesteeProduct = createProduct(requestee, "requesteeProduct", AVAILABLE);
+            em.persist(requesterProduct);
+            em.persist(requesteeProduct);
+
+            productChangeService.changeRequest(requester, requesteeProduct.getId(), List.of(requesterProduct.getId()), "교환신청합니다~");
+            Long requestId = productChangeService.getAllChangeRequest(requestee).getRequestingForMeList().get(0).getId();
+
+            // when & then
+            Assertions.assertThrows(
+                    IllegalArgumentException.class,
+                    () -> productChangeService.rejectChangeRequest(another, requesterProduct.getId(), "거절합니다~"),
+                    "본인에게 온 교환 신청만 거절할 수 있습니다."
+            );
+        }
     }
 
     @Nested
