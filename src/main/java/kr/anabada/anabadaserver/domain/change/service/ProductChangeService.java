@@ -97,12 +97,29 @@ public class ProductChangeService {
         if (changeRequest.getTargetProduct().getStatus() != ProductStatus.REQUESTING)
             throw new IllegalArgumentException("양측 물건중 이미 교환 완료된 물건이 존재합니다.");
 
-
         changeRequest.getTargetProduct().setStatus(ProductStatus.CHANGED);
         changeRequest.getToChangeProducts().forEach(product -> {
             if (product.getProduct().getStatus() != ProductStatus.REQUESTING)
                 throw new IllegalArgumentException("양측 물건중 이미 교환 완료된 물건이 존재합니다.");
             product.getProduct().setStatus(ProductStatus.CHANGED);
         });
+    }
+
+    @Transactional
+    public void rejectChangeRequest(User user, Long changeRequestId, String rejectMessage) {
+        // check is for me
+        ChangeRequest changeRequest = changeRequestRepository.findById(changeRequestId).orElseThrow(() -> new IllegalArgumentException("교환 신청이 존재하지 않습니다."));
+        if (!Objects.equals(changeRequest.getRequestee().getId(), user.getId()))
+            throw new IllegalArgumentException("본인에게 온 교환 신청만 거절할 수 있습니다.");
+
+        // check is requesting
+        if (changeRequest.getStatus() != ChangeRequestStatus.REQUESTING)
+            throw new IllegalArgumentException("진행중인 교환 신청만 거절할 수 있습니다.");
+
+        // change status to rejected
+        changeRequest.setStatus(ChangeRequestStatus.REJECTED);
+
+        // change product statuses to AVAILABLE
+        changeRequest.getToChangeProducts().forEach(product -> product.getProduct().setStatus(ProductStatus.AVAILABLE));
     }
 }
