@@ -3,13 +3,14 @@ package kr.anabada.anabadaserver.fixture.dto;
 import kr.anabada.anabadaserver.domain.recycle.dto.request.RecyclePostRequest;
 
 import java.util.List;
+import java.util.UUID;
 
 public class RecycleFixture {
     public static RecyclePostRequest createRecycle(){
         return RecyclePostRequest.builder()
                 .title("title")
                 .content("content")
-                .images(List.of("image1", "image2"))
+                .images(List.of(UUID.randomUUID().toString(), UUID.randomUUID().toString()))
                 .build();
     }
 
@@ -17,7 +18,7 @@ public class RecycleFixture {
         return RecyclePostRequest.builder()
                 .title("modifyTitle")
                 .content("modifyContent")
-                .images(List.of("image3", "image4"))
+                .images(List.of(UUID.randomUUID().toString(), UUID.randomUUID().toString()))
                 .build();
     }
 }

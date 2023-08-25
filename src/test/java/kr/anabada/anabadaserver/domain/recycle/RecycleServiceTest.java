@@ -166,7 +166,7 @@ public class RecycleServiceTest {
 
         RecyclePostRequest recyclePostRequest = createRecycle();
         Recycle newRecyclePost = recycleService.createNewRecyclePost(user, recyclePostRequest);
-        entityManager.persist(newRecyclePost);
+        recycleService.deleteRecyclePost(user, newRecyclePost.getId());
 
         // when & then
         Assertions.assertThrows(IllegalArgumentException.class, () -> {

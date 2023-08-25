@@ -43,7 +43,7 @@ public class RecycleController {
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponse(responseCode = "201", description = "다시쓰기 수정 성공")
-    public void modifyRecyclePost(@CurrentUser User user, Long recycleId, @RequestBody @Valid RecyclePostRequest recyclePostRequest) {
+    public void modifyRecyclePost(@CurrentUser User user, @PathVariable @NotNull(message = "게시물 id를 입력해주세요.") Long recycleId, @RequestBody @Valid RecyclePostRequest recyclePostRequest) {
         if (user == null)
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
 
@@ -53,7 +53,7 @@ public class RecycleController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponse(responseCode = "204", description = "다시쓰기 삭제 성공")
-    public void deleteRecycelPost(@CurrentUser User user, Long recycleId){
+    public void deleteRecycelPost(@CurrentUser User user, @PathVariable @NotNull(message = "삭제할 게시물 id가 없습니다.") Long recycleId){
         if (user == null)
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
 

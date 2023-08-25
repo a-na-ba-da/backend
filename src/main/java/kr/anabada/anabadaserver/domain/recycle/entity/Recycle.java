@@ -56,22 +56,12 @@ public class Recycle extends BaseTimeEntity {
     @Column(name = "is_removed", nullable = false)
     private Boolean isRemoved = false;
 
-    @BatchSize(size = 100)
-    @JoinColumn(name = "post_id")
-    @OneToMany(fetch = FetchType.LAZY)
-    @Where(clause = "image_type = 'RECYCLE'")
-    private List<Image> images;
+//    @BatchSize(size = 100)
+//    @JoinColumn(name = "post_id")
+//    @OneToMany(fetch = FetchType.LAZY)
+//    @Where(clause = "image_type = 'RECYCLE'")
+//    private List<Image> images;
 
-    @Builder
-    public Recycle(BaseTimeEntityBuilder<?, ?> b, Long id, String title, User writer, String content, Boolean isRemoved, List<Image> images) {
-        super(b);
-        this.id = id;
-        this.title = title;
-        this.writer = writer;
-        this.content = content;
-        this.isRemoved = isRemoved;
-        this.images = images;
-    }
 
     public void setWriter(User writer) {
         this.writer = writer;
@@ -90,7 +80,7 @@ public class Recycle extends BaseTimeEntity {
                 .title(getTitle())
                 .content(getContent())
                 .writer(getWriter().toDto())
-                .images(images.stream().map(Image::getId).map(UUID::toString).toList())
+//                .images(images.stream().map(Image::getId).map(UUID::toString).toList())
                 .build();
     }
 }
