@@ -256,5 +256,37 @@ class BuyTogetherServiceTest extends ServiceTestWithoutImageUpload {
                 buyTogetherService.getPost(post.getId());
             }, "해당 게시물이 없습니다.");
         }
+
+        @Test
+        @DisplayName("금액 정보가 없으면 작성에 실패한다.")
+        void fail_when_pay_is_null() {
+            // given
+            User user = createUser("test@test.com", "test");
+            em.persist(user);
+
+            BuyTogetherRequest request = createBuyTogetherMeet(true);
+            ReflectionTestUtils.setField(request, "pay", null);
+
+            // when & then
+            Assertions.assertThrows(IllegalArgumentException.class, () -> {
+                buyTogetherService.createNewBuyTogetherPost(user, request);
+            }, "상대가 지불해야 할 돈은 0 보다 커야합니다.");
+        }
+
+        @Test
+        @DisplayName("금액 정보가 음수값이면 작성에 실패한다.")
+        void fail_when_pay_is_negative() {
+            // given
+            User user = createUser("test@test.com", "test");
+            em.persist(user);
+
+            BuyTogetherRequest request = createBuyTogetherMeet(true);
+            ReflectionTestUtils.setField(request, "pay", -10);
+
+            // when & then
+            Assertions.assertThrows(IllegalArgumentException.class, () -> {
+                buyTogetherService.createNewBuyTogetherPost(user, request);
+            }, "상대가 지불해야 할 돈은 0 보다 커야합니다.");
+        }
     }
 }
