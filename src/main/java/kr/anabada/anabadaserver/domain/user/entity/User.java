@@ -41,4 +41,8 @@ public class User {
                 .activated(activated)
                 .build();
     }
+
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
+    }
 }
