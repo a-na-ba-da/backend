@@ -13,7 +13,6 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -26,7 +25,6 @@ import java.util.UUID;
 @SuperBuilder
 @Table(name = "recycle")
 @Where(clause = "is_removed = false")
-@EntityListeners(AuditingEntityListener.class)
 @SQLDelete(sql = "UPDATE recycle SET is_removed = true WHERE id = ?")
 public class Recycle extends BaseTimeEntity {
     @Id
