@@ -33,14 +33,14 @@ class RecycleServiceTest {
     private RecycleService recycleService;
 
     @Autowired
-    private EntityManager entityManager;
+    private EntityManager em;
 
     @Test
     @DisplayName("모든 파라메타가 정상이라면, 게시글 작성에 성공한다.")
     void createNewRecyclePost_Success() {
         // given
         User user = createUser("test@test.com", "testUser");
-        entityManager.persist(user);
+        em.persist(user);
 
         RecyclePostRequest recyclePostRequest = createRecycle();
 
@@ -59,7 +59,7 @@ class RecycleServiceTest {
     void createNewRecyclePost_Failure() {
         // given
         User user = createUser("test@test.com", "testUser");
-        entityManager.persist(user);
+        em.persist(user);
 
         RecyclePostRequest recyclePostRequest = createRecycle();
         ReflectionTestUtils.setField(recyclePostRequest, "images", null);
@@ -75,11 +75,11 @@ class RecycleServiceTest {
     void deleteRecyclePost_Success() {
         // given
         User user = createUser("test@test.com", "testUser");
-        entityManager.persist(user);
+        em.persist(user);
 
         RecyclePostRequest recyclePostRequest = createRecycle();
         Recycle newRecyclePost = recycleService.createNewRecyclePost(user, recyclePostRequest);
-        entityManager.persist(newRecyclePost);
+        em.persist(newRecyclePost);
 
         // when & then
         Assertions.assertDoesNotThrow(() -> {
@@ -93,12 +93,12 @@ class RecycleServiceTest {
         // given
         User poster = createUser("poster@test.com", "poster");
         User notPoster = createUser("notPoster@test.com", "notPoster");
-        entityManager.persist(poster);
-        entityManager.persist(notPoster);
+        em.persist(poster);
+        em.persist(notPoster);
 
         RecyclePostRequest recyclePostRequest = createRecycle();
         Recycle newRecyclePost = recycleService.createNewRecyclePost(poster, recyclePostRequest);
-        entityManager.persist(newRecyclePost);
+        em.persist(newRecyclePost);
 
         // when & then
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
@@ -111,11 +111,11 @@ class RecycleServiceTest {
     void modifyRecyclePost_Success() {
         // given
         User user = createUser("test@test.com", "testUser");
-        entityManager.persist(user);
+        em.persist(user);
 
         RecyclePostRequest recyclePostRequest = createRecycle();
         Recycle newRecyclePost = recycleService.createNewRecyclePost(user, recyclePostRequest);
-        entityManager.persist(newRecyclePost);
+        em.persist(newRecyclePost);
 
         // when & then
         Assertions.assertDoesNotThrow(() -> {
@@ -130,12 +130,12 @@ class RecycleServiceTest {
         // given
         User poster = createUser("poster@test.com", "poster");
         User notPoster = createUser("notPoster@test.com", "notPoster");
-        entityManager.persist(poster);
-        entityManager.persist(notPoster);
+        em.persist(poster);
+        em.persist(notPoster);
 
         RecyclePostRequest recyclePostRequest = createRecycle();
         Recycle newRecyclePost = recycleService.createNewRecyclePost(poster, recyclePostRequest);
-        entityManager.persist(newRecyclePost);
+        em.persist(newRecyclePost);
 
         // when & then
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
@@ -148,11 +148,11 @@ class RecycleServiceTest {
     void getRecyclePost_Success() {
         // given
         User user = createUser("test@test.com", "testUser");
-        entityManager.persist(user);
+        em.persist(user);
 
         RecyclePostRequest recyclePostRequest = createRecycle();
         Recycle newRecyclePost = recycleService.createNewRecyclePost(user, recyclePostRequest);
-        entityManager.persist(newRecyclePost);
+        em.persist(newRecyclePost);
 
         // when & then
         Assertions.assertDoesNotThrow(() -> {
@@ -165,7 +165,7 @@ class RecycleServiceTest {
     void getRecyclePost_Failure() {
         // given
         User user = createUser("test@test.com", "testUser");
-        entityManager.persist(user);
+        em.persist(user);
 
         RecyclePostRequest recyclePostRequest = createRecycle();
         Recycle newRecyclePost = recycleService.createNewRecyclePost(user, recyclePostRequest);
