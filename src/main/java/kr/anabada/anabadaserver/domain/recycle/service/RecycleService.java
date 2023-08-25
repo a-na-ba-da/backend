@@ -42,7 +42,7 @@ public class RecycleService {
         Recycle originalPost = recycleRepository.findByIdAndWriter(recycleId, writer)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
 
-        if(!originalPost.getWriter().getId().equals(writer.getId()))
+        if (!originalPost.getWriter().getId().equals(writer.getId()))
             throw new IllegalArgumentException("해당 게시물의 작성자가 아닙니다.");
 
         originalPost.editPost(recyclePostRequest);
@@ -53,7 +53,7 @@ public class RecycleService {
         Recycle recycle = recycleRepository.findByIdAndWriter(recycleId, writer)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
 
-        if(!recycle.getWriter().getId().equals(writer.getId()))
+        if (!recycle.getWriter().getId().equals(writer.getId()))
             throw new IllegalArgumentException("해당 게시물의 작성자가 아닙니다.");
 
         recycleRepository.delete(recycle);
