@@ -10,6 +10,7 @@ import kr.anabada.anabadaserver.global.response.CustomException;
 import kr.anabada.anabadaserver.global.response.ErrorCode;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,9 +21,11 @@ import static kr.anabada.anabadaserver.fixture.dto.RecycleFixture.createRecycle;
 import static kr.anabada.anabadaserver.fixture.dto.RecycleFixture.modifyRecycle;
 import static kr.anabada.anabadaserver.fixture.entity.UserFixture.createUser;
 
+@Nested
 @Transactional
 @SpringBootTest
-public class RecycleServiceTest {
+@DisplayName("Recycle 서비스 테스트")
+class RecycleServiceTest {
     @Autowired
     private RecycleRepository recycleRepository;
 
@@ -33,7 +36,7 @@ public class RecycleServiceTest {
     private EntityManager entityManager;
 
     @Test
-    @DisplayName("게시글 작성 성공")
+    @DisplayName("모든 파라메타가 정상이라면, 게시글 작성에 성공한다.")
     void createNewRecyclePost_Success() {
         // given
         User user = createUser("test@test.com", "testUser");
@@ -52,8 +55,8 @@ public class RecycleServiceTest {
 
 
     @Test
-    @DisplayName("글 작성 시 이미지가 없는 경우, 작성 실패")
-    void createNewRecyclePost_Failure(){
+    @DisplayName("글 작성 시 이미지가 없는 경우, 작성에 실패한다.")
+    void createNewRecyclePost_Failure() {
         // given
         User user = createUser("test@test.com", "testUser");
         entityManager.persist(user);
@@ -68,8 +71,8 @@ public class RecycleServiceTest {
     }
 
     @Test
-    @DisplayName("본인이 작성한 글일 경우, 삭제 성공")
-    void deleteRecyclePost_Success(){
+    @DisplayName("본인이 작성한 글일 경우, 삭제할 수 있다.")
+    void deleteRecyclePost_Success() {
         // given
         User user = createUser("test@test.com", "testUser");
         entityManager.persist(user);
@@ -85,7 +88,7 @@ public class RecycleServiceTest {
     }
 
     @Test
-    @DisplayName("본인이 작성한 글이 아닐 경우, 삭제 실패")
+    @DisplayName("본인이 작성한 글이 아닐 경우, 삭제 할 수 없다.")
     void deleteRecyclePost_Failure() {
         // given
         User poster = createUser("poster@test.com", "poster");
@@ -104,7 +107,7 @@ public class RecycleServiceTest {
     }
 
     @Test
-    @DisplayName("본인이 작성한 글일 경우, 수정 성공")
+    @DisplayName("본인이 작성한 글일 경우, 수정 할 수 있다.")
     void modifyRecyclePost_Success() {
         // given
         User user = createUser("test@test.com", "testUser");
@@ -122,7 +125,7 @@ public class RecycleServiceTest {
 
 
     @Test
-    @DisplayName("본인이 작성한 글이 아닐 경우, 수정 실패")
+    @DisplayName("본인이 작성한 글이 아닐 경우, 수정 할 수 없다.")
     void modifyRecyclePost_Failure() {
         // given
         User poster = createUser("poster@test.com", "poster");
@@ -141,8 +144,8 @@ public class RecycleServiceTest {
     }
 
     @Test
-    @DisplayName("삭제되지 않은 글이라면, 조회 가능")
-    void getRecyclePost_Success(){
+    @DisplayName("삭제되지 않은 글이라면, 조회 가능하다.")
+    void getRecyclePost_Success() {
         // given
         User user = createUser("test@test.com", "testUser");
         entityManager.persist(user);
@@ -158,8 +161,8 @@ public class RecycleServiceTest {
     }
 
     @Test
-    @DisplayName("삭제된 글이라면, 조회 불가능")
-    void getRecyclePost_Failure(){
+    @DisplayName("삭제된 글이라면, 조회가 불가능하다.")
+    void getRecyclePost_Failure() {
         // given
         User user = createUser("test@test.com", "testUser");
         entityManager.persist(user);
