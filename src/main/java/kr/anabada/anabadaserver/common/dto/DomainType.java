@@ -1,5 +1,8 @@
 package kr.anabada.anabadaserver.common.dto;
 
+import lombok.Getter;
+
+@Getter
 public enum DomainType {
     BUY_TOGETHER("같이 사요"),
     KNOW_TOGETHER("같이 알아요"),
@@ -19,7 +22,4 @@ public enum DomainType {
         throw new IllegalArgumentException("존재하지 않는 도메인 타입입니다.");
     }
 
-    public String getKo() {
-        return ko;
-    }
 }
