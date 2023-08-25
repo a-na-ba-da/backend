@@ -56,7 +56,7 @@ public class ProductChangeController {
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/accept/{changeRequestId}")
+    @PostMapping("/accept/{changeRequestId}")
     @Operation(
             summary = "바꿔쓰기 요청 수락"
     )
