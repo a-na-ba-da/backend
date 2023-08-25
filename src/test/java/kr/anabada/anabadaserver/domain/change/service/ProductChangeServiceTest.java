@@ -177,6 +177,16 @@ class ProductChangeServiceTest {
                     "양측 물건중 이미 교환 완료된 물건이 존재합니다."
             );
         }
+
+        @Test
+        @DisplayName("한번 거절한 교환 신청은 다시 수락할 수 없다.")
+        void test() {
+            // given
+
+            // when
+
+            // then
+        }
     }
 
     @Nested
