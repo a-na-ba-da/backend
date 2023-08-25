@@ -7,6 +7,7 @@ import kr.anabada.anabadaserver.domain.change.entity.ChangeRequest;
 import kr.anabada.anabadaserver.domain.change.entity.MyProduct;
 import kr.anabada.anabadaserver.domain.change.respository.ProductRepository;
 import kr.anabada.anabadaserver.domain.user.entity.User;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -64,6 +65,32 @@ class ProductChangeServiceTest {
             assertEquals(ProductStatus.CHANGED, requesterProduct.getStatus());
             assertEquals(ProductStatus.CHANGED, requesteeProduct.getStatus());
             assertEquals(ChangeRequestStatus.ACCEPTED, em.find(ChangeRequest.class, requestId).getStatus());
+        }
+
+        @Test
+        @DisplayName("requestee 가 아닌 다른 사용자가 교환을 수락하면 예외가 발생한다.")
+        void can_accept_change_only_requestee() {
+            // given
+            User requester = craeteUser("requester");
+            User requestee = craeteUser("requestee");
+            User another = craeteUser("another");
+            em.persist(requester);
+            em.persist(requestee);
+
+            MyProduct requesterProduct = createProduct(requester, "requesterProduct", AVAILABLE);
+            MyProduct requesteeProduct = createProduct(requestee, "requesteeProduct", AVAILABLE);
+            em.persist(requesterProduct);
+            em.persist(requesteeProduct);
+
+            productChangeService.changeRequest(requester, requesteeProduct.getId(), List.of(requesterProduct.getId()), "교환신청합니다~");
+            Long requestId = productChangeService.getAllChangeRequest(requestee).getRequestingForMeList().get(0).getId();
+
+            // when & then
+            Assertions.assertThrows(
+                    IllegalArgumentException.class,
+                    () -> productChangeService.acceptChangeRequest(another, requesterProduct.getId()),
+                    "본인에게 온 교환 신청만 수락할 수 있습니다."
+            );
         }
     }
 
