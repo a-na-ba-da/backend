@@ -54,4 +54,20 @@ public class ProductChangeController {
 
         productChangeService.changeRequest(user, targetProductId, myProductIds, message);
     }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/accept/{changeRequestId}")
+    @Operation(
+            summary = "바꿔쓰기 요청 수락"
+    )
+    public void acceptChangeRequest(@CurrentUser User user,
+                                    @Schema(description = "바꿔쓰기 요청 ID", required = true, example = "1")
+                                    @PathVariable Long changeRequestId) {
+        if (user == null)
+            throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
+        if (changeRequestId == null)
+            throw new IllegalArgumentException("changeRequestId를 입력해주세요.");
+
+        productChangeService.acceptChangeRequest(user, changeRequestId);
+    }
 }

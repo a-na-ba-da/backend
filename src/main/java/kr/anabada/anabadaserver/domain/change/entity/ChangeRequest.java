@@ -58,4 +58,9 @@ public class ChangeRequest extends BaseTimeEntity {
         this.rejectMessage = rejectMessage;
         this.status = status;
     }
+
+    public void setStatus(ChangeRequestStatus changeRequestStatus) {
+        if (changeRequestStatus != null)
+            this.status = changeRequestStatus;
+    }
 }
