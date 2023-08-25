@@ -17,8 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static kr.anabada.anabadaserver.domain.change.dto.ProductStatus.AVAILABLE;
-import static kr.anabada.anabadaserver.domain.change.dto.ProductStatus.REQUESTING;
+import static kr.anabada.anabadaserver.domain.change.dto.ProductStatus.*;
 import static kr.anabada.anabadaserver.fixture.entity.ProductFixture.createProduct;
 import static kr.anabada.anabadaserver.fixture.entity.UserFixture.craeteUser;
 import static org.junit.jupiter.api.Assertions.*;
@@ -76,6 +75,7 @@ class ProductChangeServiceTest {
             User another = craeteUser("another");
             em.persist(requester);
             em.persist(requestee);
+            em.persist(another);
 
             MyProduct requesterProduct = createProduct(requester, "requesterProduct", AVAILABLE);
             MyProduct requesteeProduct = createProduct(requestee, "requesteeProduct", AVAILABLE);
@@ -90,6 +90,33 @@ class ProductChangeServiceTest {
                     IllegalArgumentException.class,
                     () -> productChangeService.acceptChangeRequest(another, requesterProduct.getId()),
                     "본인에게 온 교환 신청만 수락할 수 있습니다."
+            );
+        }
+
+        @Test
+        @DisplayName("양측 물건중 하나라도 교환중인 상태가 아니면 교환을 수락할 수 없다.")
+        void can_accept_all_product_status_ok() {
+            // given
+            User requester = craeteUser("requester");
+            User requestee = craeteUser("requestee");
+            em.persist(requester);
+            em.persist(requestee);
+
+            MyProduct requesterProduct = createProduct(requester, "requesterProduct", AVAILABLE);
+            MyProduct requesteeProduct = createProduct(requestee, "requesteeProduct", AVAILABLE);
+            em.persist(requesterProduct);
+            em.persist(requesteeProduct);
+
+            productChangeService.changeRequest(requester, requesteeProduct.getId(), List.of(requesterProduct.getId()), "교환신청합니다~");
+            Long requestId = productChangeService.getAllChangeRequest(requestee).getRequestingForMeList().get(0).getId();
+
+            requesterProduct.setStatus(CHANGED);
+
+            // when & then
+            Assertions.assertThrows(
+                    IllegalArgumentException.class,
+                    () -> productChangeService.acceptChangeRequest(requester, requesterProduct.getId()),
+                    "양측 물건중 이미 교환 완료된 물건이 존재합니다."
             );
         }
     }
