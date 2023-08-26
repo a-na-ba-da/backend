@@ -35,6 +35,7 @@ public class CommentController {
                                         examples = {
                                                 @ExampleObject(name = "같이 사요", value = "buy-together"),
                                                 @ExampleObject(name = "같이 알아요", value = "know-together"),
+                                                @ExampleObject(name = "다시 쓰기", value = "recycle"),
                                         })
                                 @NotNull(message = "댓글을 달 게시판 타입을 입력해주세요.")
                                 @PathVariable String postType,
@@ -53,6 +54,7 @@ public class CommentController {
                     examples = {
                             @ExampleObject(name = "같이 사요", value = "buy-together"),
                             @ExampleObject(name = "같이 알아요", value = "know-together"),
+                            @ExampleObject(name = "다시 쓰기", value = "recycle"),
                     })
             @NotNull(message = "조회 할 게시판 타입을 입력해주세요.")
             @PathVariable String postType,

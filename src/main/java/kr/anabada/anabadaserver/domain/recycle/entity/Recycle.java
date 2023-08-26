@@ -52,6 +52,10 @@ public class Recycle extends BaseTimeEntity {
     @Where(clause = "image_type = 'RECYCLE'")
     private List<Image> images;
 
+    @Builder.Default
+    @Column(name = "comment_cnt")
+    private long commentCount = 0;
+
     public void setWriter(User writer) {
         this.writer = writer;
     }
@@ -65,11 +69,16 @@ public class Recycle extends BaseTimeEntity {
 
     public RecycleResponse toResponse() {
         return RecycleResponse.builder()
-                .id(getId())
-                .title(getTitle())
-                .content(getContent())
-                .writer(getWriter().toDto())
-                .images(images.stream().map(Image::getId).map(UUID::toString).toList())
+                .id(this.id)
+                .title(this.title)
+                .content(this.content)
+                .commentCount(this.commentCount)
+                .writer(this.writer.toDto())
+                .images(this.images.stream().map(Image::getId).map(UUID::toString).toList())
                 .build();
+    }
+
+    public void increaseCommentCount() {
+        this.commentCount++;
     }
 }

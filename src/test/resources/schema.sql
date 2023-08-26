@@ -164,6 +164,7 @@ create table recycle
     title       varchar(50)                not null,
     writer      bigint                     not null,
     content     varchar(300)               null,
+    comment_cnt bigint     default 0       null comment '댓글 갯수 카운트',
     created_at  datetime(6)                not null,
     modified_at datetime(6)                null,
     is_removed  tinyint(1) default (false) not null comment '삭제 여부'
