@@ -75,12 +75,13 @@ public class ProductChangeController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping("/reject/{changeRequestId}")
     @Operation(
-            summary = "바꿔쓰기 요청 거절"
+            summary = "바꿔쓰기 요청 거절",
+            description = "바꿔쓰기 요청을 거절합니다. body값에 거절 메시지를 필히 입력해야 합니다."
     )
     public void rejectChangeRequest(@CurrentUser User user,
                                     @Schema(description = "바꿔쓰기 요청 ID", required = true, example = "1")
                                     @PathVariable Long changeRequestId,
-                                    @RequestBody String rejectMessage) {
+                                    @Schema(description = "거절메세지", required = true, example = "죄송합니다^^ 거절합니당 ㅎ..") @RequestBody String rejectMessage) {
         if (user == null)
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
         if (changeRequestId == null)
