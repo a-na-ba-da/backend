@@ -43,7 +43,7 @@ public class ImageUploadController {
                                                             @ExampleObject(name = "같이 사요", value = "BUY_TOGETHER", summary = "같이 사요 게시물에 사용되는 이미지"),
                                                             @ExampleObject(name = "같이 알아요", value = "KNOW_TOGETHER", summary = "같이 알아요 게시물에 사용되는 이미지"),
                                                             @ExampleObject(name = "물건(바꿔쓰기)", value = "MY_PRODUCT", summary = "바꿔쓰기에 사용되는 내 물건 이미지"),
-                                                            @ExampleObject(name = "다시쓰기", value = "RECYCLE", summary = "다시쓰기에 사용되는 내 물건 이미지")
+                                                            @ExampleObject(name = "다시쓰기", value = "RECYCLE", summary = "다시쓰기 게시물에 사용되는 이미지")
                                                     })
                                                     String type) {
         if (user == null) {
