@@ -86,4 +86,9 @@ public class MyProduct {
     public void updateStatus(ProductStatus status) {
         this.status = status;
     }
+
+    public void setStatus(ProductStatus productStatus) {
+        if (productStatus != null)
+            this.status = productStatus;
+    }
 }

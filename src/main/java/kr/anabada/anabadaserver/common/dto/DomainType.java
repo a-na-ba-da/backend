@@ -1,9 +1,13 @@
 package kr.anabada.anabadaserver.common.dto;
 
+import lombok.Getter;
+
+@Getter
 public enum DomainType {
     BUY_TOGETHER("같이 사요"),
     KNOW_TOGETHER("같이 알아요"),
-    MY_PRODUCT("내 상품");
+    MY_PRODUCT("내 상품"),
+    RECYCLE("다시쓰기");
 
     private final String ko;
 
@@ -18,4 +22,5 @@ public enum DomainType {
         }
         throw new IllegalArgumentException("존재하지 않는 도메인 타입입니다.");
     }
+
 }

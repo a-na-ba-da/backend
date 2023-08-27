@@ -14,6 +14,7 @@ import kr.anabada.anabadaserver.global.response.GlobalResponse;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -53,5 +54,41 @@ public class ProductChangeController {
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
 
         productChangeService.changeRequest(user, targetProductId, myProductIds, message);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PostMapping("/accept/{changeRequestId}")
+    @Operation(
+            summary = "바꿔쓰기 요청 수락"
+    )
+    public void acceptChangeRequest(@CurrentUser User user,
+                                    @Schema(description = "바꿔쓰기 요청 ID", required = true, example = "1")
+                                    @PathVariable Long changeRequestId) {
+        if (user == null)
+            throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
+        if (changeRequestId == null)
+            throw new IllegalArgumentException("changeRequestId를 입력해주세요.");
+
+        productChangeService.acceptChangeRequest(user, changeRequestId);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PostMapping("/reject/{changeRequestId}")
+    @Operation(
+            summary = "바꿔쓰기 요청 거절",
+            description = "바꿔쓰기 요청을 거절합니다. body값에 거절 메시지를 필히 입력해야 합니다."
+    )
+    public void rejectChangeRequest(@CurrentUser User user,
+                                    @Schema(description = "바꿔쓰기 요청 ID", required = true, example = "1")
+                                    @PathVariable Long changeRequestId,
+                                    @Schema(description = "거절메세지", required = true, example = "죄송합니다^^ 거절합니당 ㅎ..") @RequestBody String rejectMessage) {
+        if (user == null)
+            throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
+        if (changeRequestId == null)
+            throw new IllegalArgumentException("changeRequestId를 입력해주세요.");
+        if (StringUtils.hasText(rejectMessage))
+            throw new IllegalArgumentException("rejectMessage를 입력해주세요.");
+
+        productChangeService.rejectChangeRequest(user, changeRequestId, rejectMessage);
     }
 }
