@@ -3,16 +3,14 @@ package kr.anabada.anabadaserver.domain.change.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Setter
 @Getter
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "바꿔쓰기 내 상품 생성")
 public class MyProductRequest {

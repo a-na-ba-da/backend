@@ -3,8 +3,10 @@ package kr.anabada.anabadaserver.domain.save.repository;
 import kr.anabada.anabadaserver.domain.save.entity.BuyTogether;
 import kr.anabada.anabadaserver.domain.save.entity.KnowTogether;
 import kr.anabada.anabadaserver.domain.save.entity.Save;
+import kr.anabada.anabadaserver.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface SaveRepository extends JpaRepository<Save, Long>, SaveRepositoryCustom {
@@ -12,4 +14,6 @@ public interface SaveRepository extends JpaRepository<Save, Long>, SaveRepositor
     Optional<BuyTogether> findBuyTogetherById(Long id);
 
     Optional<KnowTogether> findKnowTogetherById(Long id);
+
+    List<Save> findAllByWriter(User user);
 }

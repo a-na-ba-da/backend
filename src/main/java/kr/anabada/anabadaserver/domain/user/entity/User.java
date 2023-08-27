@@ -44,6 +44,10 @@ public class User {
                 .build();
     }
 
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
