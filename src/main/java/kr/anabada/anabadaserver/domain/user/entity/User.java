@@ -27,7 +27,8 @@ public class User {
     @Column(name = "activated", nullable = false)
     private Boolean activated;
     @Column(name = "role", nullable = false)
-    private String role;
+    @Builder.Default
+    private String role = "ROLE_USER";
 
     public boolean isBan() {
         if (role.equals("ROLE_ADMIN"))
