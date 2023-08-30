@@ -59,7 +59,7 @@ public class MessageService {
         // 처음 보내는 메세지 인지 확인, 처음이면 메세지 방 생성
         final User receiver = checkValidPostType(user, postType, postId);
 
-        MessageOrigin messageRoom = messageOriginRepository.findByReceiverOrSender(receiver, user)
+        MessageOrigin messageRoom = messageOriginRepository.findChatRoom(postId, postType, receiver)
                 .orElseGet(() -> {
                     // 메세지 방 생성
                     MessageOrigin messageOrigin = MessageOrigin.builder()

@@ -15,5 +15,8 @@ public interface MessageOriginRepository extends JpaRepository<MessageOrigin, Lo
             where m.messagePostId = :messagePostId and m.messagePostType = :messagePostType and (m.sender = :postWriter or m.receiver = :postWriter)""")
     boolean isAlreadyExistChatroom(@Param("messagePostId") Long messagePostId, @Param("messagePostType") DomainType messagePostType, @Param("postWriter") User postWriter);
 
-    Optional<MessageOrigin> findByReceiverOrSender(User receiver, User sender);
+    @Query("""
+            select m from MessageOrigin m
+            where m.messagePostId = :messagePostId and m.messagePostType = :messagePostType and (m.sender = :sender or m.receiver = :sender)""")
+    Optional<MessageOrigin> findChatRoom(@Param("messagePostId") Long messagePostId, @Param("messagePostType") DomainType messagePostType, @Param("sender") User sender);
 }
