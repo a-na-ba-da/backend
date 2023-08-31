@@ -32,7 +32,6 @@ public class LendService {
         return newLendPost;
     }
 
-
     @Transactional
     public void modifyLendPost(User writer, Long lendId, LendPostRequest lendPostRequest) {
         lendPostRequest.checkValidation();
@@ -58,7 +57,6 @@ public class LendService {
 
         lendRepository.delete(post);
     }
-
 
     public List<Lend> getLendList(Pageable pageable) {
         return lendRepository.findByLendList(pageable);
