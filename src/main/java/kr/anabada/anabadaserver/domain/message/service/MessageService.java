@@ -134,6 +134,7 @@ public class MessageService {
 
         // parse
         var response = new MessageDetailResponse(messageRoom.getMessagePostType(),
+                messageRoom.getMessagePostId(),
                 messageRoom.getId(),
                 messageRoom.getInterlocutor(messageRoom.getSender()).toDto());
 
