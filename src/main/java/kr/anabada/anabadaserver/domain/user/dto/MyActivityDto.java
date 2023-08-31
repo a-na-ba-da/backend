@@ -7,6 +7,7 @@ import kr.anabada.anabadaserver.domain.change.dto.ChangeRequestStatus;
 import kr.anabada.anabadaserver.domain.change.entity.ChangeRequest;
 import kr.anabada.anabadaserver.domain.recycle.entity.Recycle;
 import kr.anabada.anabadaserver.domain.save.entity.Save;
+import kr.anabada.anabadaserver.domain.share.entity.Lend;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,15 +20,17 @@ import java.util.List;
 public class MyActivityDto {
     List<SaveTypeRecord> saves = new ArrayList<>();
     List<PostTypeRecord> recycles = new ArrayList<>();
+    List<LendTypeRecord> lends = new ArrayList<>();
     List<ChangeRequestRecord> changes = new ArrayList<>();
 
-    private MyActivityDto(List<SaveTypeRecord> saves, List<PostTypeRecord> recycles, List<ChangeRequestRecord> changes) {
+    private MyActivityDto(List<SaveTypeRecord> saves, List<PostTypeRecord> recycles, List<LendTypeRecord> lends, List<ChangeRequestRecord> changes) {
         this.saves = saves;
         this.recycles = recycles;
+        this.lends = lends;
         this.changes = changes;
     }
 
-    static public MyActivityDto CreateMyActivityDto(List<Save> saves, List<Recycle> recycles, List<ChangeRequest> changes) {
+    static public MyActivityDto CreateMyActivityDto(List<Save> saves, List<Recycle> recycles, List<Lend> lends, List<ChangeRequest> changes) {
         MyActivityDto myActivityDto = new MyActivityDto();
         for (Save save : saves) {
             myActivityDto.saves.add(
@@ -37,6 +40,10 @@ public class MyActivityDto {
                             save.getContent(),
                             save.getClass().getAnnotation(DiscriminatorValue.class).value(),
                             save.getCreatedAt()));
+        }
+
+        for (Lend lend : lends) {
+            myActivityDto.lends.add(new LendTypeRecord(lend.getId(), lend.getTitle(), lend.getContent(), lend.getCreatedAt()));
         }
 
         for (Recycle recycle : recycles) {
@@ -65,6 +72,17 @@ public class MyActivityDto {
     }
 
     public record PostTypeRecord(
+            long id,
+            @Schema(description = "글 제목")
+            String title,
+            @Schema(description = "글 내용")
+            String content,
+            @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+            @Schema(pattern = "yyyy-MM-dd HH:mm:ss", description = "생성일")
+            LocalDateTime createdAt) {
+    }
+
+    public record LendTypeRecord(
             long id,
             @Schema(description = "글 제목")
             String title,
