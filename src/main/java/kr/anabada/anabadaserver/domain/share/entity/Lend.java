@@ -71,6 +71,9 @@ public class Lend extends BaseTimeEntity {
     @Where(clause = "image_type = 'LEND'")
     private List<Image> images;
 
+    @Builder.Default
+    @Column(name = "comment_cnt")
+    private long commentCount = 0;
 
     public void setWriter(User writer) {
         this.writer = writer;
@@ -121,7 +124,12 @@ public class Lend extends BaseTimeEntity {
                 .end(this.end)
                 .lat(this.lat)
                 .lng(this.lng)
+                .commentCount(this.commentCount)
                 .images(this.images.stream().map(Image::getId).map(UUID::toString).toList())
                 .build();
+    }
+
+    public void increaseCommentCount() {
+        this.commentCount++;
     }
 }
