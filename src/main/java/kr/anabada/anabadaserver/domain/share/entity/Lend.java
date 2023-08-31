@@ -100,17 +100,7 @@ public class Lend extends BaseTimeEntity {
 
         if (lendPostRequest.getEnd() != null)
             this.end = lendPostRequest.getEnd();
-
-        if (lendPostRequest.getImages() != null)
-            this.images = lendPostRequest.getImages().stream()
-                    .map(imageId -> {
-                        Image newImage = new Image();
-                        newImage.setId(UUID.fromString(imageId));
-                        return newImage;
-                    })
-                    .toList();
     }
-
 
     public LendResponse toResponse() {
         return LendResponse.builder()
