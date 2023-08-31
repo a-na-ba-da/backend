@@ -65,4 +65,8 @@ public class Image {
 
         this.postId = postId;
     }
+
+    public void setId(UUID uuid) {
+        this.id = uuid;
+    }
 }
