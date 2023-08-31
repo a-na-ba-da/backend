@@ -58,7 +58,6 @@ public class LendPostRequest {
     @Size(min = 1, max = 5, message = "이미지는 1개 이상 5개 이하로 업로드 해주세요.")
     private List<String> images;
 
-
     @Builder
     public LendPostRequest(String title, String content, @NotNull(message = "대여 시작 일자를 입력해주세요. (형식: yyyy-MM-dd)") LocalDate start, @NotNull(message = "대여 종료 일자를 입력해주세요. (형식: yyyy-MM-dd)") LocalDate end, Long pricePerDay, Double lat, Double lng, List<String> images) {
         this.title = title;
@@ -83,7 +82,6 @@ public class LendPostRequest {
                 .lng(lendPostRequest.getLng())
                 .build();
     }
-
 
     public void checkValidation() {
         if (images == null || images.isEmpty())
