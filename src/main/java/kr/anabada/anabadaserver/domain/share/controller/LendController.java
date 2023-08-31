@@ -60,7 +60,6 @@ public class LendController {
         lendService.deleteLendPost(user, lendId);
     }
 
-
     @GetMapping("")
     @ApiResponse(responseCode = "200", description = "나눠쓰기 목록 조회 성공")
     public GlobalResponse<PageImpl<LendResponse>> getLendList(@ParameterObject Pageable pageable) {
@@ -69,7 +68,6 @@ public class LendController {
 
         return new GlobalResponse<>(new PageImpl<>(lendList, pageable, lendList.size()));
     }
-
 
     @GetMapping("/{lendId}")
     @ApiResponse(responseCode = "200", description = "나눠쓰기 단건 조회 성공")
