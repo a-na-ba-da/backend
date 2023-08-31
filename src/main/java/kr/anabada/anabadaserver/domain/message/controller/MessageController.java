@@ -23,8 +23,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.CREATED;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/message")
@@ -61,7 +59,6 @@ public class MessageController {
     }
 
     @PostMapping("/{postType}/{postId}")
-    @ResponseStatus(CREATED)
     @Operation(summary = "메세지 보내기", description = "게시물 타입과 ID를 통해 메세지를 보낼때 사용하는 API")
     public GlobalResponse<MessageSendResponse> sendMessage(@CurrentUser User user,
                                                            @Schema(description = "게시물 종류", allowableValues = {"BUY_TOGETHER", "BUY_TOGETHER", "RECYCLE"})
