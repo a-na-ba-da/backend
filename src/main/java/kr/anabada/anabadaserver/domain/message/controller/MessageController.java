@@ -62,7 +62,7 @@ public class MessageController {
     @ResponseStatus(CREATED)
     @Operation(summary = "메세지 보내기", description = "게시물 타입과 ID를 통해 메세지를 보낼때 사용하는 API")
     public void sendMessage(@CurrentUser User user,
-                            @Schema(description = "게시물 종류", allowableValues = {"BUY_TOGETHER", "BUY_TOGETHER", "RECYCLE"})
+                            @Schema(description = "게시물 종류", allowableValues = {"BUY_TOGETHER", "BUY_TOGETHER", "RECYCLE", "LEND"})
                             @PathVariable DomainType postType,
                             @Schema(description = "게시물 ID")
                             @PathVariable Long postId,
