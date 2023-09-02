@@ -117,6 +117,7 @@ public class Lend extends BaseTimeEntity {
                 .createdAt(getCreatedAt())
                 .modifiedAt(getModifiedAt())
                 .writer(this.writer.toDto())
+                .pricePerDay(this.pricePerDay)
                 .start(this.start)
                 .end(this.end)
                 .lat(this.lat)
