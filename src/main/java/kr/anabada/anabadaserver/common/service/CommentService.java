@@ -6,6 +6,7 @@ import kr.anabada.anabadaserver.common.entity.Comment;
 import kr.anabada.anabadaserver.common.repository.CommentRepository;
 import kr.anabada.anabadaserver.domain.recycle.repository.RecycleRepository;
 import kr.anabada.anabadaserver.domain.save.repository.SaveRepository;
+import kr.anabada.anabadaserver.domain.share.repository.LendRepository;
 import kr.anabada.anabadaserver.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final SaveRepository saveRepository;
     private final RecycleRepository recycleRepository;
+    private final LendRepository lendRepository;
 
     /**
      * 댓글을 작성하는 메서드
@@ -57,6 +59,9 @@ public class CommentService {
                     .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."))
                     .increaseCommentCount();
             case "recycle" -> recycleRepository.findById(postId)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."))
+                    .increaseCommentCount();
+            case "lend" -> lendRepository.findById(postId)
                     .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."))
                     .increaseCommentCount();
             default -> throw new IllegalArgumentException("postType 인자값이 잘못되었습니다.");
@@ -97,6 +102,8 @@ public class CommentService {
             case "know-together" -> saveRepository.findKnowTogetherById(postId)
                     .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
             case "recycle" -> recycleRepository.findById(postId)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
+            case "lend" -> lendRepository.findById(postId)
                     .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
             default -> throw new IllegalArgumentException("postType 인자값이 잘못되었습니다.");
         }

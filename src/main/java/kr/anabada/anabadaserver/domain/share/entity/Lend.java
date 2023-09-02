@@ -71,6 +71,9 @@ public class Lend extends BaseTimeEntity {
     @Where(clause = "image_type = 'LEND'")
     private List<Image> images;
 
+    @Builder.Default
+    @Column(name = "comment_cnt")
+    private long commentCount = 0;
 
     public void setWriter(User writer) {
         this.writer = writer;
@@ -97,17 +100,7 @@ public class Lend extends BaseTimeEntity {
 
         if (lendPostRequest.getEnd() != null)
             this.end = lendPostRequest.getEnd();
-
-        if (lendPostRequest.getImages() != null)
-            this.images = lendPostRequest.getImages().stream()
-                    .map(imageId -> {
-                        Image newImage = new Image();
-                        newImage.setId(UUID.fromString(imageId));
-                        return newImage;
-                    })
-                    .toList();
     }
-
 
     public LendResponse toResponse() {
         return LendResponse.builder()
@@ -122,7 +115,12 @@ public class Lend extends BaseTimeEntity {
                 .end(this.end)
                 .lat(this.lat)
                 .lng(this.lng)
+                .commentCount(this.commentCount)
                 .images(this.images.stream().map(Image::getId).map(UUID::toString).toList())
                 .build();
+    }
+
+    public void increaseCommentCount() {
+        this.commentCount++;
     }
 }
