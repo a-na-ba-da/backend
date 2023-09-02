@@ -44,8 +44,6 @@ public class LendService {
             throw new IllegalArgumentException("해당 게시물의 작성자가 아닙니다.");
 
         originalPost.editPost(lendPostRequest);
-
-        // TODO 이미지 수정
     }
 
     @Transactional
