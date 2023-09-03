@@ -37,10 +37,9 @@ public class SecurityConfig {
                                 .requestMatchers("/api-docs/**").permitAll()
                                 .requestMatchers("/swagger-ui/**").permitAll()
                                 .requestMatchers("/h2-console/**").permitAll()
-                                
                                 .requestMatchers("/test/user/**").hasRole("USER")
                                 .requestMatchers("/test/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/api/v1/auth/nickname").permitAll()
+                                .requestMatchers("/api/v1/auth/**").permitAll()
                                 .anyRequest().permitAll()
                 )
                 .formLogin(
