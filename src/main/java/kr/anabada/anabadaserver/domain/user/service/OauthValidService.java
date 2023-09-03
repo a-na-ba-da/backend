@@ -56,7 +56,13 @@ public class OauthValidService {
             br.close();
             System.out.printf("Kakao API 응답 : %s\n", response);
 
-            return response.toString();
+            /*
+            response is like this:
+            {"id":2817061190,"connected_at":"2023-06-02T11:47:10Z","kakao_account":{"has_email":true,"email_needs_agreement":false,"is_email_valid":true,"is_email_verified":true,"email":"vaccine@kakao.com"}}
+            return email using regex
+             */
+
+            return response.toString().replaceAll(".*\"email\":\"([^\"]+)\".*", "$1");
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Kakao API 요청 중 오류 발생");

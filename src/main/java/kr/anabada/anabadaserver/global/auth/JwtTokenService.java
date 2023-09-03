@@ -39,7 +39,7 @@ public class JwtTokenService {
     }
 
     public JwtToken generateToken(String email) {
-        Claims claims = Jwts.claims().setSubject(EMAIL);
+        Claims claims = Jwts.claims();
         claims.put(EMAIL, email);
 
         Date now = new Date();
