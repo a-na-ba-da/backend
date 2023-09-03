@@ -26,7 +26,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             throws IOException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
 
-        JwtToken token = tokenService.generateToken(oAuth2User);
+        JwtToken token = tokenService.generateToken(oAuth2User.getAttribute("EMAIL"));
         log.info("토큰 발행 성공 : {}", token.getAccessToken());
         writeTokenResponse(response, token);
     }
