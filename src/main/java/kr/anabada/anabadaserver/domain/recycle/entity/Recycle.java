@@ -72,6 +72,8 @@ public class Recycle extends BaseTimeEntity {
                 .id(this.id)
                 .title(this.title)
                 .content(this.content)
+                .createdAt(getCreatedAt())
+                .modifiedAt(getModifiedAt())
                 .commentCount(this.commentCount)
                 .writer(this.writer.toDto())
                 .images(this.images.stream().map(Image::getId).map(UUID::toString).toList())
