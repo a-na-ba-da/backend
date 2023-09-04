@@ -47,9 +47,10 @@ public class OAuth2Attribute {
         return map;
     }
 
-    public User toEntity() {
+    public User toEntity(String nickname) {
         return User.builder()
                 .email(email)
+                .nickname(nickname)
                 .build();
     }
 }
