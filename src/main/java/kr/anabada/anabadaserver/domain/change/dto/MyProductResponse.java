@@ -1,10 +1,12 @@
 package kr.anabada.anabadaserver.domain.change.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import kr.anabada.anabadaserver.domain.user.dto.UserDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -30,28 +32,35 @@ public abstract class MyProductResponse {
     @Schema(description = "상품 이미지 파일 이름")
     private List<String> images;
 
-    private MyProductResponse(Long id, String name, String content, int originalPrice, ProductStatus status, List<String> images) {
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdAt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime modifiedAt;
+
+    private MyProductResponse(Long id, String name, String content, int originalPrice, ProductStatus status, List<String> images, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         this.id = id;
         this.name = name;
         this.content = content;
         this.originalPrice = originalPrice;
         this.status = status;
         this.images = images;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
     }
 
     public static class IncludeOwner extends MyProductResponse {
         @Schema(description = "상품 소유자 정보")
         private final UserDto owner;
 
-        public IncludeOwner(Long id, String name, String content, int originalPrice, ProductStatus status, List<String> images, UserDto owner) {
-            super(id, name, content, originalPrice, status, images);
+        public IncludeOwner(Long id, String name, String content, int originalPrice, ProductStatus status, List<String> images, UserDto owner, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+            super(id, name, content, originalPrice, status, images, createdAt, modifiedAt);
             this.owner = owner;
         }
     }
 
     public static class ExcludeOwner extends MyProductResponse {
-        public ExcludeOwner(Long id, String name, String content, int originalPrice, ProductStatus status, List<String> images) {
-            super(id, name, content, originalPrice, status, images);
+        public ExcludeOwner(Long id, String name, String content, int originalPrice, ProductStatus status, List<String> images, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+            super(id, name, content, originalPrice, status, images, createdAt, modifiedAt);
         }
     }
 }

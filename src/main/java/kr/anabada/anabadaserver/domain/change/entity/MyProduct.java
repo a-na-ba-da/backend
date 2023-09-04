@@ -1,6 +1,7 @@
 package kr.anabada.anabadaserver.domain.change.entity;
 
 import jakarta.persistence.*;
+import kr.anabada.anabadaserver.common.entity.BaseTimeEntity;
 import kr.anabada.anabadaserver.common.entity.Image;
 import kr.anabada.anabadaserver.domain.change.dto.MyProductResponse;
 import kr.anabada.anabadaserver.domain.change.dto.ProductStatus;
@@ -27,7 +28,7 @@ import static kr.anabada.anabadaserver.domain.change.dto.ProductStatus.AVAILABLE
 @Table(name = "my_product")
 @Where(clause = "is_removed = 0")
 @SQLDelete(sql = "UPDATE my_product SET is_removed = 1 WHERE id = ?")
-public class MyProduct {
+public class MyProduct extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -67,12 +68,12 @@ public class MyProduct {
 
     private MyProductResponse toResponseExcludeOwner() {
         return new MyProductResponse.ExcludeOwner(id, name, content, originalPrice, status,
-                getImageString());
+                getImageString(), super.getCreatedAt(), super.getModifiedAt());
     }
 
     private MyProductResponse toResponseIncludeOwner() {
         return new MyProductResponse.IncludeOwner(id, name, content, originalPrice, status,
-                getImageString(), owner.toDto());
+                getImageString(), owner.toDto(), super.getCreatedAt(), super.getModifiedAt());
     }
 
     private List<String> getImageString() {
