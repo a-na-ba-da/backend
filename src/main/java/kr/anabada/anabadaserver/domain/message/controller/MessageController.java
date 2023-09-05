@@ -7,7 +7,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Nullable;
 import kr.anabada.anabadaserver.common.dto.DomainType;
 import kr.anabada.anabadaserver.domain.message.dto.MessageDetailResponse;
+import kr.anabada.anabadaserver.domain.message.dto.MessageSendResponse;
 import kr.anabada.anabadaserver.domain.message.dto.MessageSummaryResponse;
+import kr.anabada.anabadaserver.domain.message.entity.Message;
 import kr.anabada.anabadaserver.domain.message.service.MessageService;
 import kr.anabada.anabadaserver.domain.user.entity.User;
 import kr.anabada.anabadaserver.global.auth.CurrentUser;
@@ -20,8 +22,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @RequiredArgsConstructor
@@ -59,7 +59,6 @@ public class MessageController {
     }
 
     @PostMapping("/{postType}/{postId}")
-    @ResponseStatus(CREATED)
     @Operation(summary = "메세지 보내기", description = "게시물 타입과 ID를 통해 메세지를 보낼때 사용하는 API")
     public void sendMessage(@CurrentUser User user,
                             @Schema(description = "게시물 종류", allowableValues = {"BUY_TOGETHER", "BUY_TOGETHER", "RECYCLE", "LEND"})
@@ -71,7 +70,15 @@ public class MessageController {
         if (user == null)
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
 
-        messageService.sendMessage(user, postType, postId, message);
+        Message sentMessage = messageService.sendMessage(user, postType, postId, message);
+        return new GlobalResponse<>(
+                MessageSendResponse.builder()
+                        .messageRoomId(sentMessage.getMessageOrigin().getId())
+                        .messageId(sentMessage.getId())
+                        .sentMessage(sentMessage.getContent())
+                        .sentAt(sentMessage.getCreatedAt())
+                        .build()
+        );
     }
 
 }

@@ -155,6 +155,8 @@ create table my_product
     content        varchar(700)               not null comment '설명',
     status         varchar(20)                not null,
     category       varchar(40)                null,
+    created_at     datetime(6)                not null,
+    modified_at    datetime(6)                not null,
     is_removed     tinyint(1) default (false) not null comment '삭제 여부'
 );
 

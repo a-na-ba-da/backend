@@ -37,7 +37,7 @@ public class MessageService {
     private final LendRepository lendRepository;
 
     private MessageType parseSendBy(User me, MessageOrigin messageRoom) {
-        return messageRoom.getSender() == me ? MessageType.SENDER_SEND : MessageType.RECEIVER_SEND;
+        return messageRoom.getSender().equals(me) ? MessageType.SENDER_SEND : MessageType.RECEIVER_SEND;
     }
 
     private MessageTypeResponse parseSendBy(User me, MessageOrigin messageRoom, MessageType messageType) {
@@ -62,7 +62,7 @@ public class MessageService {
         // 처음 보내는 메세지 인지 확인, 처음이면 메세지 방 생성
         final User receiver = checkValidPostType(user, postType, postId);
 
-        MessageOrigin messageRoom = messageOriginRepository.findByReceiverOrSender(receiver, user)
+        MessageOrigin messageRoom = messageOriginRepository.findChatRoom(postId, postType, receiver)
                 .orElseGet(() -> {
                     // 메세지 방 생성
                     MessageOrigin messageOrigin = MessageOrigin.builder()
@@ -144,6 +144,7 @@ public class MessageService {
 
         // parse
         var response = new MessageDetailResponse(messageRoom.getMessagePostType(),
+                messageRoom.getMessagePostId(),
                 messageRoom.getId(),
                 messageRoom.getInterlocutor(messageRoom.getSender()).toDto());
 

@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -39,9 +38,9 @@ public class JwtTokenService {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public JwtToken generateToken(OAuth2User user) {
-        Claims claims = Jwts.claims().setSubject(user.getName());
-        claims.put(EMAIL, user.getAttribute(EMAIL));
+    public JwtToken generateToken(String email) {
+        Claims claims = Jwts.claims();
+        claims.put(EMAIL, email);
 
         Date now = new Date();
         long tokenPeriod = 1000L * 60L * 60L * 24L * 30L * 3L; // 10분

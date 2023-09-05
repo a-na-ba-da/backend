@@ -10,7 +10,7 @@ spring:
             client-id: ${ANABADA_KAKAO_CLIENT_ID}
             client-secret: ${ANABADA_KAKAO_SECRET}
             authorization-grant-type: authorization_code
-            redirect-uri: ${ANABADA_HOST}:8080/login/oauth2/code/kakao
+            redirect-uri: ${ANABADA_HOST}:8080/login/oauth2/code/{registrationId}
             scope:
               - account_email
             client-name: kakao

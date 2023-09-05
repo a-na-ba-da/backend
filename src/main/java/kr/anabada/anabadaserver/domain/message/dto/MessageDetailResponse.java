@@ -17,13 +17,16 @@ public class MessageDetailResponse {
     final List<MessageDetail> messages = new ArrayList<>();
     @Schema(description = "메세지가 시작되게된 게시물 타입")
     DomainType messagePostType;
+    @Schema(description = "메세지가 시작된 게시물의 ID")
+    Long messagePostId;
     @Schema(description = "메시지방 ID")
     Long messageRoomId;
     @Schema(description = "상대방 정보")
     UserDto interlocutor;
 
-    public MessageDetailResponse(DomainType messagePostType, Long messageRoomId, UserDto interlocutor) {
+    public MessageDetailResponse(DomainType messagePostType, Long messagePostId, Long messageRoomId, UserDto interlocutor) {
         this.messagePostType = messagePostType;
+        this.messagePostId = messagePostId;
         this.messageRoomId = messageRoomId;
         this.interlocutor = interlocutor;
     }
