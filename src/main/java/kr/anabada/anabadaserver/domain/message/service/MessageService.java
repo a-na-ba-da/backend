@@ -34,7 +34,7 @@ public class MessageService {
     private final RecycleRepository recycleRepository;
 
     private MessageType parseSendBy(User me, MessageOrigin messageRoom) {
-        return messageRoom.getSender() == me ? MessageType.SENDER_SEND : MessageType.RECEIVER_SEND;
+        return messageRoom.getSender().equals(me) ? MessageType.SENDER_SEND : MessageType.RECEIVER_SEND;
     }
 
     private MessageTypeResponse parseSendBy(User me, MessageOrigin messageRoom, MessageType messageType) {
