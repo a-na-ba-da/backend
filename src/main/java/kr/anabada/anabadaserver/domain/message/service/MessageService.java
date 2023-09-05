@@ -13,6 +13,8 @@ import kr.anabada.anabadaserver.domain.recycle.entity.Recycle;
 import kr.anabada.anabadaserver.domain.recycle.repository.RecycleRepository;
 import kr.anabada.anabadaserver.domain.save.entity.Save;
 import kr.anabada.anabadaserver.domain.save.repository.SaveRepository;
+import kr.anabada.anabadaserver.domain.share.entity.Lend;
+import kr.anabada.anabadaserver.domain.share.repository.LendRepository;
 import kr.anabada.anabadaserver.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,7 @@ public class MessageService {
     private final MessageOriginRepository messageOriginRepository;
     private final SaveRepository saveRepository;
     private final RecycleRepository recycleRepository;
+    private final LendRepository lendRepository;
 
     private MessageType parseSendBy(User me, MessageOrigin messageRoom) {
         return messageRoom.getSender().equals(me) ? MessageType.SENDER_SEND : MessageType.RECEIVER_SEND;
@@ -93,6 +96,7 @@ public class MessageService {
         User postWriter = switch (postType) {
             case BUY_TOGETHER -> checkValidBuyTogether(postId);
             case KNOW_TOGETHER -> checkValidKnowTogether(postId);
+            case LEND -> checkValidLend(postId);
             case RECYCLE -> checkValidRecycle(postId);
             case MY_PRODUCT -> throw new IllegalArgumentException("내 상품에는 메세지를 보낼 수 없습니다.");
         };
@@ -105,6 +109,12 @@ public class MessageService {
         }
 
         return postWriter;
+    }
+
+    private User checkValidLend(Long postId) {
+        Lend post = lendRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
+        return post.getWriter();
     }
 
     private User checkValidRecycle(Long postId) {

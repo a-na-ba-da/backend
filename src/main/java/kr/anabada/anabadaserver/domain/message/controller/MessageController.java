@@ -60,13 +60,13 @@ public class MessageController {
 
     @PostMapping("/{postType}/{postId}")
     @Operation(summary = "메세지 보내기", description = "게시물 타입과 ID를 통해 메세지를 보낼때 사용하는 API")
-    public GlobalResponse<MessageSendResponse> sendMessage(@CurrentUser User user,
-                                                           @Schema(description = "게시물 종류", allowableValues = {"BUY_TOGETHER", "BUY_TOGETHER", "RECYCLE"})
-                                                           @PathVariable DomainType postType,
-                                                           @Schema(description = "게시물 ID")
-                                                           @PathVariable Long postId,
-                                                           @Schema(description = "보낼 메세지", example = "안녕하세요~ 메세지 드려요^^")
-                                                           @RequestBody String message) {
+    public void sendMessage(@CurrentUser User user,
+                            @Schema(description = "게시물 종류", allowableValues = {"BUY_TOGETHER", "BUY_TOGETHER", "RECYCLE", "LEND"})
+                            @PathVariable DomainType postType,
+                            @Schema(description = "게시물 ID")
+                            @PathVariable Long postId,
+                            @Schema(description = "보낼 메세지", example = "안녕하세요~ 메세지 드려요^^")
+                            @RequestBody String message) {
         if (user == null)
             throw new CustomException(ErrorCode.ONLY_ACCESS_USER);
 
