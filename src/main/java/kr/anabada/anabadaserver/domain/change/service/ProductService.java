@@ -42,10 +42,10 @@ public class ProductService {
     }
 
     public Page<MyProductResponse> getMyProducts(User owner, String searchWord, Pageable pageable, Boolean searchAllStatus) {
-        return myProductRepository.findUserProductList(new SearchProductRecord(owner, searchWord, pageable, true, searchAllStatus));
+        return myProductRepository.findUserProductList(new SearchProductRecord(owner, searchWord, pageable, searchAllStatus));
     }
 
     public Page<MyProductResponse> getProducts(String searchWord, Pageable pageable) {
-        return myProductRepository.findUserProductList(new SearchProductRecord(null, searchWord, pageable, true, false));
+        return myProductRepository.findUserProductList(new SearchProductRecord(null, searchWord, pageable, false));
     }
 }

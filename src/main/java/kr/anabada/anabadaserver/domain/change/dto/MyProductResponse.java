@@ -48,6 +48,7 @@ public abstract class MyProductResponse {
         this.modifiedAt = modifiedAt;
     }
 
+    @Getter
     public static class IncludeOwner extends MyProductResponse {
         @Schema(description = "상품 소유자 정보")
         private final UserDto owner;

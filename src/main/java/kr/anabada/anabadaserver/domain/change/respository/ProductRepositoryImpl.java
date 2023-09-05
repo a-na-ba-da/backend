@@ -86,8 +86,13 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .limit(searchProduct.pageable.getPageSize())
                 .fetch();
 
-        return new PageImpl<>(
-                result.stream().map(myProduct -> myProduct.toResponse(true)).toList(),
+        return (searchProduct.user == null) ?
+                new PageImpl<>(
+                        result.stream().map(MyProduct::toResponseIncludeOwner).toList(),
+                        searchProduct.pageable,
+                        result.size())
+                : new PageImpl<>(
+                result.stream().map(MyProduct::toResponseExcludeOwner).toList(),
                 searchProduct.pageable,
                 result.size());
     }
@@ -131,7 +136,6 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             User user,
             String keyword,
             Pageable pageable,
-            boolean isMyProduct,
             boolean searchAllStatus) {
     }
 }

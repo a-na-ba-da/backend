@@ -62,16 +62,12 @@ public class MyProduct extends BaseTimeEntity {
     @Column(name = "is_removed", nullable = false)
     private Boolean isRemoved = false;
 
-    public MyProductResponse toResponse(boolean includeOwner) {
-        return includeOwner ? toResponseIncludeOwner() : toResponseExcludeOwner();
-    }
-
-    private MyProductResponse toResponseExcludeOwner() {
+    public MyProductResponse toResponseExcludeOwner() {
         return new MyProductResponse.ExcludeOwner(id, name, content, originalPrice, status,
                 getImageString(), super.getCreatedAt(), super.getModifiedAt());
     }
 
-    private MyProductResponse toResponseIncludeOwner() {
+    public MyProductResponse toResponseIncludeOwner() {
         return new MyProductResponse.IncludeOwner(id, name, content, originalPrice, status,
                 getImageString(), owner.toDto(), super.getCreatedAt(), super.getModifiedAt());
     }
